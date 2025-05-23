@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('compte')->constrained('utilisateurs');
-            $table->string('entreprise');
-            $table->foreignId('sla')->constrained('slas');
+            $table->string('nom');
+            $table->string('description');
+            $table->string('code');
             $table->timestamps();
             $table->engine = 'InnoDB';
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('permissions');
     }
 };
