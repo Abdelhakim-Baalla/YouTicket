@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('contenu');
             $table->boolean('lu')->default(false);
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

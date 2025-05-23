@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('compte')->constrained('utilisateurs');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

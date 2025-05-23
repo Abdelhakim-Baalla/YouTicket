@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('resultat');
             $table->string('format');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

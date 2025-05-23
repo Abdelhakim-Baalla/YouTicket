@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('date_fin')->nullable();
             $table->boolean('actif')->default(true);
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

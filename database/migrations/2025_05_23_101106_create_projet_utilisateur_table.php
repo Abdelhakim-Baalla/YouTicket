@@ -19,10 +19,11 @@ return new class extends Migration
             $table->foreignId('utilisateur')->constrained('utilisateurs')->onDelete('cascade');
             $table->string('role')->nullable();
             $table->timestamps();
-            $table->unique(['projet_id', 'user_id']);
+            $table->unique(['projet', 'utilisateur']);
+            $table->engine = 'InnoDB';
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
