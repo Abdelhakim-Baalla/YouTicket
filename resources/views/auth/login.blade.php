@@ -32,6 +32,7 @@
             width: 100%;
         }
     </style>
+    <link rel="shortcut icon" href="{{asset('images/YouTicketLogo.png')}}" type="image/x-icon">
 </head>
 <body>
     <div class="login-container">
