@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Frequence extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'description',
+        'duree_en_minutes',
+    ];
 }

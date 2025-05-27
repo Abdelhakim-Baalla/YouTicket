@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class JourFerie extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'date',
+        'recurrent',
+    ];
 }
