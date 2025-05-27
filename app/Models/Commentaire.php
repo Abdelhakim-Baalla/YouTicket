@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Commentaire extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ticket_id',
+        'utilisateur_id',
+        'contenu',
+        'interne',
+    ];
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class);
+    }
 }
