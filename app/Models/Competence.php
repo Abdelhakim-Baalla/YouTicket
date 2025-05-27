@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Competence extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'description',
+        'niveau',
+    ];
+
+    public function agents()
+    {
+        return $this->belongsToMany(Agent::class, 'agent_competence')
+            ->withPivot('niveau');
+    }
 }
