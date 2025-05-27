@@ -40,7 +40,7 @@ YouTicket repense complètement la gestion des tickets avec une approche **intel
 
 ### 🧠 Intelligence Artificielle Intégrée
 
-| #### 🎯 **Auto-Assignment Intelligent**
+#### 🎯 **Auto-Assignment Intelligent**
 
 - Analyse des compétences en temps réel
 - Prédiction de la charge de travail
@@ -54,7 +54,7 @@ YouTicket repense complètement la gestion des tickets avec une approche **intel
 - Prévention des dépassements SLA
 
 
- | #### 📈 **Analytics Prédictifs**
+#### 📈 **Analytics Prédictifs**
 
 - Tendances des incidents
 - Prévision des pics d'activité
