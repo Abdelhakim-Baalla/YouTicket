@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Projet extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'description',
+        'responsable_id',
+        'date_debut',
+        'date_fin',
+        'statut',
+    ];
+
+    public function responsable()
+    {
+        return $this->belongsTo(Utilisateur::class, 'responsable_id');
+    }
 }
