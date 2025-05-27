@@ -6,29 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('equipes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('description');
-            $table->timestamps();
+            $table->string('description')->nullable();
+            $table->boolean('active')->default(true);
             $table->engine = 'InnoDB';
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('equipes');
     }
 };

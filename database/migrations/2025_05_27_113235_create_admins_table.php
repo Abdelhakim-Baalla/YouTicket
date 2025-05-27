@@ -6,26 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('compte')->constrained('utilisateurs');
-            $table->timestamps();
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->json('permissions_speciales')->nullable();
             $table->engine = 'InnoDB';
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('admins');

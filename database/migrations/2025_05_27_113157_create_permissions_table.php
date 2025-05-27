@@ -6,28 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('description');
-            $table->string('code');
-            $table->timestamps();
+            $table->string('description')->nullable();
+            $table->string('module'); // Module concerné (tickets, users, etc.)
             $table->engine = 'InnoDB';
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('permissions');
