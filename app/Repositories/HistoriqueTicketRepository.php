@@ -2,20 +2,34 @@
 
 namespace App\Repositories;
 
-use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
-//use Your Model
+use App\Models\HistoriqueTicket;
+use App\Repositories\Interfaces\HistoriqueTicketRepositoryInterface;
 
-/**
- * Class HistoriqueTicketRepository.
- */
-class HistoriqueTicketRepository extends BaseRepository
+class HistoriqueTicketRepository implements HistoriqueTicketRepositoryInterface
 {
-    /**
-     * @return string
-     *  Return the model
-     */
-    public function model()
+    public function tous()
     {
-        //return YourModel::class;
+
     }
+    
+    public function trouver($id)
+    {
+
+    }
+    
+    public function creer(array $donnees)
+    {
+
+    }
+    
+    public function mettreAJour($id, array $donnees)
+    {
+
+    }
+    
+    public function supprimer($id)
+    {
+
+    }
+    
 }
