@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class AgentCompetence extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'agent_id',
+        'competence_id',
+        'niveau',
+    ];
+
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class);
+    }
+
+    public function competence()
+    {
+        return $this->belongsTo(Competence::class);
+    }
 }
