@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'couleur',
+    ];
+
+    public function tickets()
+    {
+        return $this->belongsToMany(Ticket::class, 'ticket_tag');
+    }
 }
