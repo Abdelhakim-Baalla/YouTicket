@@ -27,8 +27,7 @@ class CompetenceRepository implements CompetenceRepositoryInterface
         $competence = $this->trouver($id);
         if($competence)
         {
-            $competence->update($donnees);
-            return $competence;
+           return $competence->update($donnees);
         }
         return null;
     }
@@ -38,8 +37,7 @@ class CompetenceRepository implements CompetenceRepositoryInterface
         $competence = $this->trouver($id);
         if($competence)
         {
-            $competence->delete();
-            return true;
+           return $competence->delete();
         }
         return false;
     }

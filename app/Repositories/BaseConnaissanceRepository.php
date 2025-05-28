@@ -27,8 +27,7 @@ class BaseConnaissanceRepository implements BaseConnaissanceRepositoryInterface
         $baseConnaissance = $this->trouver($id);
         if($baseConnaissance)
         {
-            $baseConnaissance->update($donnees);
-            return $baseConnaissance;
+            return $baseConnaissance->update($donnees);
         }
         return null;
     }
@@ -38,8 +37,7 @@ class BaseConnaissanceRepository implements BaseConnaissanceRepositoryInterface
         $baseConnaissance = $this->trouver($id);
         if($baseConnaissance)
         {
-            $baseConnaissance->delete();
-            return true;
+            return $baseConnaissance->delete();
         }
         return false;
     }

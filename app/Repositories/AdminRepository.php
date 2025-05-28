@@ -27,8 +27,7 @@ class AdminRepository implements AdminRepositoryInterface
         $admin = $this->trouver($id);
         if ($admin) 
         {
-            $admin->update($donnees);
-            return $admin;
+           return $admin->update($donnees);
         }
         return null;
     }
@@ -38,8 +37,7 @@ class AdminRepository implements AdminRepositoryInterface
         $admin = $this->trouver($id);
         if($admin)
         {
-            $admin->delete();
-            return true;
+            return $admin->delete();
         }
     }
 

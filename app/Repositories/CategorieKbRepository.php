@@ -26,8 +26,7 @@ class CategorieKbRepository implements CategorieKbRepositoryInterface
     {
         $categorie = $this->trouver($id);
         if ($categorie) {
-            $categorie->update($donnees);
-            return $categorie;
+            return $categorie->update($donnees);
         }
         return null;
     }
@@ -36,8 +35,7 @@ class CategorieKbRepository implements CategorieKbRepositoryInterface
     {
         $categorie = $this->trouver($id);
         if ($categorie) {
-            $categorie->delete();
-            return true;
+           return $categorie->delete();
         }
         return false;
     }

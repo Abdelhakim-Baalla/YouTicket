@@ -26,8 +26,7 @@ class CommentaireRepository implements CommentaireRepositoryInterface
     {
         $commentaire = $this->trouver($id);
         if ($commentaire) {
-            $commentaire->update($donnees);
-            return $commentaire;
+            return $commentaire->update($donnees);
         }
         return null;
     }
@@ -36,8 +35,7 @@ class CommentaireRepository implements CommentaireRepositoryInterface
     {
         $commentaire = $this->trouver($id);
         if ($commentaire) {
-            $commentaire->delete();
-            return true;
+            return $commentaire->delete();
         }
         return false;
     }

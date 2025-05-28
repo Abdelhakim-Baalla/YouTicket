@@ -26,8 +26,7 @@ class AgentRepository implements AgentRepositoryInterface
     {
         $agent = $this->trouver($id);
         if ($agent) {
-            $agent->update($donnees);
-            return $agent;
+            return $agent->update($donnees);
         }
         return null;
     }
@@ -36,8 +35,7 @@ class AgentRepository implements AgentRepositoryInterface
     {
         $agent = $this->trouver($id);
         if ($agent) {
-            $agent->delete();
-            return true;
+            return $agent->delete();
         }
         return false;
     }
