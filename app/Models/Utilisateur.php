@@ -43,6 +43,11 @@ class Utilisateur extends Authenticatable implements JWTSubject
         return $this->hasMany(Ticket::class, 'demandeur_id');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigne_a_id');
+    }
+
     public function ticketsAssignes()
     {
         return $this->hasMany(Ticket::class, 'assigne_a_id');
