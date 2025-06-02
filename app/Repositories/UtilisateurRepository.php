@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Utilisateur;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UtilisateurRepository implements UtilisateurRepositoryInterface
 {
@@ -42,6 +43,25 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
             return $utilisateur->delete();
         }
         return false;
+    }
+
+    public function findByEmail(string $email)
+    {
+        return Utilisateur::where('email', $email)->first();
+    }
+
+    public function connexion(string $email, string $password)
+    {
+        $utilisateur = $this->findByEmail($email);
+        
+        if (!$utilisateur || !Hash::check($password, $utilisateur->password) ){
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'errorLogin' => ['L\'émail ou le mot de passe sont incorrect.'],
+            ]);
+        }
+        
+        
+        return $utilisateur;
     }
     
 }

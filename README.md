@@ -1,36 +1,15 @@
-# ![YouTicket Logo](/public/images/YouTicketLogo.png)
+# ![YouTicket Logo](/public/images/YouTicketLogo.jpg)
 
-### 🚀 YouTicket - Révolutionnez Votre Support Client
+## 🚀 YouTicket - Révolutionnez Votre Support Client
 
-<div>
-
-**🎯 La Solution de Ticketing Nouvelle Génération**
-
-*Transformez vos défis de support en opportunités de satisfaction client*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>---
+Bienvenue sur **YouTicket**, la plateforme de gestion de tickets pensée pour les entreprises modernes. Simplifiez la gestion de votre support client, boostez la satisfaction de vos utilisateurs et gagnez en efficacité grâce à une solution innovante, intuitive et puissante.
+> **🎯 La Solution de Ticketing Nouvelle Génération**
+>
+> *Transformez vos défis de support en opportunités de satisfaction client*
 
 ## 🌟 Pourquoi YouTicket Change la Donne
 
 > *"Dans un monde où l'expérience client définit le succès, YouTicket n'est pas juste un outil - c'est votre avantage concurrentiel."*
-
-
 
 ### 💡 L'Innovation au Service de l'Efficacité
 
@@ -46,13 +25,11 @@ YouTicket repense complètement la gestion des tickets avec une approche **intel
 - Prédiction de la charge de travail
 - Optimisation automatique des affectations
 
-
 #### 🔮 **Prédiction des Escalades**
 
 - Détection précoce des risques
 - Suggestions proactives d'actions
 - Prévention des dépassements SLA
-
 
 #### 📈 **Analytics Prédictifs**
 
@@ -60,16 +37,11 @@ YouTicket repense complètement la gestion des tickets avec une approche **intel
 - Prévision des pics d'activité
 - Optimisation des ressources
 
-
 #### 🎨 **Interface Adaptative**
 
 - Personnalisation automatique
 - Workflows contextuels
 - Expérience utilisateur optimisée
-
-
-
-
 
 ### 🚀 Performance & Scalabilité
 
@@ -98,7 +70,6 @@ YouTicket repense complètement la gestion des tickets avec une approche **intel
 | **⚙️ Backend** | Laravel 9.x | Écosystème riche, sécurité native
 | **💾 Base de Données** | MySQL 8.0 | Fiabilité éprouvée, cache ultra-rapide
 | **📱 Mobile** | Responsive | Expérience native sur tous devices
-
 
 ---
 
@@ -154,23 +125,17 @@ git push origin feature/amazing-feature
 
 ### 🏆 Hall of Fame
 
-<div>
-
 **🙏 Merci à nos contributeurs extraordinaires !**
 
-[Contributeurs](https://github.com/Abdelhakim-Baalla/YouTicket/graphs/contributors)
-
-</div>
-
-### 💝 Sponsoring
-
+> **🙏 Merci à nos contributeurs extraordinaires !**
+>
+> [Contributeurs](https://github.com/Abdelhakim-Baalla/YouTicket/graphs/contributors)
 Soutenez le développement de YouTicket :
 
 - ⭐ **Star** le projet sur GitHub
 - 💰 **Sponsor** via GitHub Sponsors
 - 🗣️ **Partagez** YouTicket dans votre réseau
 - 🐛 **Reportez** les bugs et proposez des améliorations
-
 
 ---
 
@@ -200,10 +165,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ---
 
-<div>
-
-*Fait par Abdelhakim Baalla*
-
-**[📧 Contact](mailto:abdelhakimbaalla50@gmail.com.com)**
-
-</div>
+```plaintext
+> *Fait par Abdelhakim Baalla*
+>
+> **[📧 Contact](mailto:abdelhakimbaalla50@gmail.com)**

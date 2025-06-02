@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('departement')->nullable();
             $table->foreignId('role_id')->constrained('roles');
             $table->foreignId('equipe_id')->nullable()->constrained('equipes');
-            $table->boolean('actif')->default(true);
+            $table->boolean('actif')->default(false);
             $table->timestamp('derniere_connexion')->nullable();
             $table->rememberToken();
             $table->engine = 'InnoDB';

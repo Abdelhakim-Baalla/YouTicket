@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,95 +17,135 @@ use Illuminate\Support\Facades\Route;
 
 // Page d'accueil
 Route::get('/', function () {
-    return view('auth.login');
+    return view('welcome');
 });
 
 // Routes d'authentification
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('login');
+    Route::post('/loginSubmitte', 'login')->name('login.submit');
+    Route::get('/register', 'showRegistrationForm')->name('register');
+    Route::post('/registerSubmitte', 'register')->name('register.submit');
+    Route::get('/logout', 'logout')->name('logout');
+    Route::get('/profile', 'profile')->name('profile');
+    Route::get('/validation', 'validationCompte')->name('valider.compte');
+    Route::post('/validation/email', 'sendValidationEmail')->name('validation.email');
+    Route::get('/validation/valider', 'validateAccount')->name('validate.account');
+    Route::post('/validation/sms', 'sendValidationSms')->name('validation.sms');
+    Route::post('/validation/sms/valider', 'validateSmsCode')->name('validation.sms.valider');
+});
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+// Mot de passe oublié
+Route::get('/mot-de-passe-oublie', [AuthController::class, 'showForgetPasswordForm'])->name('password.request');
+Route::post('/mot-de-passe-oublie', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reinitialiser-mot-de-passe/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reinitialiser-mot-de-passe', [AuthController::class, 'resetPassword'])->name('password.update');
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('password.request');
+// Route::controller(AuthController::class)->group(function () {
+//     Route::get('/login', 'showLoginForm')->name('login');
+//     // Route::get('/products/show', 'productShow')->name('products.show');
+//     // Route::get('/cart/save', 'addToCart')->name('add.cart.save');
+//     // Route::get('/cart', 'cartIndex')->name('cart.index');
+//     // Route::post('/cart/delete', 'cartDeleteItem')->name('cart.delete.product');
+//     // Route::get('/cart/vider', 'cartVider')->name('cart.vider');
+
+//     // Route::get('/checkout', 'checkoutIndex')->name('checkout.index');
+//     // Route::get('/checkout/confirmation', 'checkoutConfirmation')->name('payment.success');
+//     // Route::get('/checkout/cancel', 'checkoutCancel')->name('payment.cancel');
+//     // Route::post('/checkout/payment', 'checkoutpayment')->name('checkout.payment');
+
+//     // Route::get('/orders', 'ordersIndex')->name('orders.index');
+//     // Route::get('/orders/show', 'ordersShow')->name('orders.show');
+// });
+
+
+// Route::middleware('auth')->group(function () {
+//     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+//     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// });
+
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->name('password.request');
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+
+Route::controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'showDashboard')->name('dashboard');
+});
+
+
+
+
 
 // Tickets
 Route::prefix('tickets')->group(function () {
     Route::get('/', function () {
         return view('tickets.index');
     })->name('tickets.index');
-    
+
     Route::get('/create', function () {
         return view('tickets.create');
     })->name('tickets.create');
-    
+
     Route::get('/{id}', function ($id) {
         return view('tickets.show');
     })->name('tickets.show');
-    
+
     Route::get('/{id}/edit', function ($id) {
         return view('tickets.edit');
     })->name('tickets.edit');
 });
 
-// Utilisateurs
-Route::prefix('users')->group(function () {
-    Route::get('/', function () {
-        return view('users.index');
-    })->name('users.index');
-    
-    Route::get('/create', function () {
-        return view('users.create');
-    })->name('users.create');
-    
-    Route::get('/{id}', function ($id) {
-        return view('users.show');
-    })->name('users.show');
-    
-    Route::get('/{id}/edit', function ($id) {
-        return view('users.edit');
-    })->name('users.edit');
-});
+// // Utilisateurs
+// Route::prefix('users')->group(function () {
+//     Route::get('/', function () {
+//         return view('users.index');
+//     })->name('users.index');
 
-// Base de connaissances
-Route::prefix('knowledge')->group(function () {
-    Route::get('/', function () {
-        return view('knowledge.index');
-    })->name('knowledge.index');
-    
-    Route::get('/create', function () {
-        return view('knowledge.create');
-    })->name('knowledge.create');
-    
-    Route::get('/{id}', function ($id) {
-        return view('knowledge.show');
-    })->name('knowledge.show');
-});
+//     Route::get('/create', function () {
+//         return view('users.create');
+//     })->name('users.create');
 
-// Rapports
+//     Route::get('/{id}', function ($id) {
+//         return view('users.show');
+//     })->name('users.show');
+
+//     Route::get('/{id}/edit', function ($id) {
+//         return view('users.edit');
+//     })->name('users.edit');
+// });
+
+// // Base de connaissances
+// Route::prefix('knowledge')->group(function () {
+//     Route::get('/', function () {
+//         return view('knowledge.index');
+//     })->name('knowledge.index');
+
+//     Route::get('/create', function () {
+//         return view('knowledge.create');
+//     })->name('knowledge.create');
+
+//     Route::get('/{id}', function ($id) {
+//         return view('knowledge.show');
+//     })->name('knowledge.show');
+// });
+
+// // Rapports
 Route::get('/reports', function () {
     return view('reports.index');
 })->name('reports.index');
 
-// Paramètres
+// // Paramètres
 Route::prefix('settings')->group(function () {
     Route::get('/', function () {
         return view('settings.index');
     })->name('settings.index');
-    
+
     Route::get('/notifications', function () {
         return view('settings.notifications');
     })->name('settings.notifications');
-    
+
     Route::get('/integrations', function () {
         return view('settings.integrations');
     })->name('settings.integrations');
@@ -120,21 +162,21 @@ Route::prefix('settings')->group(function () {
         return view('settings.appearance');
     })->name('settings.appearance');
 
-     Route::get('/language', function () {
+    Route::get('/language', function () {
         return view('settings.language');
     })->name('settings.language');
 
-     Route::get('/backup', function () {
+    Route::get('/backup', function () {
         return view('settings.backup');
     })->name('settings.backup');
 });
 
-// Faq
-Route::get('/faq', function () {
-    return view('faq.index');
-})->name('faq.index');
+// // Faq
+// Route::get('/faq', function () {
+//     return view('faq.index');
+// })->name('faq.index');
 
-// Profile
-Route::get('/profile', function () {
-    return view('profile.index');
-})->name('profile.index');
+// // Profile
+// Route::get('/profile', function () {
+//     return view('profile.index');
+// })->name('profile.index');
