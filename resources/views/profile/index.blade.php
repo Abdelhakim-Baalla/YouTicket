@@ -1,584 +1,353 @@
 @extends('layouts.app')
 
+@section('title', 'Mon Profil - YouTicket')
+
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Mon profil</h1>
-        <button type="button" class="btn btn-primary">
-            <i class="fas fa-save me-1"></i> Enregistrer les modifications
-        </button>
-    </div>
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <div class="position-relative d-inline-block">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto" style="width: 120px; height: 120px; font-size: 48px;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle" style="width: 32px; height: 32px;">
-                                <i class="fas fa-camera"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <h5 class="card-title">Pierre Durand</h5>
-                    <p class="text-muted">Administrateur</p>
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fas fa-key me-1"></i> Changer le mot de passe
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Navigation</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <a href="#personal_info" class="list-group-item list-group-item-action active">
-                            <i class="fas fa-user me-2"></i> Informations personnelles
-                        </a>
-                        <a href="#account_settings" class="list-group-item list-group-item-action">
-                            <i class="fas fa-cog me-2"></i> Paramètres du compte
-                        </a>
-                        <a href="#notifications" class="list-group-item list-group-item-action">
-                            <i class="fas fa-bell me-2"></i> Préférences de notification
-                        </a>
-                        <a href="#security" class="list-group-item list-group-item-action">
-                            <i class="fas fa-shield-alt me-2"></i> Sécurité
-                        </a>
-                        <a href="#api_tokens" class="list-group-item list-group-item-action">
-                            <i class="fas fa-key me-2"></i> Jetons API
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Statistiques</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Tickets créés</span>
-                            <span class="badge bg-primary rounded-pill">24</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Tickets résolus</span>
-                            <span class="badge bg-success rounded-pill">18</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Commentaires</span>
-                            <span class="badge bg-info rounded-pill">42</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Dernière connexion</span>
-                            <span class="text-muted small">21/05/2025 08:30</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                            <span>Membre depuis</span>
-                            <span class="text-muted small">01/01/2025</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<div class="auth-container">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12 fade-in">
+            <h1 class="brand-tagline">Mon Profil</h1>
+            <p class="brand-description">Gérez vos informations personnelles et préférences de compte</p>
         </div>
 
-        <div class="col-md-9">
-            <div class="card mb-4" id="personal_info">
-                <div class="card-header">
-                    <h5 class="card-title">Informations personnelles</h5>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="first_name" class="form-label">Prénom</label>
-                                <input type="text" class="form-control" id="first_name" value="Pierre">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- Profile Card -->
+                <div class="auth-card mb-6">
+                    <div class="text-center">
+                        <div class="relative inline-block mb-6">
+                            <div class="w-20 h-20 rounded-full bg-gray-700 flex items-center justify-center text-2xl font-bold text-white mx-auto overflow-hidden">
+                                @if(auth()->user()->photo)
+                                    <img src="{{ auth()->user()->photo }}" alt="Photo de profil" class="w-full h-full object-cover">
+                                @else
+                                    {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
+                                @endif
                             </div>
-                            <div class="col-md-6">
-                                <label for="last_name" class="form-label">Nom</label>
-                                <input type="text" class="form-control" id="last_name" value="Durand">
+                        </div>
+                        <h3 class="auth-title mb-2">
+                            {{ auth()->user()->prenom ?? 'Prénom' }} {{ auth()->user()->nom ?? 'Nom' }}
+                        </h3>
+                        <p class="auth-subtitle mb-6">{{ auth()->user()->poste ?? 'Poste non défini' }}</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="auth-card mb-6">
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
+                        <i class="fas fa-list mr-2 text-primary-light"></i>
+                        Navigation
+                    </h3>
+                    <nav class="space-y-2">
+                        <a href="#personal_info" class="nav-link active flex items-center gap-3 px-3 py-3 text-sm rounded-lg transition-colors">
+                            <i class="fas fa-user text-primary-light"></i>
+                            Informations personnelles
+                        </a>
+                        <a href="#account_settings" class="nav-link flex items-center gap-3 px-3 py-3 text-sm rounded-lg transition-colors">
+                            <i class="fas fa-cog text-gray-400"></i>
+                            Paramètres du compte
+                        </a>
+                        <a href="#notifications" class="nav-link flex items-center gap-3 px-3 py-3 text-sm rounded-lg transition-colors">
+                            <i class="fas fa-bell text-gray-400"></i>
+                            Notifications
+                        </a>
+                        <a href="#security" class="nav-link flex items-center gap-3 px-3 py-3 text-sm rounded-lg transition-colors">
+                            <i class="fas fa-shield-alt text-gray-400"></i>
+                            Sécurité
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Statistics -->
+                <div class="auth-card">
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
+                        <i class="fas fa-chart-bar mr-2 text-primary-light"></i>
+                        Statistiques
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 text-sm">Tickets créés</span>
+                            <span class="feature-icon">24</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 text-sm">Tickets résolus</span>
+                            <span class="px-2 py-1 bg-green-900 bg-opacity-30 text-green-400 rounded-full text-xs font-medium">18</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 text-sm">Commentaires</span>
+                            <span class="px-2 py-1 bg-blue-900 bg-opacity-30 text-blue-400 rounded-full text-xs font-medium">42</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300 text-sm">Membre depuis</span>
+                            <span class="text-gray-400 text-xs">
+                                {{ auth()->user()->created_at ? auth()->user()->created_at->format('d/m/Y') : 'N/A' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-3 space-y-8">
+                <!-- Personal Information -->
+                <div class="auth-card fade-in" id="personal_info">
+                    <div class="auth-header">
+                        <h2 class="auth-title flex items-center justify-center">
+                            <i class="fas fa-user mr-3 text-primary-light"></i>
+                            Informations personnelles
+                        </h2>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prenom" class="form-label">Prénom</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-user"></i>
+                                    <input type="text" id="prenom" class="form-control" value="{{ auth()->user()->prenom ?? '' }}" placeholder="Votre prénom">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nom" class="form-label">Nom</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-user"></i>
+                                    <input type="text" id="nom" class="form-control" value="{{ auth()->user()->nom ?? '' }}" placeholder="Votre nom">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
+                        <div class="form-row">
+                            <div class="form-group">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="pierre.durand@exemple.com">
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-envelope"></i>
+                                    <input type="email" id="email" class="form-control" value="{{ auth()->user()->email ?? '' }}" placeholder="votre@email.com">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label">Téléphone</label>
-                                <input type="tel" class="form-control" id="phone" value="+33 1 23 45 67 89">
+                            <div class="form-group">
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-phone"></i>
+                                    <input type="tel" id="telephone" class="form-control" value="{{ auth()->user()->telephone ?? '' }}" placeholder="+33 1 23 45 67 89">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="job_title" class="form-label">Titre du poste</label>
-                            <input type="text" class="form-control" id="job_title" value="Directeur informatique">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="poste" class="form-label">Poste</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-briefcase"></i>
+                                    <input type="text" id="poste" class="form-control" value="{{ auth()->user()->poste ?? '' }}" placeholder="Votre poste">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="departement" class="form-label">Département</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-building"></i>
+                                    <select id="departement" class="form-control">
+                                        <option value="">Sélectionner un département</option>
+                                        <option value="it" {{ (auth()->user()->departement ?? '') == 'it' ? 'selected' : '' }}>IT</option>
+                                        <option value="accounting" {{ (auth()->user()->departement ?? '') == 'accounting' ? 'selected' : '' }}>Comptabilité</option>
+                                        <option value="hr" {{ (auth()->user()->departement ?? '') == 'hr' ? 'selected' : '' }}>Ressources Humaines</option>
+                                        <option value="marketing" {{ (auth()->user()->departement ?? '') == 'marketing' ? 'selected' : '' }}>Marketing</option>
+                                        <option value="sales" {{ (auth()->user()->departement ?? '') == 'sales' ? 'selected' : '' }}>Ventes</option>
+                                        <option value="management" {{ (auth()->user()->departement ?? '') == 'management' ? 'selected' : '' }}>Direction</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="department" class="form-label">Département</label>
-                            <select class="form-select" id="department">
-                                <option value="">Sélectionner un département</option>
-                                <option value="it" selected>IT</option>
-                                <option value="accounting">Comptabilité</option>
-                                <option value="hr">Ressources Humaines</option>
-                                <option value="marketing">Marketing</option>
-                                <option value="sales">Ventes</option>
-                                <option value="management">Direction</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="bio" class="form-label">Biographie</label>
-                            <textarea class="form-control" id="bio" rows="3">Directeur informatique avec plus de 15 ans d'expérience dans la gestion des systèmes d'information et des équipes techniques.</textarea>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Enregistrer les modifications
+                            </button>
                         </div>
                     </form>
                 </div>
-            </div>
 
-            <div class="card mb-4" id="account_settings">
-                <div class="card-header">
-                    <h5 class="card-title">Paramètres du compte</h5>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="language" class="form-label">Langue</label>
-                            <select class="form-select" id="language">
-                                <option value="fr" selected>Français</option>
-                                <option value="en">English</option>
-                                <option value="es">Español</option>
-                                <option value="de">Deutsch</option>
-                                <option value="it">Italiano</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="timezone" class="form-label">Fuseau horaire</label>
-                            <select class="form-select" id="timezone">
-                                <option value="UTC">UTC</option>
-                                <option value="Europe/Paris" selected>Europe/Paris</option>
-                                <option value="Europe/London">Europe/London</option>
-                                <option value="America/New_York">America/New_York</option>
-                                <option value="America/Los_Angeles">America/Los_Angeles</option>
-                                <option value="Asia/Tokyo">Asia/Tokyo</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="date_format" class="form-label">Format de date</label>
-                            <select class="form-select" id="date_format">
-                                <option value="d/m/Y" selected>DD/MM/YYYY (31/12/2025)</option>
-                                <option value="m/d/Y">MM/DD/YYYY (12/31/2025)</option>
-                                <option value="Y-m-d">YYYY-MM-DD (2025-12-31)</option>
-                                <option value="d F Y">DD Month YYYY (31 Décembre 2025)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="time_format" class="form-label">Format d'heure</label>
-                            <select class="form-select" id="time_format">
-                                <option value="H:i" selected>24 heures (14:30)</option>
-                                <option value="h:i A">12 heures (02:30 PM)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="dark_mode">
-                                <label class="form-check-label" for="dark_mode">Mode sombre</label>
+                <!-- Account Settings -->
+                <div class="auth-card fade-in" id="account_settings">
+                    <div class="auth-header">
+                        <h2 class="auth-title flex items-center justify-center">
+                            <i class="fas fa-cog mr-3 text-primary-light"></i>
+                            Paramètres du compte
+                        </h2>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="language" class="form-label">Langue</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-globe"></i>
+                                    <select id="language" class="form-control">
+                                        <option value="fr" selected>Français</option>
+                                        <option value="en">English</option>
+                                        <option value="es">Español</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="it">Italiano</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="timezone" class="form-label">Fuseau horaire</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-clock"></i>
+                                    <select id="timezone" class="form-control">
+                                        <option value="UTC">UTC</option>
+                                        <option value="Europe/Paris" selected>Europe/Paris</option>
+                                        <option value="Europe/London">Europe/London</option>
+                                        <option value="America/New_York">America/New_York</option>
+                                        <option value="America/Los_Angeles">America/Los_Angeles</option>
+                                        <option value="Asia/Tokyo">Asia/Tokyo</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="compact_mode">
-                                <label class="form-check-label" for="compact_mode">Mode compact</label>
+                        <div class="space-y-4">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="email_notifications" class="checkbox" checked>
+                                <label for="email_notifications" class="checkbox-label">
+                                    <strong>Notifications par email</strong><br>
+                                    <small>Recevoir les notifications importantes par email</small>
+                                </label>
                             </div>
-                            <div class="form-text">Réduit l'espacement pour afficher plus de contenu à l'écran</div>
+
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="browser_notifications" class="checkbox" checked>
+                                <label for="browser_notifications" class="checkbox-label">
+                                    <strong>Notifications navigateur</strong><br>
+                                    <small>Afficher les notifications dans le navigateur</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Enregistrer les préférences
+                            </button>
                         </div>
                     </form>
                 </div>
-            </div>
 
-            <div class="card mb-4" id="notifications">
-                <div class="card-header">
-                    <h5 class="card-title">Préférences de notification</h5>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Canaux de notification</label>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="notify_email" checked>
-                                <label class="form-check-label" for="notify_email">
-                                    Email
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="notify_browser" checked>
-                                <label class="form-check-label" for="notify_browser">
-                                    Notifications du navigateur
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="notify_sms">
-                                <label class="form-check-label" for="notify_sms">
-                                    SMS
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="notify_slack">
-                                <label class="form-check-label" for="notify_slack">
-                                    Slack
-                                </label>
+                <!-- Notifications -->
+                <div class="auth-card fade-in" id="notifications">
+                    <div class="auth-header">
+                        <h2 class="auth-title flex items-center justify-center">
+                            <i class="fas fa-bell mr-3 text-primary-light"></i>
+                            Préférences de notification
+                        </h2>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label">Types de notifications</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span>Nouveaux tickets</span>
+                                        <input type="checkbox" checked class="checkbox ml-auto">
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span>Commentaires</span>
+                                        <input type="checkbox" checked class="checkbox ml-auto">
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span>Assignations</span>
+                                        <input type="checkbox" checked class="checkbox ml-auto">
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span>Échéances SLA</span>
+                                        <input type="checkbox" class="checkbox ml-auto">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Événements</label>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Événement</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Navigateur</th>
-                                            <th class="text-center">SMS</th>
-                                            <th class="text-center">Slack</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Nouveau ticket assigné</td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Commentaire sur un ticket assigné</td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ticket proche de l'échéance SLA</td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ticket résolu</td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nouvel article dans la base de connaissances</td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                            <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="notification_frequency" class="form-label">Fréquence des notifications</label>
-                            <select class="form-select" id="notification_frequency">
-                                <option value="immediate" selected>Immédiate</option>
-                                <option value="hourly">Toutes les heures</option>
-                                <option value="daily">Quotidienne (résumé)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="quiet_hours" checked>
-                                <label class="form-check-label" for="quiet_hours">Activer les heures de silence</label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="quiet_hours_start" class="form-label">Début des heures de silence</label>
-                                <input type="time" class="form-control" id="quiet_hours_start" value="22:00">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="quiet_hours_end" class="form-label">Fin des heures de silence</label>
-                                <input type="time" class="form-control" id="quiet_hours_end" value="07:00">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card mb-4" id="security">
-                <div class="card-header">
-                    <h5 class="card-title">Sécurité</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h6>Changer le mot de passe</h6>
-                        <form>
-                            <div class="mb-3">
-                                <label for="current_password" class="form-label">Mot de passe actuel</label>
-                                <input type="password" class="form-control" id="current_password">
-                            </div>
-                            <div class="mb-3">
-                                <label for="new_password" class="form-label">Nouveau mot de passe</label>
-                                <input type="password" class="form-control" id="new_password">
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirmer le nouveau mot de passe</label>
-                                <input type="password" class="form-control" id="confirm_password">
-                            </div>
-                            <button type="button" class="btn btn-primary">Changer le mot de passe</button>
-                        </form>
-                    </div>
-
-                    <div class="mb-4">
-                        <h6>Authentification à deux facteurs</h6>
-                        <div class="mb-3">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="enable_2fa">
-                                <label class="form-check-label" for="enable_2fa">Activer l'authentification à deux facteurs</label>
-                            </div>
-                            <div class="form-text">Ajoute une couche de sécurité supplémentaire à votre compte</div>
-                        </div>
-                        <button type="button" class="btn btn-outline-primary" disabled>Configurer l'authentification à deux facteurs</button>
-                    </div>
-
-                    <div class="mb-4">
-                        <h6>Sessions actives</h6>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Appareil</th>
-                                        <th>Navigateur</th>
-                                        <th>Adresse IP</th>
-                                        <th>Dernière activité</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <i class="fas fa-desktop me-1"></i> Windows 10
-                                        </td>
-                                        <td>Chrome 112.0</td>
-                                        <td>192.168.1.105</td>
-                                        <td>Actuellement</td>
-                                        <td><span class="badge bg-success">Session actuelle</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <i class="fas fa-mobile-alt me-1"></i> iPhone 13
-                                        </td>
-                                        <td>Safari 15.4</td>
-                                        <td>192.168.1.110</td>
-                                        <td>Il y a 2 heures</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-sign-out-alt"></i> Déconnecter
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <i class="fas fa-laptop me-1"></i> MacBook Pro
-                                        </td>
-                                        <td>Firefox 99.0</td>
-                                        <td>192.168.1.120</td>
-                                        <td>Hier, 15:45</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-sign-out-alt"></i> Déconnecter
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <button type="button" class="btn btn-outline-danger">
-                            <i class="fas fa-sign-out-alt me-1"></i> Déconnecter toutes les autres sessions
-                        </button>
-                    </div>
-
-                    <div>
-                        <h6>Historique de connexion</h6>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Date et heure</th>
-                                        <th>Appareil</th>
-                                        <th>Navigateur</th>
-                                        <th>Adresse IP</th>
-                                        <th>Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>21/05/2025 08:30</td>
-                                        <td>Windows 10</td>
-                                        <td>Chrome 112.0</td>
-                                        <td>192.168.1.105</td>
-                                        <td><span class="badge bg-success">Réussi</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/05/2025 17:15</td>
-                                        <td>iPhone 13</td>
-                                        <td>Safari 15.4</td>
-                                        <td>192.168.1.110</td>
-                                        <td><span class="badge bg-success">Réussi</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>20/05/2025 09:45</td>
-                                        <td>Windows 10</td>
-                                        <td>Chrome 112.0</td>
-                                        <td>192.168.1.105</td>
-                                        <td><span class="badge bg-success">Réussi</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>19/05/2025 14:20</td>
-                                        <td>MacBook Pro</td>
-                                        <td>Firefox 99.0</td>
-                                        <td>192.168.1.120</td>
-                                        <td><span class="badge bg-success">Réussi</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>19/05/2025 08:10</td>
-                                        <td>Inconnu</td>
-                                        <td>Chrome 112.0</td>
-                                        <td>203.0.113.42</td>
-                                        <td><span class="badge bg-danger">Échoué</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" id="api_tokens">
-                <div class="card-header">
-                    <h5 class="card-title">Jetons API</h5>
-                </div>
-                <div class="card-body">
-                    <p>Créez des jetons API pour accéder à l'API du système de ticketing depuis des applications externes.</p>
-                    
-                    <div class="mb-4">
-                        <h6>Créer un nouveau jeton</h6>
-                        <form>
-                            <div class="mb-3">
-                                <label for="token_name" class="form-label">Nom du jeton</label>
-                                <input type="text" class="form-control" id="token_name" placeholder="Ex: Application mobile">
-                            </div>
-                            <div class="mb-3">
-                                <label for="token_permissions" class="form-label">Permissions</label>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="perm_read_tickets" checked>
-                                    <label class="form-check-label" for="perm_read_tickets">
-                                        Lire les tickets
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="perm_create_tickets" checked>
-                                    <label class="form-check-label" for="perm_create_tickets">
-                                        Créer des tickets
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="perm_update_tickets">
-                                    <label class="form-check-label" for="perm_update_tickets">
-                                        Mettre à jour des tickets
-                                    </label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="perm_delete_tickets">
-                                    <label class="form-check-label" for="perm_delete_tickets">
-                                        Supprimer des tickets
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="perm_read_users">
-                                    <label class="form-check-label" for="perm_read_users">
-                                        Lire les utilisateurs
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="token_expiration" class="form-label">Expiration</label>
-                                <select class="form-select" id="token_expiration">
-                                    <option value="never">Jamais</option>
-                                    <option value="1_day">1 jour</option>
-                                    <option value="7_days">7 jours</option>
-                                    <option value="30_days" selected>30 jours</option>
-                                    <option value="60_days">60 jours</option>
-                                    <option value="90_days">90 jours</option>
-                                    <option value="1_year">1 an</option>
+                            <div class="input-wrapper">
+                                <i class="input-icon fas fa-clock"></i>
+                                <select id="notification_frequency" class="form-control">
+                                    <option value="immediate" selected>Immédiate</option>
+                                    <option value="hourly">Toutes les heures</option>
+                                    <option value="daily">Quotidienne (résumé)</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="text-center">
                             <button type="button" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i> Créer un jeton
+                                <i class="fas fa-save"></i>
+                                Enregistrer les notifications
                             </button>
-                        </form>
+                        </div>
                     </div>
-                    
-                    <div>
-                        <h6>Jetons actifs</h6>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Dernière utilisation</th>
-                                        <th>Créé le</th>
-                                        <th>Expire le</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Application mobile</td>
-                                        <td>21/05/2025 09:15</td>
-                                        <td>15/05/2025</td>
-                                        <td>14/06/2025</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-trash"></i> Révoquer
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Intégration Slack</td>
-                                        <td>20/05/2025 14:30</td>
-                                        <td>10/05/2025</td>
-                                        <td>09/06/2025</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-trash"></i> Révoquer
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                </div>
+
+                <!-- Security -->
+                <div class="auth-card fade-in" id="security">
+                    <div class="auth-header">
+                        <h2 class="auth-title flex items-center justify-center">
+                            <i class="fas fa-shield-alt mr-3 text-primary-light"></i>
+                            Sécurité
+                        </h2>
+                    </div>
+                    <div class="space-y-8">
+                        <!-- Change Password -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-4 text-center">Changer le mot de passe</h3>
+                            <form class="space-y-4">
+                                <div class="form-group">
+                                    <label for="current_password" class="form-label">Mot de passe actuel</label>
+                                    <div class="input-wrapper">
+                                        <i class="input-icon fas fa-lock"></i>
+                                        <input type="password" id="current_password" class="form-control" placeholder="Mot de passe actuel">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="new_password" class="form-label">Nouveau mot de passe</label>
+                                        <div class="input-wrapper">
+                                            <i class="input-icon fas fa-lock"></i>
+                                            <input type="password" id="new_password" class="form-control" placeholder="Nouveau mot de passe">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
+                                        <div class="input-wrapper">
+                                            <i class="input-icon fas fa-lock"></i>
+                                            <input type="password" id="confirm_password" class="form-control" placeholder="Confirmer le mot de passe">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="fas fa-key"></i>
+                                        Changer le mot de passe
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -586,4 +355,247 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Profile Image Styles */
+.w-20.h-20.rounded-full {
+    border: 3px solid rgba(99, 102, 241, 0.3);
+}
+
+/* Navigation Styles */
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-light);
+    border-left: 3px solid var(--primary);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+    margin-right: 0.75rem;
+}
+
+/* Form Styles */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.form-control {
+    padding-left: 3rem;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Feature Items */
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+}
+
+.feature-item .flex-1 {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feature-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-light);
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .lg\:grid-cols-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .lg\:col-span-1, .lg\:col-span-3 {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .auth-container {
+        padding: 1rem;
+    }
+    
+    .brand-tagline {
+        font-size: 2rem;
+    }
+}
+
+/* Animation Styles */
+.fade-in {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Update active navigation
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+        }
+    });
+});
+
+// Update active navigation on scroll
+window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 200)) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Form validation and submission
+document.addEventListener('DOMContentLoaded', function() {
+    // Password strength indicator
+    const newPasswordInput = document.getElementById('new_password');
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            // Add password strength logic here
+        });
+    }
+    
+    // Save buttons functionality
+    document.querySelectorAll('.btn.btn-primary').forEach(button => {
+        button.addEventListener('click', function() {
+            // Add save functionality here
+            console.log('Saving changes...');
+            
+            // Show success message
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistré !';
+            this.style.background = 'var(--gradient-accent)';
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.style.background = 'var(--gradient-primary)';
+            }, 2000);
+        });
+    });
+});
+</script>
 @endsection
