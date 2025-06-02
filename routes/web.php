@@ -35,6 +35,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/validation/sms/valider', 'validateSmsCode')->name('validation.sms.valider');
 });
 
+// Mot de passe oublié
+Route::get('/mot-de-passe-oublie', [AuthController::class, 'showForgetPasswordForm'])->name('password.request');
+Route::post('/mot-de-passe-oublie', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reinitialiser-mot-de-passe/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reinitialiser-mot-de-passe', [AuthController::class, 'resetPassword'])->name('password.update');
+
 // Route::controller(AuthController::class)->group(function () {
 //     Route::get('/login', 'showLoginForm')->name('login');
 //     // Route::get('/products/show', 'productShow')->name('products.show');
