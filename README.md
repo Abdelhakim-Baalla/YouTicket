@@ -1,4 +1,4 @@
-# ![YouTicket Logo](/public/images/YouTicketLogo.png)
+# ![YouTicket Logo](/public/images/YouTicketLogo.jpg)
 
 ## 🚀 YouTicket - Révolutionnez Votre Support Client
 
