@@ -29,6 +29,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/profile', 'profile')->name('profile');
     Route::get('/validation', 'validationCompte')->name('valider.compte');
+    Route::post('/validation/email', 'sendValidationEmail')->name('validation.email');
+    Route::get('/validation/valider', 'validateAccount')->name('validate.account');
 });
 
 // Route::controller(AuthController::class)->group(function () {

@@ -73,7 +73,7 @@
                             <span>Lien valable 24h</span>
                         </div>
                     </div>
-                    <form method="POST" action="" class="option-form">
+                    <form method="POST" action="{{ route('validation.email') }}" class="option-form">
                         @csrf
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane"></i>

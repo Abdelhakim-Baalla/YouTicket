@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use App\Models\Utilisateur;
+use App\Mail\ValidationEmail;
 
 class AuthController extends Controller
 {
@@ -143,5 +146,36 @@ class AuthController extends Controller
         }
 
         return view('auth.register');
+    }
+
+    /**
+     * Envoie un email de validation de compte avec un lien sécurisé
+     */
+    public function sendValidationEmail(Request $request)
+    {
+        $user = Auth::user();
+        // Générer un lien signé valable 24h
+        $url = URL::temporarySignedRoute(
+            'validate.account',
+            now()->addHours(24),
+            ['user' => $user->id]
+        );
+        Mail::to($user->email)->send(new ValidationEmail($url, $user));
+        return back()->with('success', 'Un email de validation a été envoyé à votre adresse.');
+    }
+
+    /**
+     * Valide le compte utilisateur via le lien reçu par email
+     */
+    public function validateAccount(Request $request)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(401, 'Lien de validation invalide ou expiré.');
+        }
+        $user = \App\Models\Utilisateur::findOrFail($request->user);
+        $user->actif = 1;
+        $user->save();
+        Auth::login($user);
+        return redirect()->route('profile')->with('success', 'Votre compte a été validé avec succès !');
     }
 }
