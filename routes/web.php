@@ -26,8 +26,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/loginSubmitte', 'login')->name('login.submit');
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/registerSubmitte', 'register')->name('register.submit');
-    Route::post('/logout', 'logout')->name('logout');
-    Route::get('/profile', 'profile')->name('profile.index');
+    Route::get('/logout', 'logout')->name('logout');
+    Route::get('/profile', 'profile')->name('profile');
 });
 
 // Route::controller(AuthController::class)->group(function () {
@@ -58,28 +58,33 @@ Route::controller(AuthController::class)->group(function () {
 // })->name('password.request');
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->name('dashboard.index');
+
+Route::controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'showDashboard')->name('dashboard');
+});
+
+
+
+
 
 // Tickets
-// Route::prefix('tickets')->group(function () {
-//     Route::get('/', function () {
-//         return view('tickets.index');
-//     })->name('tickets.index');
+Route::prefix('tickets')->group(function () {
+    Route::get('/', function () {
+        return view('tickets.index');
+    })->name('tickets.index');
 
-//     Route::get('/create', function () {
-//         return view('tickets.create');
-//     })->name('tickets.create');
+    Route::get('/create', function () {
+        return view('tickets.create');
+    })->name('tickets.create');
 
-//     Route::get('/{id}', function ($id) {
-//         return view('tickets.show');
-//     })->name('tickets.show');
+    Route::get('/{id}', function ($id) {
+        return view('tickets.show');
+    })->name('tickets.show');
 
-//     Route::get('/{id}/edit', function ($id) {
-//         return view('tickets.edit');
-//     })->name('tickets.edit');
-// });
+    Route::get('/{id}/edit', function ($id) {
+        return view('tickets.edit');
+    })->name('tickets.edit');
+});
 
 // // Utilisateurs
 // Route::prefix('users')->group(function () {
@@ -116,44 +121,44 @@ Route::get('/dashboard', function () {
 // });
 
 // // Rapports
-// Route::get('/reports', function () {
-//     return view('reports.index');
-// })->name('reports.index');
+Route::get('/reports', function () {
+    return view('reports.index');
+})->name('reports.index');
 
 // // Paramètres
-// Route::prefix('settings')->group(function () {
-//     Route::get('/', function () {
-//         return view('settings.index');
-//     })->name('settings.index');
+Route::prefix('settings')->group(function () {
+    Route::get('/', function () {
+        return view('settings.index');
+    })->name('settings.index');
 
-//     Route::get('/notifications', function () {
-//         return view('settings.notifications');
-//     })->name('settings.notifications');
+    Route::get('/notifications', function () {
+        return view('settings.notifications');
+    })->name('settings.notifications');
 
-//     Route::get('/integrations', function () {
-//         return view('settings.integrations');
-//     })->name('settings.integrations');
+    Route::get('/integrations', function () {
+        return view('settings.integrations');
+    })->name('settings.integrations');
 
-//     Route::get('/email', function () {
-//         return view('settings.email');
-//     })->name('settings.email');
+    Route::get('/email', function () {
+        return view('settings.email');
+    })->name('settings.email');
 
-//     Route::get('/security', function () {
-//         return view('settings.security');
-//     })->name('settings.security');
+    Route::get('/security', function () {
+        return view('settings.security');
+    })->name('settings.security');
 
-//     Route::get('/appearance', function () {
-//         return view('settings.appearance');
-//     })->name('settings.appearance');
+    Route::get('/appearance', function () {
+        return view('settings.appearance');
+    })->name('settings.appearance');
 
-//     Route::get('/language', function () {
-//         return view('settings.language');
-//     })->name('settings.language');
+    Route::get('/language', function () {
+        return view('settings.language');
+    })->name('settings.language');
 
-//     Route::get('/backup', function () {
-//         return view('settings.backup');
-//     })->name('settings.backup');
-// });
+    Route::get('/backup', function () {
+        return view('settings.backup');
+    })->name('settings.backup');
+});
 
 // // Faq
 // Route::get('/faq', function () {
