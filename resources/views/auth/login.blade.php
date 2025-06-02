@@ -117,5 +117,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{asset('js/validationInscriptionFormulaire.js')}}"></script>
+<script src="{{asset('js/validationConnexionFormulaire.js')}}"></script>
 @endsection
