@@ -1,4 +1,3 @@
-@if(auth()->user()->actif == 1)
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -846,6 +845,13 @@
                             S'inscrire
                         </a>
                     @else
+                        <form method="GET" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class=" text-red-400 btn btn-primary text-sm">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Déconnexion</span>
+                                </button>
+                        </form>
                         <a href="{{ route('dashboard') }}" class="btn btn-primary text-sm">
                             <i class="fas fa-tachometer-alt mr-2"></i>
                             Dashboard
@@ -1002,8 +1008,3 @@
     @yield('scripts')
 </body>
 </html>
-@else
-    <script>
-        window.location.href = "{{ route('valider.compte') }}";
-    </script>
-@endif

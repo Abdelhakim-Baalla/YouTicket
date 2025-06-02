@@ -109,11 +109,21 @@ class AuthController extends Controller
 
     public function profile()
     {
+        // dd(Auth::user()->actif);
         if (Auth::check()) {
             return view('profile.index');
         }
 
         return redirect()->route('login')->with('error', 'Please log in to access to your profile.');
+    }
+
+    public function validationCompte()
+    {
+        if (Auth::check()) {
+            return view('auth.validation');
+        }
+
+        return redirect()->route('login')->with('error', 'Please log in to validate your account.');
     }
 
 

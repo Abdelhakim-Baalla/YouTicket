@@ -28,6 +28,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/registerSubmitte', 'register')->name('register.submit');
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/profile', 'profile')->name('profile');
+    Route::get('/validation', 'validationCompte')->name('valider.compte');
 });
 
 // Route::controller(AuthController::class)->group(function () {

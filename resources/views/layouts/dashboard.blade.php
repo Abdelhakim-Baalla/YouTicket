@@ -1,3 +1,4 @@
+@if(auth()->user()->actif == 1)
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -711,3 +712,8 @@
     @yield('scripts')
 </body>
 </html>
+@else
+    <script>
+        window.location.href = "{{ route('valider.compte') }}";
+    </script>
+@endif
