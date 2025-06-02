@@ -59,7 +59,6 @@
                             class="form-control @error('email') error @enderror" 
                             placeholder="votre@email.com"
                             value="{{ old('email') }}"
-                            required
                             autocomplete="email"
                             autofocus
                         >
@@ -82,7 +81,6 @@
                             name="password" 
                             class="form-control @error('password') error @enderror" 
                             placeholder="••••••••••"
-                            required
                             autocomplete="current-password"
                         >
                     </div>
@@ -116,4 +114,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="{{asset('js/validationInscriptionFormulaire.js')}}"></script>
 @endsection
