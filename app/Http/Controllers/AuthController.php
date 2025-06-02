@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Utilisateur;
 
 class AuthController extends Controller
 {
     // SUPPRESSION des middlewares dans le constructeur pour éviter les boucles de redirection
-    public function __construct()
-    {
-        
-    }
+    public function __construct() {}
 
     public function login(Request $request)
     {
@@ -22,7 +20,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-      
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('profile');
@@ -57,34 +55,50 @@ class AuthController extends Controller
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:utilisateurs',
-            'password' => 'required|string|min:6',
-            'telephone' => 'required|string|max:13',
+            'password' => 'required|string|min:8',
+            'telephone' => 'required|string|max:15',
             'post' => 'required|string|max:255',
+            'terms' => 'required|accepted',
+        ], [
+            // Messages d'erreur personnalisés
+            'nom.required' => 'Le nom est requis',
+            'prenom.required' => 'Le prénom est requis',
+            'email.required' => 'L\'adresse email est requise',
+            'email.email' => 'Veuillez entrer une adresse email valide',
+            'email.unique' => 'Cette adresse email est déjà utilisée par un autre compte',
+            'password.required' => 'Le mot de passe est requis',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            'telephone.required' => 'Le numéro de téléphone est requis',
+            'post.required' => 'Le poste est requis',
+            'terms.required' => 'Vous devez accepter les conditions d\'utilisation',
+            'terms.accepted' => 'Vous devez accepter les conditions d\'utilisation',
         ]);
-        $data['password'] = Hash::make($data['password']);
-        // dd($data['password']);
 
-        $user = Utilisateur::create($data);
+        try {
+            $data['password'] = Hash::make($data['password']);
 
-        if (Auth::login($user)) {
-            $request->session()->regenerate();
-            return redirect()->route('profile');
+            // Retirer le champ 'terms' avant de créer l'utilisateur
+            unset($data['terms']);
+
+            $user = Utilisateur::create($data);
+
+            if ($user) {
+                Auth::login($user);
+                $request->session()->regenerate();
+
+                return redirect()->route('profile')->with('success', 'Compte créé avec succès !');
+            }
+
+            return back()->withErrors([
+                'general' => 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.',
+            ])->withInput();
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la création du compte: ' . $e->getMessage());
+
+            return back()->withErrors([
+                'general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
+            ])->withInput();
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-
-        // $token = Auth::login($user);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'User created successfully',
-        //     'user' => $user,
-        //     'authorisation' => [
-        //         'token' => $token,
-        //         'type' => 'bearer',
-        //     ]
-        // ]);
     }
 
     public function logout()
@@ -98,7 +112,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return view('profile.index');
         }
-        
+
         return redirect()->route('login')->with('error', 'Please log in to access to your profile.');
     }
 

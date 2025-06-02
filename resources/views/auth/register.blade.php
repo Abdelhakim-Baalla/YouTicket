@@ -60,7 +60,6 @@
                                 class="form-control @error('prenom') error @enderror" 
                                 placeholder="Prénom"
                                 value="{{ old('prenom') }}"
-                                required
                                 autocomplete="given-name"
                                 autofocus
                             >
@@ -84,7 +83,6 @@
                                 class="form-control @error('nom') error @enderror" 
                                 placeholder="Nom"
                                 value="{{ old('nom') }}"
-                                required
                                 autocomplete="family-name"
                             >
                         </div>
@@ -108,7 +106,6 @@
                             class="form-control @error('email') error @enderror" 
                             placeholder="votre@email.com"
                             value="{{ old('email') }}"
-                            required
                             autocomplete="email"
                         >
                     </div>
@@ -132,7 +129,6 @@
                                 class="form-control @error('telephone') error @enderror" 
                                 placeholder="+212 6 12 34 56 78"
                                 value="{{ old('telephone') }}"
-                                required
                                 autocomplete="tel"
                             >
                         </div>
@@ -155,7 +151,6 @@
                                 class="form-control @error('post') error @enderror" 
                                 placeholder="Votre fonction"
                                 value="{{ old('post') }}"
-                                required
                                 autocomplete="organization-title"
                             >
                         </div>
@@ -178,7 +173,7 @@
                             name="password" 
                             class="form-control @error('password') error @enderror" 
                             placeholder="8 caractères minimum"
-                            required
+                            value="{{ old('password') }}"
                             autocomplete="new-password"
                             minlength="8"
                         >
@@ -201,7 +196,7 @@
                             name="password_confirmation" 
                             class="form-control" 
                             placeholder="Retapez votre mot de passe"
-                            required
+                            value="{{ old('password_confirmation') }}"
                             autocomplete="new-password"
                             minlength="8"
                         >
@@ -209,7 +204,7 @@
                 </div>
 
                 <div class="checkbox-wrapper">
-                    <input type="checkbox" id="terms" name="terms" class="checkbox @error('terms') error @enderror" required>
+                    <input type="checkbox" id="terms" name="terms" class="checkbox @error('terms') error @enderror" >
                     <label for="terms" class="checkbox-label">
                         J'accepte les <a href="#" class="auth-link">conditions d'utilisation</a> et la 
                         <a href="#" class="auth-link">politique de confidentialité</a>
@@ -234,4 +229,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="{{asset('js/validationInscriptionFormulaire.js')}}"></script>
 @endsection
