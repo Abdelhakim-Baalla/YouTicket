@@ -635,7 +635,11 @@
                     
                     <div class="relative">
                         <button class="user-avatar" id="topbarProfileBtn">
-                            {{ strtoupper(substr(auth()->user()->prenom, 0, 1)) }}{{ strtoupper(substr(auth()->user()->nom, 0, 1)) }}
+                             @if(auth()->user()->photo)
+                                    <img src="{{ auth()->user()->photo }}" alt="Photo de profil" class="w-full h-full rounded-full object-cover">
+                                @else
+                                    {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
+                                @endif
                         </button>
                         
                         <div class="dropdown-menu" id="topbarDropdown">
