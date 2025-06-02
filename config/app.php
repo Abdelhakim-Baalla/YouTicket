@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -137,7 +136,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -167,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        NotificationChannels\Twilio\TwilioProvider::class,
 
         /*
          * Application Service Providers...
@@ -176,7 +175,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*
@@ -192,6 +190,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // ...
+        'TwilioChannel' => NotificationChannels\Twilio\TwilioChannel::class,
     ])->toArray(),
-
 ];

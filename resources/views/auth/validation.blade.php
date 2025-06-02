@@ -103,14 +103,27 @@
                             <span>Valable 10 minutes</span>
                         </div>
                     </div>
-                    <form method="POST" action="" class="option-form">
+                    <form method="POST" action="{{ route('validation.sms') }}" class="option-form">
                         @csrf
                         <div class="phone-input">
-                            <input type="tel" name="phone" value="{{ auth()->user()->telephone }}" placeholder="+212 XXXXXXXXX" class="form-control" required>
+                            <input type="tel" name="phone" value="{{ auth()->user()->telephone }}" placeholder="+212 XXXXXXXXX" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-accent">
                             <i class="fas fa-sms"></i>
                             Envoyer le code SMS
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('validation.sms.valider') }}" class="option-form" style="margin-top:1rem;">
+                        @csrf
+                        <div class="code-input">
+                            <input type="text" name="code" placeholder="Entrez le code reçu" maxlength="6" class="form-control code-field" required>
+                        </div>
+                        @error('code')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            Valider le code
                         </button>
                     </form>
                 </div>
@@ -849,12 +862,12 @@ document.addEventListener('DOMContentLoaded', function() {
     phoneInputs.forEach(input => {
         input.addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
-            if (value.startsWith('33')) {
+            if (value.startsWith('212')) {
                 value = '+' + value;
             } else if (value.startsWith('0')) {
-                value = '+33' + value.substring(1);
+                value = '+212' + value.substring(1);
             } else if (!value.startsWith('+')) {
-                value = '+33' + value;
+                value = '+212' + value;
             }
             this.value = value;
         });

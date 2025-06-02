@@ -31,6 +31,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/validation', 'validationCompte')->name('valider.compte');
     Route::post('/validation/email', 'sendValidationEmail')->name('validation.email');
     Route::get('/validation/valider', 'validateAccount')->name('validate.account');
+    Route::post('/validation/sms', 'sendValidationSms')->name('validation.sms');
+    Route::post('/validation/sms/valider', 'validateSmsCode')->name('validation.sms.valider');
 });
 
 // Route::controller(AuthController::class)->group(function () {

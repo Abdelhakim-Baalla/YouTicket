@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Utilisateur extends Authenticatable implements JWTSubject
@@ -76,5 +76,13 @@ class Utilisateur extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Permet à Laravel Notification Channels d'envoyer un SMS via Twilio
+     */
+    public function routeNotificationForTwilio()
+    {
+        return $this->telephone;
     }
 }

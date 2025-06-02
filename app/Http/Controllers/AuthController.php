@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Models\Utilisateur;
 use App\Mail\ValidationEmail;
+use App\Notifications\ValidationSms;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -177,5 +179,42 @@ class AuthController extends Controller
         $user->save();
         Auth::login($user);
         return redirect()->route('profile')->with('success', 'Votre compte a été validé avec succès !');
+    }
+
+    /**
+     * Envoie un code de validation par SMS
+     */
+    public function sendValidationSms(Request $request)
+    {
+        $user = Auth::user();
+        $code = random_int(100000, 999999);
+        // Stocker le code temporairement (10 min)
+        Cache::put('sms_code_' . $user->id, $code, now()->addMinutes(10));
+        $user->notify(new ValidationSms($code));
+        return back()->with('success', 'Un code de validation a été envoyé par SMS.');
+    }
+
+    /**
+     * Vérifie le code SMS et active le compte
+     */
+    public function validateSmsCode(Request $request)
+    {
+        $request->validate(['code' => 'required|digits:6']);
+        $user = Auth::user();
+        $code = Cache::get('sms_code_' . $user->id);
+        if ($code && $request->code == $code) {
+            // Re-fetch the user as an Eloquent model to ensure save() is available
+            $eloquentUser = \App\Models\Utilisateur::find($user->id);
+            if ($eloquentUser) {
+                $eloquentUser->actif = 1;
+                $eloquentUser->save();
+                Cache::forget('sms_code_' . $user->id);
+                Auth::login($eloquentUser);
+                return redirect()->route('profile')->with('success', 'Votre compte a été validé par SMS !');
+            } else {
+                return back()->withErrors(['code' => 'Utilisateur introuvable.']);
+            }
+        }
+        return back()->withErrors(['code' => 'Code invalide ou expiré.']);
     }
 }

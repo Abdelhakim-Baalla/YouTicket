@@ -204,6 +204,6 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 *Fait par Abdelhakim Baalla*
 
-**[📧 Contact](mailto:abdelhakimbaalla50@gmail.com.com)**
+**[📧 Contact](mailto:abdelhakimbaalla50@gmail.com)**
 
 </div>
