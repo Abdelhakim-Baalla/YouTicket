@@ -11,14 +11,19 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Utilisateur;
 use App\Mail\ValidationEmail;
 use App\Notifications\ValidationSms;
+use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    // SUPPRESSION des middlewares dans le constructeur pour éviter les boucles de redirection
-    public function __construct() {}
+    protected $utilisateurRepository;
+
+    public function __construct(UtilisateurRepositoryInterface $utilisateurRepository) 
+    {
+        $this->utilisateurRepository = $utilisateurRepository;
+    }
 
     public function login(Request $request)
     {
@@ -272,5 +277,37 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('success', 'Votre mot de passe a été réinitialisé avec succès.')
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    /**
+     * Affiche le formulaire d'édition du profil utilisateur
+     */
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+
+    /**
+     * Met à jour les informations personnelles de l'utilisateur
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        // dd($request->all());
+        $data = $request->validate([
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:utilisateurs,email,' . $user->id,
+            'telephone' => 'nullable|string|max:20',
+            'poste' => 'nullable|string|max:255',
+            'departement' => 'nullable|string|max:255',
+        ]);
+        
+        // dd($data);
+
+        $this->utilisateurRepository->mettreAJour($user->id, $data);
+        // $user->update($data);
+        return back()->with('success', 'Profil mis à jour avec succès.');
     }
 }

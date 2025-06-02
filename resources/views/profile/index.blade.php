@@ -98,20 +98,21 @@
                             Informations personnelles
                         </h2>
                     </div>
-                    <form class="space-y-6">
+                    <form action="{{route('profile.update')}}" method="POST" class="space-y-6">
+                        @csrf
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="prenom" class="form-label">Prénom</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-user"></i>
-                                    <input type="text" id="prenom" class="form-control" value="{{ auth()->user()->prenom ?? '' }}" placeholder="Votre prénom">
+                                    <input type="text" id="prenom" name="prenom" class="form-control" value="{{ auth()->user()->prenom ?? '' }}" placeholder="Votre prénom">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="nom" class="form-label">Nom</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-user"></i>
-                                    <input type="text" id="nom" class="form-control" value="{{ auth()->user()->nom ?? '' }}" placeholder="Votre nom">
+                                    <input type="text" id="nom" name="nom" class="form-control" value="{{ auth()->user()->nom ?? '' }}" placeholder="Votre nom">
                                 </div>
                             </div>
                         </div>
@@ -121,14 +122,14 @@
                                 <label for="email" class="form-label">Email</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-envelope"></i>
-                                    <input type="email" id="email" class="form-control" value="{{ auth()->user()->email ?? '' }}" placeholder="votre@email.com">
+                                    <input type="email" id="email" name="email" class="form-control" value="{{ auth()->user()->email ?? '' }}" placeholder="votre@email.com">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="telephone" class="form-label">Téléphone</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-phone"></i>
-                                    <input type="tel" id="telephone" class="form-control" value="{{ auth()->user()->telephone ?? '' }}" placeholder="+33 1 23 45 67 89">
+                                    <input type="tel" id="telephone" name="telephone" class="form-control" value="{{ auth()->user()->telephone ?? '' }}" placeholder="+33 1 23 45 67 89">
                                 </div>
                             </div>
                         </div>
@@ -138,14 +139,14 @@
                                 <label for="poste" class="form-label">Poste</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-briefcase"></i>
-                                    <input type="text" id="poste" class="form-control" value="{{ auth()->user()->poste ?? '' }}" placeholder="Votre poste">
+                                    <input type="text" id="poste" name="poste" class="form-control" value="{{ auth()->user()->poste ?? '' }}" placeholder="Votre poste">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="departement" class="form-label">Département</label>
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-building"></i>
-                                    <select id="departement" class="form-control">
+                                    <select id="departement" name="departement" class="form-control">
                                         <option value="">Sélectionner un département</option>
                                         <option value="it" {{ (auth()->user()->departement ?? '') == 'it' ? 'selected' : '' }}>IT</option>
                                         <option value="accounting" {{ (auth()->user()->departement ?? '') == 'accounting' ? 'selected' : '' }}>Comptabilité</option>
@@ -159,7 +160,8 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary">
+
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i>
                                 Enregistrer les modifications
                             </button>

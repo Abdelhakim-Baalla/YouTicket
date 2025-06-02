@@ -180,3 +180,8 @@ Route::prefix('settings')->group(function () {
 // Route::get('/profile', function () {
 //     return view('profile.index');
 // })->name('profile.index');
+
+Route::middleware('auth')->group(function () {
+    // Route::get('/profil/edition', [AuthController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profil/edition', [AuthController::class, 'updateProfile'])->name('profile.update');
+});
