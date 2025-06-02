@@ -12,7 +12,7 @@ class AuthController extends Controller
     // SUPPRESSION des middlewares dans le constructeur pour éviter les boucles de redirection
     public function __construct()
     {
-        // Ne rien mettre ici, la gestion des accès se fait dans les routes
+        
     }
 
     public function login(Request $request)
@@ -25,7 +25,7 @@ class AuthController extends Controller
       
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard.index');
+            return redirect()->route('profile');
         }
 
         return back()->withErrors([
@@ -68,7 +68,7 @@ class AuthController extends Controller
 
         if (Auth::login($user)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard.index');
+            return redirect()->route('profile');
         }
 
         return back()->withErrors([
@@ -99,14 +99,14 @@ class AuthController extends Controller
             return view('profile.index');
         }
         
-        return redirect()->route('login');
+        return redirect()->route('login')->with('error', 'Please log in to access to your profile.');
     }
 
 
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard.index');
+            return redirect()->route('dashboard');
         }
 
         return view('auth.login');
@@ -115,7 +115,7 @@ class AuthController extends Controller
     public function showRegistrationForm()
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard.index');
+            return redirect()->route('dashboard');
         }
 
         return view('auth.register');
