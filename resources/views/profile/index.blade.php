@@ -250,7 +250,7 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i>
                                 Enregistrer les préférences
                             </button>
@@ -322,7 +322,7 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i>
                                 Enregistrer les notifications
                             </button>
@@ -342,12 +342,13 @@
                         <!-- Change Password -->
                         <div>
                             <h3 class="text-lg font-semibold text-white mb-4 text-center">Changer le mot de passe</h3>
-                            <form class="space-y-4">
+                            <form class="space-y-4" action="{{route('profile.change_password')}}" method="POST">
+                                @csrf
                                 <div class="form-group">
                                     <label for="current_password" class="form-label">Mot de passe actuel</label>
                                     <div class="input-wrapper">
                                         <i class="input-icon fas fa-lock"></i>
-                                        <input type="password" id="current_password" class="form-control" placeholder="Mot de passe actuel">
+                                        <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Mot de passe actuel">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -355,19 +356,19 @@
                                         <label for="new_password" class="form-label">Nouveau mot de passe</label>
                                         <div class="input-wrapper">
                                             <i class="input-icon fas fa-lock"></i>
-                                            <input type="password" id="new_password" class="form-control" placeholder="Nouveau mot de passe">
+                                            <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Nouveau mot de passe">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
                                         <div class="input-wrapper">
                                             <i class="input-icon fas fa-lock"></i>
-                                            <input type="password" id="confirm_password" class="form-control" placeholder="Confirmer le mot de passe">
+                                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirmer le mot de passe">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-key"></i>
                                         Changer le mot de passe
                                     </button>

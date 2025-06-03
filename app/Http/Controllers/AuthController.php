@@ -279,6 +279,30 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
+    public function updateProfileChangePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string',
+        ]);
+
+        // dd($data);
+
+        // Vérifier le mot de passe actuel
+        if (!Hash::check($data['current_password'], $user->password)) {
+            return back()->with('error', 'Le mot de passe actuel est incorrect.');
+        }
+        // Mettre à jour le mot de passe
+        $data = [
+            'password' => Hash::make($data['new_password']),
+        ];
+
+        $this->utilisateurRepository->mettreAJour($user->id, $data);
+        return back()->with('success', 'Mot de passe mis à jour avec succès.');
+    }
+
     /**
      * Affiche le formulaire d'édition du profil utilisateur
      */

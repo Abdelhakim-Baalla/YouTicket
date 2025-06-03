@@ -419,19 +419,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Personal Information Form
     const personalInfoForm = document.querySelector('#personal_info form');
     if (personalInfoForm) {
-        const submitBtn = personalInfoForm.querySelector('.btn.btn-primary');
-        
-        submitBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            if (validatePersonalInfoForm()) {
-                // If validation passes, submit the form
-                showSuccess(this, 'Informations mises à jour !');
-                
-                // Uncomment the next line to actually submit the form
-                personalInfoForm.submit();
-            } else {
-                showButtonError(this, 'Veuillez corriger les erreurs');
+        personalInfoForm.addEventListener('submit', function(e) {
+            if (!validatePersonalInfoForm()) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('.btn.btn-primary');
+                showButtonError(submitBtn, 'Veuillez corriger les erreurs');
             }
         });
     }
@@ -464,17 +456,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // Security Form
-    const securityBtn = document.querySelector('#security .btn.btn-primary');
-    if (securityBtn) {
-        securityBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            if (validateSecurityForm()) {
-                showSuccess(this, 'Mot de passe modifié !');
-            } else {
-                showButtonError(this, 'Veuillez corriger les erreurs');
+    // Security Form - CORRECTION ICI
+    const securityForm = document.querySelector('#security form');
+    if (securityForm) {
+        securityForm.addEventListener('submit', function(e) {
+            if (!validateSecurityForm()) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('.btn.btn-primary');
+                showButtonError(submitBtn, 'Veuillez corriger les erreurs');
             }
+            // Si la validation passe, le formulaire sera soumis normalement vers l'action Laravel
         });
     }
     

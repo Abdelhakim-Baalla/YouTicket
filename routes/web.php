@@ -28,6 +28,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/registerSubmitte', 'register')->name('register.submit');
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/profile', 'profile')->name('profile');
+    Route::post('/profile/change/password', 'updateProfileChangePassword')->name('profile.change_password');
     Route::get('/validation', 'validationCompte')->name('valider.compte');
     Route::post('/validation/email', 'sendValidationEmail')->name('validation.email');
     Route::get('/validation/valider', 'validateAccount')->name('validate.account');
