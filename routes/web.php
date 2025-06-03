@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +75,12 @@ Route::post('/reinitialiser-mot-de-passe', [AuthController::class, 'resetPasswor
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'showDashboard')->name('dashboard');
 });
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin', 'showAdminDashboard')->name('dashboard.admin');
+    Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
+});
+
 
 
 

@@ -555,16 +555,16 @@
                     <h3 class="nav-section-title">Principal</h3>
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-home"></i></span>
                                 <span>Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tickets.index') }}" class="nav-link {{ request()->routeIs('tickets.*') && !request()->routeIs('tickets.create') ? 'active' : '' }}">
-                                <span class="nav-icon"><i class="fas fa-ticket-alt"></i></span>
-                                <span>Mes Tickets</span>
-                                <span class="nav-badge">{{ auth()->user()->tickets()->count() }}</span>
+                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('tickets.*') && !request()->routeIs('tickets.create') ? 'active' : '' }}">
+                                <span class="nav-icon"><i class="fas fa-users"></i></span>
+                                <span>Utilisateurs</span>
+                                <span class="nav-badge">{{ auth()->user()->count() }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
