@@ -24,6 +24,7 @@ class Utilisateur extends Authenticatable implements JWTSubject
         'role_id',
         'equipe_id',
         'actif',
+        'photo',
         'derniere_connexion',
         'remember_token',
     ];

@@ -20,7 +20,7 @@
                         <div class="relative inline-block mb-6">
                             <div class="w-20 h-20 rounded-full bg-gray-700 flex items-center justify-center text-2xl font-bold text-white mx-auto overflow-hidden">
                                 @if(auth()->user()->photo)
-                                    <img src="{{ auth()->user()->photo }}" alt="Photo de profil" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Photo de profil" class="w-full h-full object-cover">
                                 @else
                                     {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
                                 @endif
@@ -98,7 +98,7 @@
                             Informations personnelles
                         </h2>
                     </div>
-                    <form action="{{route('profile.update')}}" method="POST" class="space-y-6">
+                    <form action="{{route('profile.update')}}" method="POST" class="space-y-6" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
                             <div class="form-group">
@@ -130,6 +130,29 @@
                                 <div class="input-wrapper">
                                     <i class="input-icon fas fa-phone"></i>
                                     <input type="tel" id="telephone" name="telephone" class="form-control" value="{{ auth()->user()->telephone ?? '' }}" placeholder="+33 1 23 45 67 89">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="display: flex; align-items: center; gap: 1rem;">
+                                @if(auth()->user()->photo)
+                                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Photo de profil" style="height:40px; width:40px; border-radius:50%; object-fit:cover; border:2px solid var(--primary);">
+                                @else
+                                    <div style="height:40px; width:40px; border-radius:50%; background:#444; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.1rem; border:2px solid var(--primary);">
+                                        {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
+                                    </div>
+                                @endif
+                                <div style="flex:1;">
+                                    <label for="photo" class="form-label" style="margin-bottom:0.5rem;">Photo de profil</label>
+                                    <input type="file" name="photo" id="photo" class="form-control" style="padding-left:1rem; background:var(--surface); border:1px solid var(--primary); border-radius:0.5rem; color:var(--text-primary); font-size:0.95rem;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="equipe" class="form-label">Equipe</label>
+                                <div class="input-wrapper">
+                                    <i class="input-icon fas fa-users"></i>
+                                    <input type="text" id="equipe" name="equipe" class="form-control" value="{{ auth()->user()->equipe_id ?? '' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -358,246 +381,246 @@
     </div>
 </div>
 
-<style>
-/* Profile Image Styles */
-.w-20.h-20.rounded-full {
-    border: 3px solid rgba(99, 102, 241, 0.3);
-}
+    <style>
+        /* Profile Image Styles */
+        .w-20.h-20.rounded-full {
+            border: 3px solid rgba(99, 102, 241, 0.3);
+        }
 
-/* Navigation Styles */
-.nav-link {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--text-secondary);
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-    margin-bottom: 0.5rem;
-}
+        /* Navigation Styles */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
 
-.nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-}
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
 
-.nav-link.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-light);
-    border-left: 3px solid var(--primary);
-}
+        .nav-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-light);
+            border-left: 3px solid var(--primary);
+        }
 
-.nav-link i {
-    width: 20px;
-    text-align: center;
-    margin-right: 0.75rem;
-}
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.75rem;
+        }
 
-/* Form Styles */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
+        /* Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
 
-.form-group {
-    margin-bottom: 0;
-}
+        .form-group {
+            margin-bottom: 0;
+        }
 
-.input-wrapper {
-    position: relative;
-}
+        .input-wrapper {
+            position: relative;
+        }
 
-.input-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-}
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
 
-.form-control {
-    padding-left: 3rem;
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-}
+        .form-control {
+            padding-left: 3rem;
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
 
-.form-control:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
 
-/* Feature Items */
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
+        /* Feature Items */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
 
-.feature-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--primary);
-}
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+        }
 
-.feature-item .flex-1 {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .feature-item .flex-1 {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.feature-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(99, 102, 241, 0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-light);
-}
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+        }
 
-/* Button Styles */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    gap: 0.5rem;
-}
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            gap: 0.5rem;
+        }
 
-.btn-primary {
-    background: var(--gradient-primary);
-    color: white;
-}
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
-}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
+        }
 
-/* Responsive Styles */
-@media (max-width: 1024px) {
-    .lg\:grid-cols-4 {
-        grid-template-columns: 1fr;
-    }
-    
-    .lg\:col-span-1, .lg\:col-span-3 {
-        grid-column: auto;
-    }
-}
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .lg\:grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
 
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .auth-container {
-        padding: 1rem;
-    }
-    
-    .brand-tagline {
-        font-size: 2rem;
-    }
-}
+            .lg\:col-span-1, .lg\:col-span-3 {
+                grid-column: auto;
+            }
+        }
 
-/* Animation Styles */
-.fade-in {
-    animation: fadeInUp 0.6s ease-out;
-}
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
+            .auth-container {
+                padding: 1rem;
+            }
+
+            .brand-tagline {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animation Styles */
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 
 <script>
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update active navigation
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+    
+    // Update active navigation on scroll
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+    
+    // Form validation and submission
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password strength indicator
+        const newPasswordInput = document.getElementById('new_password');
+        if (newPasswordInput) {
+            newPasswordInput.addEventListener('input', function() {
+                // Add password strength logic here
             });
-            
-            // Update active navigation
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            this.classList.add('active');
         }
-    });
-});
-
-// Update active navigation on scroll
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (scrollY >= (sectionTop - 200)) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
-    });
-});
-
-// Form validation and submission
-document.addEventListener('DOMContentLoaded', function() {
-    // Password strength indicator
-    const newPasswordInput = document.getElementById('new_password');
-    if (newPasswordInput) {
-        newPasswordInput.addEventListener('input', function() {
-            // Add password strength logic here
-        });
-    }
-    
-    // Save buttons functionality
-    document.querySelectorAll('.btn.btn-primary').forEach(button => {
-        button.addEventListener('click', function() {
-            // Add save functionality here
-            console.log('Saving changes...');
-            
-            // Show success message
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistré !';
-            this.style.background = 'var(--gradient-accent)';
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                this.style.background = 'var(--gradient-primary)';
-            }, 2000);
+        
+        // Save buttons functionality
+        document.querySelectorAll('.btn.btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                // Add save functionality here
+                console.log('Saving changes...');
+                
+                // Show success message
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check mr-2"></i>Enregistré !';
+                this.style.background = 'var(--gradient-accent)';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.background = 'var(--gradient-primary)';
+                }, 2000);
+            });
         });
     });
-});
 </script>
 @endsection

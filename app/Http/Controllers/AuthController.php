@@ -20,7 +20,7 @@ class AuthController extends Controller
 {
     protected $utilisateurRepository;
 
-    public function __construct(UtilisateurRepositoryInterface $utilisateurRepository) 
+    public function __construct(UtilisateurRepositoryInterface $utilisateurRepository)
     {
         $this->utilisateurRepository = $utilisateurRepository;
     }
@@ -294,7 +294,7 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        // dd($request->all());
+        // dd($request->file('photo'));
         $data = $request->validate([
             'prenom' => 'required|string|max:255',
             'nom' => 'required|string|max:255',
@@ -302,12 +302,19 @@ class AuthController extends Controller
             'telephone' => 'nullable|string|max:20',
             'poste' => 'nullable|string|max:255',
             'departement' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
         // dd($data);
 
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            // dd($path);
+            $data['photo'] = $path;
+        } else {
+            unset($data['photo']); // Ne pas inclure la clé si pas d'upload
+        }
         $this->utilisateurRepository->mettreAJour($user->id, $data);
-        // $user->update($data);
         return back()->with('success', 'Profil mis à jour avec succès.');
     }
 }
