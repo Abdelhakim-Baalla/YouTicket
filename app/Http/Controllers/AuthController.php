@@ -11,14 +11,19 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Utilisateur;
 use App\Mail\ValidationEmail;
 use App\Notifications\ValidationSms;
+use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    // SUPPRESSION des middlewares dans le constructeur pour éviter les boucles de redirection
-    public function __construct() {}
+    protected $utilisateurRepository;
+
+    public function __construct(UtilisateurRepositoryInterface $utilisateurRepository)
+    {
+        $this->utilisateurRepository = $utilisateurRepository;
+    }
 
     public function login(Request $request)
     {
@@ -272,5 +277,68 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('success', 'Votre mot de passe a été réinitialisé avec succès.')
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    public function updateProfileChangePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string',
+        ]);
+
+        // dd($data);
+
+        // Vérifier le mot de passe actuel
+        if (!Hash::check($data['current_password'], $user->password)) {
+            return back()->with('error', 'Le mot de passe actuel est incorrect.');
+        }
+        // Mettre à jour le mot de passe
+        $data = [
+            'password' => Hash::make($data['new_password']),
+        ];
+
+        $this->utilisateurRepository->mettreAJour($user->id, $data);
+        return back()->with('success', 'Mot de passe mis à jour avec succès.');
+    }
+
+    /**
+     * Affiche le formulaire d'édition du profil utilisateur
+     */
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+
+    /**
+     * Met à jour les informations personnelles de l'utilisateur
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        // dd($request->file('photo'));
+        $data = $request->validate([
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:utilisateurs,email,' . $user->id,
+            'telephone' => 'nullable|string|max:20',
+            'poste' => 'nullable|string|max:255',
+            'departement' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        // dd($data);
+
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('photos', 'public');
+            // dd($path);
+            $data['photo'] = $path;
+        } else {
+            unset($data['photo']); // Ne pas inclure la clé si pas d'upload
+        }
+        $this->utilisateurRepository->mettreAJour($user->id, $data);
+        return back()->with('success', 'Profil mis à jour avec succès.');
     }
 }

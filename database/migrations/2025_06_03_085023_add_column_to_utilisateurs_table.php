@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('utilisateurs', function (Blueprint $table) {
-            $table->string('photo')->nullable()->after('role_id');
+            $table->binary('photo')->nullable()->after('role_id');
             $table->engine = 'InnoDB';
         });
     }
