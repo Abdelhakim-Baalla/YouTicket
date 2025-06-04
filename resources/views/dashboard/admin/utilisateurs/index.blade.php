@@ -37,6 +37,21 @@
                 Filtrer
             </button>
         </form>
+        {{-- formulaire de recherche par role --}}
+        <form method="GET" action="{{route('dashboard.admin.utilisateurs')}}" class="flex space-x-2 ml-4">
+            <select name="role" class="px-4 py-2 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Tous les rôles</option>
+                @foreach($roles as $role)
+                    <option value="{{ $role->nom }}" {{ request('role') == $role->id ? 'selected' : '' }}>{{ $role->nom }}</option>
+                @endforeach
+            </select>
+            <button 
+                type="submit" 
+                class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+            >
+                Filtrer
+            </button>
+        </form>
     </div>
     <!-- Users Table Card -->
     <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
