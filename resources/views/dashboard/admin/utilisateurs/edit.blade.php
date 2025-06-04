@@ -34,6 +34,7 @@
             <div>
                 <label for="equipe" class="block text-sm font-medium text-gray-300 mb-2">Equipe</label>
                 <select name="equipe_id" id="" class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">Aucune</option>
                     @foreach($equipes as $equipe)
                     <option value="{{ $equipe->id }}" {{ (old('equipe_id', $utilisateur->equipe_id ?? '') == $equipe->nom) ? 'selected' : '' }}>
                         {{ $equipe->nom }}
