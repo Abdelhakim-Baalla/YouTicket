@@ -1,3 +1,4 @@
+@if(Auth::check())
 @if(auth()->user()->actif == 1)
 <!DOCTYPE html>
 <html lang="fr">
@@ -715,5 +716,10 @@
 @else
     <script>
         window.location.href = "{{ route('valider.compte') }}";
+    </script>
+@endif
+@else
+    <script>
+        window.location.href = "{{ route('login') }}";
     </script>
 @endif
