@@ -79,6 +79,8 @@ Route::controller(DashboardController::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'showAdminDashboard')->name('dashboard.admin');
     Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
+    Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
+    Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
 });
 
 

@@ -77,6 +77,7 @@
         /* Structure principale */
         .dashboard-container {
             display: flex;
+            gap: 7px;
             min-height: 100vh;
         }
 
@@ -301,8 +302,9 @@
         /* Zone de contenu */
         .content-area {
             flex: 1;
-            padding: 2rem;
+            /* padding: 1rem; */
             overflow-y: auto;
+            overflow-x: auto;
         }
 
         /* Cartes */
@@ -533,6 +535,52 @@
             color: white;
             font-weight: 600;
             cursor: pointer;
+        }
+        /* Assure que la table est responsive */
+        .min-w-full {
+            min-width: 100%;
+        }
+        
+        /* Correction pour le conteneur principal */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Correction pour le contenu principal */
+        .main-content {
+            flex: 1;
+            margin-left: 230px; /* Doit correspondre à la largeur de la sidebar */
+            width: calc(100% - 230px);
+            overflow-x: hidden;
+        }
+        
+        /* Ajustements pour les petits écrans */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        
+        /* Assure que le contenu de la table reste lisible */
+        table {
+            width: 100%;
+            white-space: nowrap;
+        }
+        
+        /* Padding pour le contenu */
+        .content-area {
+            padding: 1rem;
         }
     </style>
     @yield('styles')
