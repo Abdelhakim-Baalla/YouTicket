@@ -3,11 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\Utilisateur;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
 class UtilisateurRepository implements UtilisateurRepositoryInterface
 {
+    protected $roleRepository;
+    public function __construct(RoleRepositoryInterface $roleRepository)
+    {
+        $this->roleRepository = $roleRepository;
+    }
     public function tous()
     {
         return Utilisateur::orderBy('id', 'desc')->paginate(7);
@@ -90,6 +96,21 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
         }
 
         return Utilisateur::where('actif', $status)
+            ->orderBy('id', 'desc')
+            ->paginate(7);
+    }
+
+    public function rechercherParRole(string $role)
+    {
+        // dd($role);
+        $role = $this->roleRepository->trouverAvecNom($role);
+        $role = $role ? $role->id : null;
+        // dd($role->id);
+        if (!$role) {
+            return Utilisateur::orderBy('id', 'desc')->paginate(7);
+        }
+
+        return Utilisateur::where('role_id', $role)
             ->orderBy('id', 'desc')
             ->paginate(7);
     }

@@ -11,4 +11,5 @@ interface UtilisateurRepositoryInterface
     public function supprimer($id);
     public function rechercher(string $recherche);
     public function rechercherParStatus(string $status);
+    public function rechercherParRole(string $role);
 }
