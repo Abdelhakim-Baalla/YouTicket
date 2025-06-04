@@ -1,3 +1,4 @@
+@if(Auth::check())
 @if(auth()->user()->actif == 1)
 <!DOCTYPE html>
 <html lang="fr">
@@ -81,7 +82,7 @@
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
+            width: 230px;
             background: rgba(15, 15, 35, 0.9);
             backdrop-filter: blur(20px);
             border-right: 1px solid var(--border);
@@ -637,7 +638,7 @@
                     <div class="relative">
                         <button class="user-avatar" id="topbarProfileBtn">
                              @if(auth()->user()->photo)
-                                    <img src="{{ auth()->user()->photo }}" alt="Photo de profil" class="w-full h-full rounded-full object-cover">
+                                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Photo de profil" class="w-full h-full rounded-full object-cover">
                                 @else
                                     {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
                                 @endif
@@ -715,5 +716,10 @@
 @else
     <script>
         window.location.href = "{{ route('valider.compte') }}";
+    </script>
+@endif
+@else
+    <script>
+        window.location.href = "{{ route('login') }}";
     </script>
 @endif
