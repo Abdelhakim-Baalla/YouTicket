@@ -6,6 +6,24 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6 fade-in">
+    <!-- Search Form -->
+    <div class="mb-6 flex justify-end">
+        <form method="GET" action="{{route('dashboard.admin.utilisateurs')}}" class="flex space-x-2">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}" 
+                placeholder="Rechercher un utilisateur..." 
+                class="px-4 py-2 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+            <button 
+                type="submit" 
+                class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+            >
+                <i class="fas fa-search mr-1"></i> Rechercher
+            </button>
+        </form>
+    </div>
     <!-- Users Table Card -->
     <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
         <!-- Card Header -->
@@ -97,7 +115,7 @@
             <div class="flex items-center justify-between">
             <div></div>
             <div class="flex-1 flex justify-end">
-                {{ $utilisateurs->links() }}
+                {{ $utilisateurs->appends(['search' => request('search')])->links() }}
             </div>
             </div>
         </div>
