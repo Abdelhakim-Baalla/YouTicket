@@ -141,7 +141,11 @@
             <div class="flex items-center justify-between">
             <div></div>
             <div class="flex-1 flex justify-end">
-                {{ $utilisateurs->appends(['search' => request('search')])->links() }}
+                {{ $utilisateurs->appends([
+                    'search' => request('search'),
+                    'status' => request('status'),
+                    'role' => request('role')
+                ])->links() }}
             </div>
             </div>
         </div>
