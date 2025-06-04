@@ -37,6 +37,12 @@ class AdminController extends Controller
     public function showAdminDashboardUtilisateurs()
     {
         $utilisateurs = $this->utilisateurRepository->tous();
+        foreach ($utilisateurs as $utilisateur) {
+            $role = $this->roleRepository->trouver($utilisateur->role_id);
+            $utilisateur->role_id = $role ? $role->nom : 'Aucun rôle attribué';
+            // dd($utilisateur->role_id);
+        }
+        
         return view('dashboard.admin.utilisateurs.index', compact('utilisateurs'));
     }
 
