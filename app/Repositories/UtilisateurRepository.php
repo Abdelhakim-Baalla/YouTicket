@@ -66,11 +66,18 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
 
     public function rechercher(string $recherche)
     {
-        return Utilisateur::where('nom', 'like', '%' . $recherche . '%')
-            ->orWhere('prenom', 'like', '%' . $recherche . '%')
-            ->orWhere('email', 'like', '%' . $recherche . '%')
-            ->orderBy('id', 'desc')
-            ->paginate(7);
+        $termes = preg_split('/\s+/', trim($recherche));
+        return Utilisateur::where(function($query) use ($termes) {
+            foreach ($termes as $terme) {
+                $query->where(function($q) use ($terme) {
+                    $q->where('nom', 'like', '%' . $terme . '%')
+                      ->orWhere('prenom', 'like', '%' . $terme . '%')
+                      ->orWhere('email', 'like', '%' . $terme . '%');
+                });
+            }
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(7);
     }
     
 }
