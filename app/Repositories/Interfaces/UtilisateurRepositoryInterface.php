@@ -10,4 +10,5 @@ interface UtilisateurRepositoryInterface
     public function mettreAJour($id, array $donnees);
     public function supprimer($id);
     public function rechercher(string $recherche);
+    public function rechercherParStatus(string $status);
 }
