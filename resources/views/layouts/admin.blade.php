@@ -540,13 +540,13 @@
         .min-w-full {
             min-width: 100%;
         }
-        
+
         /* Correction pour le conteneur principal */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
         }
-        
+
         /* Correction pour le contenu principal */
         .main-content {
             flex: 1;
@@ -554,30 +554,30 @@
             width: calc(100% - 230px);
             overflow-x: hidden;
         }
-        
+
         /* Ajustements pour les petits écrans */
         @media (max-width: 1024px) {
             .main-content {
                 margin-left: 0;
                 width: 100%;
             }
-            
+
             .sidebar {
                 transform: translateX(-100%);
                 z-index: 1000;
             }
-            
+
             .sidebar.open {
                 transform: translateX(0);
             }
         }
-        
+
         /* Assure que le contenu de la table reste lisible */
         table {
             width: 100%;
             white-space: nowrap;
         }
-        
+
         /* Padding pour le contenu */
         .content-area {
             padding: 1rem;
@@ -587,6 +587,19 @@
      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
+    <!-- Flash Messages -->
+    <div class="flash-messages">
+        @foreach (['error', 'success', 'warning', 'info'] as $msg)
+            @if(Session::has($msg))
+                <div class="flash-message {{ $msg }}">
+                    <i class="fas @if($msg == 'error') fa-exclamation-circle @elseif($msg == 'success') fa-check-circle @elseif($msg == 'warning') fa-exclamation-triangle @else fa-info-circle @endif"></i>
+                    <span>{{ Session::get($msg) }}</span>
+                    <span class="close-flash">&times;</span>
+                </div>
+            @endif
+        @endforeach
+    </div>
+
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -721,6 +734,18 @@
             </header>
 
             <main class="content-area">
+                
+    @if ($errors->any())
+        <div class="flash-messages">
+            @foreach ($errors->all() as $error)
+                <div class="flash-message error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>{{ $error }}</span>
+                    <span class="close-flash">&times;</span>
+                </div>
+            @endforeach
+        </div>
+    @endif
                 @yield('content')
             </main>
         </div>
