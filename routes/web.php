@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserActionHistoryController;
+use App\Http\Controllers\UtilisateurController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,6 +87,28 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
     Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
 });
+
+Route::controller(AgentController::class)->group(function () {
+    Route::get('/agent', 'showAgentDashboard')->name('dashboard.agent');
+    // Route::get('/agent/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
+    // Route::get('/agent/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
+    // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
+    // Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
+    // Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+});
+
+Route::controller(UtilisateurController::class)->group(function () {
+    Route::get('/utilisateur', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
+    // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
+    // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
+    // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
+    // Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
+    // Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+});
+
+
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/histories', [UserActionHistoryController::class, 'index'])->name('histories.index');
