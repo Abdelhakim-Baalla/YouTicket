@@ -210,7 +210,7 @@ class AdminController extends Controller
 
             if ($user) {
 
-                return redirect()->route('dashboard.admin.utilisateurs', ['id' => $request->utilisateur_id])->with('success', 'Compte Modifier avec succès !');
+                return redirect()->route('dashboard.admin.utilisateurs')->with('success', 'Compte Modifier avec succès !');
             }
 
             return back()->withErrors([

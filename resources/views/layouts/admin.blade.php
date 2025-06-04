@@ -587,18 +587,7 @@
      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
-    <!-- Flash Messages -->
-    <div class="flash-messages">
-        @foreach (['error', 'success', 'warning', 'info'] as $msg)
-            @if(Session::has($msg))
-                <div class="flash-message {{ $msg }}">
-                    <i class="fas @if($msg == 'error') fa-exclamation-circle @elseif($msg == 'success') fa-check-circle @elseif($msg == 'warning') fa-exclamation-triangle @else fa-info-circle @endif"></i>
-                    <span>{{ Session::get($msg) }}</span>
-                    <span class="close-flash">&times;</span>
-                </div>
-            @endif
-        @endforeach
-    </div>
+    
 
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -734,6 +723,18 @@
             </header>
 
             <main class="content-area">
+                <!-- Flash Messages -->
+    <div class="flash-messages">
+        @foreach (['error', 'success', 'warning', 'info'] as $msg)
+            @if(Session::has($msg))
+                <div class="flash-message {{ $msg }}">
+                    <i class="fas @if($msg == 'error') fa-exclamation-circle @elseif($msg == 'success') fa-check-circle @elseif($msg == 'warning') fa-exclamation-triangle @else fa-info-circle @endif"></i>
+                    <span>{{ Session::get($msg) }}</span>
+                    <span class="close-flash">&times;</span>
+                </div>
+            @endif
+        @endforeach
+    </div>
                 
     @if ($errors->any())
         <div class="flash-messages">
