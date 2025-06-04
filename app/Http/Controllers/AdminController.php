@@ -43,8 +43,8 @@ class AdminController extends Controller
             $utilisateurs = $this->utilisateurRepository->rechercher($request->search);
         } else if ($request->has('role') && $request->role != '') {
             // $utilisateurs = $this->utilisateurRepository->rechercherParRole($request->role);
-        } else if ($request->has('actif') && $request->actif != '') {
-            // $utilisateurs = $this->utilisateurRepository->rechercherParActif($request->actif);
+        } else if ($request->has('status') && $request->status != '') {
+            $utilisateurs = $this->utilisateurRepository->rechercherParStatus($request->status);
         } else {
             $utilisateurs = $this->utilisateurRepository->tous();
         }
