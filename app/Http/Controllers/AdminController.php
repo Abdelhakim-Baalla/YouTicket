@@ -61,9 +61,22 @@ class AdminController extends Controller
         return view('dashboard.admin.utilisateurs.create');
     }
 
-    public function showAdminDashboardUtilisateursEditModal()
+    public function showAdminDashboardUtilisateursEditModal(Request $request)
     {
-        return view('dashboard.admin.utilisateurs.edit');
+        $utilisateur = $this->utilisateurRepository->trouver($request->id);
+        if (!$utilisateur) {
+            return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Utilisateur non trouvé.']);
+        }
+        $role = $this->roleRepository->trouver($utilisateur->role_id);
+
+        if ($role) {
+            $utilisateur->role_id = $role->nom;
+        } else {
+            $utilisateur->role_id = 'Aucun rôle attribué';
+        }
+        // dd($utilisateur);
+
+        return view('dashboard.admin.utilisateurs.edit', compact('utilisateur'));
     }
 
     public function AdminCreeUtilisateur(Request $request)
