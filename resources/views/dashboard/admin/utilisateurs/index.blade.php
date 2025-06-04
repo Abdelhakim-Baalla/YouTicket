@@ -101,9 +101,13 @@
                             <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-300">{{$utilisateur->equipe_id}}</td>
                             <td class="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-3">
-                                    <a href="/admin/utilisateurs/modifier" class="text-indigo-400 hover:text-indigo-300 p-2 rounded-full hover:bg-gray-700 transition" title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    <form action="{{route('dashboard.admin.utilisateurs.edit')}}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{$utilisateur->id}}">
+                                        <button type="submit" class="text-indigo-400 hover:text-indigo-300 p-2 rounded-full hover:bg-gray-700 transition" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </form>
                                     <button onclick="openDeleteUserModal(1)" class="text-red-400 hover:text-red-300 p-2 rounded-full hover:bg-gray-700 transition" title="Supprimer">
                                         <i class="fas fa-trash"></i>
                                     </button>

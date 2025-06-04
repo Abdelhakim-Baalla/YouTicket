@@ -81,7 +81,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
     Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
-    Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
+    Route::post('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
 });
 
 
