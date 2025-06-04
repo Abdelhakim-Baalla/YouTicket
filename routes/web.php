@@ -104,6 +104,9 @@ Route::get('/500', function () {
     return view('errors.500');
 })->name('error.500');
 
+Route::fallback(function () {
+    return redirect('/404');
+});
 
 
 
