@@ -42,7 +42,7 @@ class AdminController extends Controller
         if ($request->has('search') && $request->search != '') {
             $utilisateurs = $this->utilisateurRepository->rechercher($request->search);
         } else if ($request->has('role') && $request->role != '') {
-            // $utilisateurs = $this->utilisateurRepository->rechercherParRole($request->role);
+            $utilisateurs = $this->utilisateurRepository->rechercherParRole($request->role);
         } else if ($request->has('status') && $request->status != '') {
             $utilisateurs = $this->utilisateurRepository->rechercherParStatus($request->status);
         } else {
@@ -54,8 +54,9 @@ class AdminController extends Controller
             $utilisateur->role_id = $role ? $role->nom : 'Aucun rôle attribué';
             // dd($utilisateur->role_id);
         }
+        $roles = $this->roleRepository->tous();
 
-        return view('dashboard.admin.utilisateurs.index', compact('utilisateurs'));
+        return view('dashboard.admin.utilisateurs.index', compact('utilisateurs', 'roles'));
     }
 
     public function showAdminDashboardUtilisateursCreateModal()
