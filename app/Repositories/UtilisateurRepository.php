@@ -63,5 +63,14 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
         
         return $utilisateur;
     }
+
+    public function rechercher(string $recherche)
+    {
+        return Utilisateur::where('nom', 'like', '%' . $recherche . '%')
+            ->orWhere('prenom', 'like', '%' . $recherche . '%')
+            ->orWhere('email', 'like', '%' . $recherche . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(7);
+    }
     
 }
