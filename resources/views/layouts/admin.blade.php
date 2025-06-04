@@ -612,10 +612,16 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('tickets.*') && !request()->routeIs('tickets.create') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('utilisateurs') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-users"></i></span>
                                 <span>Utilisateurs</span>
                                 <span class="nav-badge">{{ auth()->user()->count() }}</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a href="{{ route('histories.index') }}" class="nav-link {{ request()->routeIs('histories') ? 'active' : '' }}">
+                                <span class="nav-icon"><i class="fas fa-history"></i></span>
+                                <span>Histoire des Actions</span>
                             </a>
                         </li>
                         <li class="nav-item">
