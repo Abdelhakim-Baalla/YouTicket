@@ -10,7 +10,7 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
 {
     public function tous()
     {
-        return Utilisateur::paginate(7); // Pagination pour une meilleure performance
+        return Utilisateur::orderBy('id', 'desc')->paginate(7);
     }
     
     public function trouver($id)
