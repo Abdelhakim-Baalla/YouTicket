@@ -58,6 +58,13 @@
                         </tr>
                     </thead>
                     <tbody class="bg-gray-800 divide-y divide-gray-700">
+                        @if($utilisateurs->isEmpty())
+                        <tr>
+                            <td colspan="9" class="px-6 py-5 text-center text-gray-400">
+                                Aucun utilisateur trouvé.
+                            </td>
+                        </tr>
+                        @else
                         @foreach($utilisateurs as $utilisateur)
                         <tr class="hover:bg-gray-750 transition-colors duration-150">
                             <td class="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-300">{{$utilisateur->id}}</td>
@@ -104,6 +111,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table> 
             </div>
