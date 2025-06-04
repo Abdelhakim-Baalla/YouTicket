@@ -34,9 +34,19 @@ class AdminController extends Controller
         return view('dashboard.admin.index', compact('countTickets', 'countAgents', 'countTicketsResolu'));
     }
 
-    public function showAdminDashboardUtilisateurs()
+    public function showAdminDashboardUtilisateurs(Request $request)
     {
-        $utilisateurs = $this->utilisateurRepository->tous();
+        if($request->has('search') && $request->search != '') {
+            $utilisateurs = $this->utilisateurRepository->rechercher($request->search);
+        } else if($request->has('role') && $request->role != '') {
+            // $utilisateurs = $this->utilisateurRepository->rechercherParRole($request->role);
+        } else if($request->has('actif') && $request->actif != '') {
+            // $utilisateurs = $this->utilisateurRepository->rechercherParActif($request->actif);
+        } else
+        {
+            $utilisateurs = $this->utilisateurRepository->tous();
+        }
+
         foreach ($utilisateurs as $utilisateur) {
             $role = $this->roleRepository->trouver($utilisateur->role_id);
             $utilisateur->role_id = $role ? $role->nom : 'Aucun rôle attribué';
