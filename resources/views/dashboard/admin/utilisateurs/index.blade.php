@@ -101,7 +101,7 @@
                             <td class="px-6 py-5 whitespace-nowrap text-sm text-gray-300">{{$utilisateur->equipe_id}}</td>
                             <td class="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-3">
-                                    <form action="{{route('dashboard.admin.utilisateurs.edit')}}" method="post">
+                                    <form action="{{route('dashboard.admin.utilisateurs.edit')}}" method="get">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$utilisateur->id}}">
                                         <button type="submit" class="text-indigo-400 hover:text-indigo-300 p-2 rounded-full hover:bg-gray-700 transition" title="Modifier">
