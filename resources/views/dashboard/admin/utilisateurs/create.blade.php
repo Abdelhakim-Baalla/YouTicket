@@ -89,12 +89,12 @@
             <label for="actif" class="block text-sm text-gray-300 mr-4">Compte actif</label>
             <div class="flex items-center space-x-4">
             <label class="inline-flex items-center">
-                <input type="radio" id="oui" name="actif" value="1" 
+                <input type="radio" id="oui" name="actif" value="1" checked
                 class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-700 rounded bg-gray-700">
                 <span class="ml-2 text-gray-300">Oui</span>
             </label>
             <label class="inline-flex items-center">
-                <input type="radio" id="non" name="actif" value="0" checked
+                <input type="radio" id="non" name="actif" value="0" 
                 class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-700 rounded bg-gray-700">
                 <span class="ml-2 text-gray-300">Non</span>
             </label>
