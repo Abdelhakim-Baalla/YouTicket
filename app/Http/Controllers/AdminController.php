@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
+use App\Repositories\Interfaces\EquipeRepositoryInterface;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Http\Request;
@@ -16,12 +17,14 @@ class AdminController extends Controller
     protected $adminRepository;
     protected $utilisateurRepository;
     protected $roleRepository;
+    protected $equipeRepository;
 
-    public function __construct(AdminRepositoryInterface $adminRepository, UtilisateurRepositoryInterface $utilisateurRepository, RoleRepositoryInterface $roleRepository)
+    public function __construct(EquipeRepositoryInterface $equipeRepository, AdminRepositoryInterface $adminRepository, UtilisateurRepositoryInterface $utilisateurRepository, RoleRepositoryInterface $roleRepository)
     {
         $this->adminRepository = $adminRepository;
         $this->utilisateurRepository = $utilisateurRepository;
         $this->roleRepository = $roleRepository;
+        $this->equipeRepository = $equipeRepository;
     }
 
 
@@ -36,14 +39,13 @@ class AdminController extends Controller
 
     public function showAdminDashboardUtilisateurs(Request $request)
     {
-        if($request->has('search') && $request->search != '') {
+        if ($request->has('search') && $request->search != '') {
             $utilisateurs = $this->utilisateurRepository->rechercher($request->search);
-        } else if($request->has('role') && $request->role != '') {
+        } else if ($request->has('role') && $request->role != '') {
             // $utilisateurs = $this->utilisateurRepository->rechercherParRole($request->role);
-        } else if($request->has('actif') && $request->actif != '') {
+        } else if ($request->has('actif') && $request->actif != '') {
             // $utilisateurs = $this->utilisateurRepository->rechercherParActif($request->actif);
-        } else
-        {
+        } else {
             $utilisateurs = $this->utilisateurRepository->tous();
         }
 
@@ -52,7 +54,7 @@ class AdminController extends Controller
             $utilisateur->role_id = $role ? $role->nom : 'Aucun rôle attribué';
             // dd($utilisateur->role_id);
         }
-        
+
         return view('dashboard.admin.utilisateurs.index', compact('utilisateurs'));
     }
 
@@ -74,9 +76,18 @@ class AdminController extends Controller
         } else {
             $utilisateur->role_id = 'Aucun rôle attribué';
         }
+        $equipe = $this->equipeRepository->trouver($utilisateur->equipe_id);
+        if ($equipe) {
+            $utilisateur->equipe_id = $equipe->nom;
+        } else {
+            $utilisateur->equipe_id = 'Aucune équipe attribuée';
+        }
+
+        $equipes = $this->equipeRepository->tous();
+        $roles = $this->roleRepository->tous();
         // dd($utilisateur);
 
-        return view('dashboard.admin.utilisateurs.edit', compact('utilisateur'));
+        return view('dashboard.admin.utilisateurs.edit', compact('utilisateur', 'equipes', 'roles'));
     }
 
     public function AdminCreeUtilisateur(Request $request)
@@ -118,7 +129,7 @@ class AdminController extends Controller
             $role = $this->roleRepository->trouverAvecNom($request->role);
             $data['role_id'] = $role->id;
 
-            
+
 
 
             if ($request->hasFile('photo')) {
@@ -142,6 +153,71 @@ class AdminController extends Controller
             ])->withInput();
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création du compte: ' . $e->getMessage());
+
+            return back()->withErrors([
+                'general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
+            ])->withInput();
+        }
+    }
+
+    public function AdminModifierUtilisateur(Request $request)
+    {
+        // dd($request->all());
+        $data = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'email' =>  'required|string|email|max:255',
+            'telephone' => 'required|string|max:15',
+            'poste' => 'required|string|max:255',
+            'departement' => 'nullable|string|max:255',
+            'role_id' => 'required|integer|exists:roles,id',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'actif' => 'required|integer|in:0,1',
+            'equipe_id' => 'nullable|integer|exists:equipes,id',
+        ], [
+            // Messages d'erreur personnalisés
+            'nom.required' => 'Le nom est requis',
+            'prenom.required' => 'Le prénom est requis',
+            'email.required' => 'L\'adresse email est requise',
+            'email.email' => 'Veuillez entrer une adresse email valide',
+            'password.required' => 'Le mot de passe est requis',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caractères',
+            'telephone.required' => 'Le numéro de téléphone est requis',
+            'role.required' => 'Le role est requis',
+            'actif.required' => 'Le statut actif est requis',
+            'equipe_id.exists' => 'L\'équipe sélectionnée n\'existe pas',
+            'role_id.exists' => 'Le rôle sélectionné n\'existe pas',
+        ]);
+
+
+
+        // dd($request->role);
+        // dd($data);
+
+
+        try {
+
+            if ($request->hasFile('photo')) {
+                $file = $request->file('photo');
+                $path = $file->store('photos', 'public');
+                // dd($path);
+                $data['photo'] = $path;
+            } else {
+                unset($data['photo']);
+            }
+
+            $user = $this->utilisateurRepository->mettreAJour($request->utilisateur_id , $data);
+
+            if ($user) {
+
+                return redirect()->route('dashboard.admin.utilisateurs', ['id' => $request->utilisateur_id])->with('success', 'Compte Modifier avec succès !');
+            }
+
+            return back()->withErrors([
+                'general' => 'Une erreur est survenue lors de la Modifcation du compte. Veuillez réessayer.',
+            ])->withInput();
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la Modification du compte: ' . $e->getMessage());
 
             return back()->withErrors([
                 'general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',

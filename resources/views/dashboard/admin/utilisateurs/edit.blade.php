@@ -35,7 +35,7 @@
                 <label for="equipe" class="block text-sm font-medium text-gray-300 mb-2">Equipe</label>
                 <select name="equipe_id" id="" class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
                     @foreach($equipes as $equipe)
-                    <option value="{{ $equipe->id }}" {{ (old('equipe_id', $utilisateur->equipe_id ?? '') == $equipe->id) ? 'selected' : '' }}>
+                    <option value="{{ $equipe->id }}" {{ (old('equipe_id', $utilisateur->equipe_id ?? '') == $equipe->nom) ? 'selected' : '' }}>
                         {{ $equipe->nom }}
                     </option>
                 @endforeach
@@ -119,6 +119,7 @@
                class="px-5 py-2.5 rounded-lg border border-gray-700 bg-gray-700 text-gray-300 hover:bg-gray-600 transition">
                 Annuler
             </a>
+            <input type="hidden" name="utilisateur_id" value="{{ $utilisateur->id ?? '' }}">
             <button type="submit" 
                     class="px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition flex items-center">
                 <i class="fas fa-save mr-2"></i>
