@@ -1,4 +1,10 @@
 @if(Auth::check())
+@php
+    $user = Auth::user();
+    $role = $user->role->nom ?? null; 
+@endphp
+@if($role == 'admin' || $role == 'super-admin')
+
 @if(auth()->user()->actif == 1)
 <!DOCTYPE html>
 <html lang="fr">
@@ -796,6 +802,19 @@
 @else
     <script>
         window.location.href = "{{ route('valider.compte') }}";
+    </script>
+@endif
+@elseif(auth()->user()->role == 'utilisateur')
+    <script>
+        window.location.href = "{{ route('dashboard.utilisateur') }}";
+    </script>
+@elseif(auth()->user()->role == 'agent')
+    <script>
+        window.location.href = "{{ route('dashboard.agent') }}";
+    </script>
+@else
+    <script>
+        window.location.href = "{{ route('error.403') }}";
     </script>
 @endif
 @else
