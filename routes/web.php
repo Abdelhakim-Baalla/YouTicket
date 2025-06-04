@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserActionHistoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,7 +86,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
 });
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/histories', [UserActionHistoryController::class, 'index'])->name('histories.index');
+    Route::get('/admin/histories/{history}', [UserActionHistoryController::class, 'show'])->name('histories.show');
+});
 
 
 

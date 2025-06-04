@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserActionHistory;
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 
 class UserActionHistoryController extends Controller
@@ -24,9 +25,14 @@ class UserActionHistoryController extends Controller
             $query->where('action', $request->action);
         }
 
+        // Récupérer tous les utilisateurs pour le filtre
+        $users = Utilisateur::orderBy('prenom')->get();
+        // Récupérer tous les types de modèles distincts
+        $modelTypes = UserActionHistory::select('model_type')->distinct()->pluck('model_type');
+
         $histories = $query->paginate(25);
 
-        return view('histories.index', compact('histories'));
+        return view('histories.index', compact('histories', 'users', 'modelTypes'));
     }
 
     public function show(UserActionHistory $history)
