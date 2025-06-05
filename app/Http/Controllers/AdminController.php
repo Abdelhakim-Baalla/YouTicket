@@ -207,7 +207,7 @@ class AdminController extends Controller
                 unset($data['photo']);
             }
 
-            $user = $this->utilisateurRepository->mettreAJour($request->utilisateur_id , $data);
+            $user = $this->utilisateurRepository->mettreAJour($request->utilisateur_id, $data);
 
             if ($user) {
 
@@ -228,8 +228,7 @@ class AdminController extends Controller
 
     public function showAdminDashboardEquipes()
     {
-        // $equipes = $this->equipeRepository->tous();
-        // dd($equipes);
-        return view('dashboard.admin.equipes.index');
+        $equipes = $this->equipeRepository->tous();
+        return view('dashboard.admin.equipes.index', compact('equipes'));
     }
 }
