@@ -231,4 +231,44 @@ class AdminController extends Controller
         $equipes = $this->equipeRepository->tous();
         return view('dashboard.admin.equipes.index', compact('equipes'));
     }
+
+    // Afficher une équipe
+    public function showEquipe($id)
+    {
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.404')->with('error', "Équipe introuvable");
+        }
+        return view('dashboard.admin.equipes.show', compact('equipe'));
+    }
+
+    // Formulaire de modification d'une équipe
+    public function editEquipe($id)
+    {
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.404')->with('error', "Équipe introuvable");
+        }
+        return view('dashboard.admin.equipes.edit', compact('equipe'));
+    }
+
+    // Traitement de la modification
+    public function updateEquipe(Request $request, $id)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'active' => 'required|boolean',
+        ]);
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.500')->with('error', "Équipe introuvable");
+        }
+        $this->equipeRepository->mettreAJour($id, [
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'active' => $request->active,
+        ]);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe modifiée avec succès');
+    }
 }

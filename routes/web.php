@@ -90,6 +90,9 @@ Route::controller(AdminController::class)->group(function () {
 
     // Admin Equipes
     Route::get('/admin/equipes', 'showAdminDashboardEquipes')->name('dashboard.admin.equipes');
+    Route::get('/admin/equipes/{id}', 'showEquipe')->name('dashboard.admin.equipes.show');
+    Route::get('/admin/equipes/{id}/edit', 'editEquipe')->name('dashboard.admin.equipes.edit');
+    Route::put('/admin/equipes/{id}', 'updateEquipe')->name('dashboard.admin.equipes.update');
 });
 
 Route::controller(AgentController::class)->group(function () {

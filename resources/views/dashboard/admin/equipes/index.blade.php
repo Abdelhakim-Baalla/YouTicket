@@ -40,8 +40,8 @@
                             </td>
                             <td>{{ $equipe->utilisateurs->count() }}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-info">Voir</a>
-                                <a href="#" class="btn btn-sm btn-warning">Modifier</a>
+                                <a href="{{ route('dashboard.admin.equipes.show', $equipe->id) }}" class="btn btn-sm btn-info">Voir</a>
+                                <a href="{{ route('dashboard.admin.equipes.edit', $equipe->id) }}" class="btn btn-sm btn-warning">Modifier</a>
                                 <form action="#" method="POST" style="display:inline-block">
                                     @csrf
                                     @method('DELETE')
