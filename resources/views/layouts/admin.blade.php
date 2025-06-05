@@ -612,13 +612,13 @@
                     <h3 class="nav-section-title">Principal</h3>
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-home"></i></span>
                                 <span>Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('utilisateurs.*') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('dashboard.admin.utilisateurs') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-users"></i></span>
                                 <span>Utilisateurs</span>
                                 <span class="nav-badge">{{ auth()->user()->count() }}</span>
@@ -631,7 +631,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('equipes.index') }}" class="nav-link {{ request()->routeIs('equipes.*') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin.equipes') }}" class="nav-link {{ request()->routeIs('equipes.*') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-people-group"></i></span>
                                 <span>Equipes</span>
                             </a>
