@@ -618,20 +618,26 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('utilisateurs') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin.utilisateurs') }}" class="nav-link {{ request()->routeIs('utilisateurs.*') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-users"></i></span>
                                 <span>Utilisateurs</span>
                                 <span class="nav-badge">{{ auth()->user()->count() }}</span>
                             </a>
                         </li>
                          <li class="nav-item">
-                            <a href="{{ route('histories.index') }}" class="nav-link {{ request()->routeIs('histories') ? 'active' : '' }}">
+                            <a href="{{ route('histories.index') }}" class="nav-link {{ request()->routeIs('histories.*') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-history"></i></span>
                                 <span>Histoire des Actions</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tickets.create') }}" class="nav-link {{ request()->routeIs('tickets.create') ? 'active' : '' }}">
+                            <a href="{{ route('equipes.index') }}" class="nav-link {{ request()->routeIs('equipes.*') ? 'active' : '' }}">
+                                <span class="nav-icon"><i class="fas fa-people-group"></i></span>
+                                <span>Equipes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('tickets.create') }}" class="nav-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-plus-circle"></i></span>
                                 <span>Nouveau Ticket</span>
                             </a>
