@@ -10,7 +10,7 @@
         <div class="card-title">
             <i class="fas fa-people-group"></i> Liste des équipes
         </div>
-        <a href="#" class="btn btn-primary">+ Nouvelle équipe</a>
+        <a href="{{ route('dashboard.admin.equipes.create') }}" class="btn btn-primary">+ Nouvelle équipe</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
