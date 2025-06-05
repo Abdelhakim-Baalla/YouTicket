@@ -271,4 +271,26 @@ class AdminController extends Controller
         ]);
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe modifiée avec succès');
     }
+
+    // Formulaire d'ajout d'une équipe
+    public function createEquipe()
+    {
+        return view('dashboard.admin.equipes.create');
+    }
+
+    // Enregistrement d'une nouvelle équipe
+    public function storeEquipe(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'active' => 'required|boolean',
+        ]);
+        $this->equipeRepository->creer([
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'active' => $request->active,
+        ]);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe créée avec succès');
+    }
 }
