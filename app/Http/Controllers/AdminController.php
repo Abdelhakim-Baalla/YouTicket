@@ -225,4 +225,11 @@ class AdminController extends Controller
             ])->withInput();
         }
     }
+
+    public function showAdminDashboardEquipes()
+    {
+        // $equipes = $this->equipeRepository->tous();
+        // dd($equipes);
+        return view('dashboard.admin.equipes.index');
+    }
 }

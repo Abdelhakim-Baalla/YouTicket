@@ -631,7 +631,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.admin.equipes') }}" class="nav-link {{ request()->routeIs('equipes.*') ? 'active' : '' }}">
+                            <a href="{{ route('dashboard.admin.equipes') }}" class="nav-link {{ request()->routeIs('dashboard.admin.equipes') ? 'active' : '' }}">
                                 <span class="nav-icon"><i class="fas fa-people-group"></i></span>
                                 <span>Equipes</span>
                             </a>
