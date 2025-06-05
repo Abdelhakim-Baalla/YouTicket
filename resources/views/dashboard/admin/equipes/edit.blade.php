@@ -415,7 +415,7 @@
                 </form>
 
                 <!-- Formulaire de suppression caché -->
-                <form id="deleteForm" action="" method="POST" style="display: none;">
+                <form id="deleteForm" action="{{ route('dashboard.admin.equipes.destroy', $equipe->id) }}" method="POST" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>
@@ -449,12 +449,7 @@
     // Confirmation de suppression
     function confirmDelete() {
         if (confirm('⚠️ ATTENTION !\n\nÊtes-vous sûr de vouloir supprimer cette équipe ?\n\nCette action est irréversible et supprimera :\n- L\'équipe "{{ $equipe->nom }}"\n- Tous les liens avec les membres\n- L\'historique associé\n\nTapez "SUPPRIMER" pour confirmer :')) {
-            const confirmation = prompt('Tapez "SUPPRIMER" pour confirmer la suppression :');
-            if (confirmation === 'SUPPRIMER') {
                 document.getElementById('deleteForm').submit();
-            } else {
-                alert('Suppression annulée.');
-            }
         }
     }
 

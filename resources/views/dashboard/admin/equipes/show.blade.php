@@ -570,7 +570,7 @@
     </div>
 
     <!-- Formulaire de suppression caché -->
-    <form id="deleteForm" action="" method="POST" style="display: none;">
+    <form id="deleteForm" action="{{ route('dashboard.admin.equipes.destroy', $equipe->id) }}" method="POST" style="display: none;">
         @csrf
         @method('DELETE')
     </form>
