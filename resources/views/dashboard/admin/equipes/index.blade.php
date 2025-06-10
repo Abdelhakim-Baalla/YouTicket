@@ -347,7 +347,7 @@
                                        class="btn btn-sm btn-warning" title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="" 
+                                    <form action="{{ route('dashboard.admin.equipes.delete', $equipe->id) }}" 
                                           method="POST" style="display: inline-block;" 
                                           onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')">
                                         @csrf
