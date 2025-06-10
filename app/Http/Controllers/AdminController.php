@@ -293,4 +293,17 @@ class AdminController extends Controller
         ]);
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe créée avec succès');
     }
+
+    // Suppression d'une équipe
+    public function equipeSupprimer(Request $request) 
+    {
+        // dd($request->id);
+        $equipe = $this->equipeRepository->trouver($request->id);
+        if (!$equipe) {
+            return redirect()->route('error.500')->with('error', "Équipe introuvable");
+        }
+
+        $this->equipeRepository->supprimer($request->id);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe supprimée avec succès');
+    }
 }
