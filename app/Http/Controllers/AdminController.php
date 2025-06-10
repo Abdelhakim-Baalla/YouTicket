@@ -207,7 +207,7 @@ class AdminController extends Controller
                 unset($data['photo']);
             }
 
-            $user = $this->utilisateurRepository->mettreAJour($request->utilisateur_id , $data);
+            $user = $this->utilisateurRepository->mettreAJour($request->utilisateur_id, $data);
 
             if ($user) {
 
@@ -224,5 +224,86 @@ class AdminController extends Controller
                 'general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
             ])->withInput();
         }
+    }
+
+    public function showAdminDashboardEquipes()
+    {
+        $equipes = $this->equipeRepository->tous();
+        return view('dashboard.admin.equipes.index', compact('equipes'));
+    }
+
+    // Afficher une équipe
+    public function showEquipe($id)
+    {
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.404')->with('error', "Équipe introuvable");
+        }
+        return view('dashboard.admin.equipes.show', compact('equipe'));
+    }
+
+    // Formulaire de modification d'une équipe
+    public function editEquipe($id)
+    {
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.404')->with('error', "Équipe introuvable");
+        }
+        return view('dashboard.admin.equipes.edit', compact('equipe'));
+    }
+
+    // Traitement de la modification
+    public function updateEquipe(Request $request, $id)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'active' => 'required|boolean',
+        ]);
+        $equipe = $this->equipeRepository->trouver($id);
+        if (!$equipe) {
+            return redirect()->route('error.500')->with('error', "Équipe introuvable");
+        }
+        $this->equipeRepository->mettreAJour($id, [
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'active' => $request->active,
+        ]);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe modifiée avec succès');
+    }
+
+    // Formulaire d'ajout d'une équipe
+    public function createEquipe()
+    {
+        return view('dashboard.admin.equipes.create');
+    }
+
+    // Enregistrement d'une nouvelle équipe
+    public function storeEquipe(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'active' => 'required|boolean',
+        ]);
+        $this->equipeRepository->creer([
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'active' => $request->active,
+        ]);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe créée avec succès');
+    }
+
+    // Suppression d'une équipe
+    public function equipeSupprimer(Request $request) 
+    {
+        // dd($request->id);
+        $equipe = $this->equipeRepository->trouver($request->id);
+        if (!$equipe) {
+            return redirect()->route('error.500')->with('error', "Équipe introuvable");
+        }
+
+        $this->equipeRepository->supprimer($request->id);
+        return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe supprimée avec succès');
     }
 }

@@ -81,11 +81,21 @@ Route::controller(DashboardController::class)->group(function () {
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'showAdminDashboard')->name('dashboard.admin');
+    // Admin Utilisateurs
     Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
     Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
     Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
     Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+
+    // Admin Equipes
+    Route::get('/admin/equipes', 'showAdminDashboardEquipes')->name('dashboard.admin.equipes');
+    Route::get('/admin/equipes/create', 'createEquipe')->name('dashboard.admin.equipes.create');
+    Route::get('/admin/equipes/{id}', 'showEquipe')->name('dashboard.admin.equipes.show');
+    Route::get('/admin/equipes/{id}/edit', 'editEquipe')->name('dashboard.admin.equipes.edit');
+    Route::put('/admin/equipes/{id}', 'updateEquipe')->name('dashboard.admin.equipes.update');
+    Route::post('/admin/equipes', 'storeEquipe')->name('dashboard.admin.equipes.store');
+    Route::delete('/admin/equipes/{id}/supprimer', 'equipeSupprimer')->name('dashboard.admin.equipes.delete');
 });
 
 Route::controller(AgentController::class)->group(function () {
