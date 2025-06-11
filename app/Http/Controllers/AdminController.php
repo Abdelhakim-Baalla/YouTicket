@@ -229,6 +229,24 @@ class AdminController extends Controller
         }
     }
 
+    public function AdminSupprimerUtilisateur(Request $request)
+    {
+        // dd($request->id);
+        $utilisateur = $this->utilisateurRepository->trouver($request->id);
+        if (!$utilisateur) {
+            return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Utilisateur non trouvé.']);
+        }
+
+        try {
+            $this->utilisateurRepository->supprimer($request->id);
+            
+            return redirect()->route('dashboard.admin.utilisateurs')->with('success', 'Compte supprimé avec succès !');
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la suppression du compte: ' . $e->getMessage());
+            return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.']);
+        }
+    }
+
     public function showAdminDashboardEquipes()
     {
         $equipes = $this->equipeRepository->tous();
