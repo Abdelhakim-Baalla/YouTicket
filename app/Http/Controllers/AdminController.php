@@ -338,7 +338,30 @@ class AdminController extends Controller
     // Traitement de la modification
     public function updateEquipe(Request $request, $id)
     {
+        // dd($request->agents);
         // dd($request->all());
+        
+        foreach ($request->agents as $agentId) {
+            // dd($agentId);
+            $agent = $this->agentRepository->trouver($agentId);
+            if (!$agent) {
+                return redirect()->route('error.500')->with('error', "Agent introuvable");
+            }
+
+            // dd($agent->utilisateur_id);
+            $data = ['equipe_id' => $id];
+
+            // echo $agent->utilisateur_id . '<br>';
+            $user = $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, $data);
+            if (!$user) {
+                return redirect()->route('error.500')->with('error', "Utilisateur introuvable pour l'agent ID: $agentId");
+            }
+
+        }
+
+        // die();
+
+
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
