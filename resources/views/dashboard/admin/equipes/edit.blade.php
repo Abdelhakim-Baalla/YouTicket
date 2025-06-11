@@ -395,13 +395,13 @@
                                 id="responsable" 
                                 class="form-control form-select @error('responsable') error @enderror">
                             <option value="">Aucun responsable</option>
-                            @foreach($utilisateurs as $utilisateur)
-                                <option value="{{ $utilisateur->id }}" 
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}" 
                                     @if(!@empty($equipe->responsable->id)) 
-                                        {{ $utilisateur->id == $equipe->responsable->id ? 'selected' : '' }}
+                                        {{ $agent->utilisateur_id == $equipe->responsable->id ? 'selected' : '' }}
                                     @endif>
 
-                                    {{ $utilisateur->prenom }} {{ $utilisateur->nom }} ({{ $utilisateur->email }})
+                                    {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} ({{ $agent->utilisateur->email }})
                                 </option>
                             @endforeach
                         </select>

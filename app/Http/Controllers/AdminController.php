@@ -285,14 +285,23 @@ class AdminController extends Controller
     public function editEquipe($id)
     {
         $equipe = $this->equipeRepository->trouver($id);
-        $utilisateurs = $this->utilisateurRepository->tousActifs();
+        $agents = $this->agentRepository->tous();
+        foreach ($agents as $agent) {
+            $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            if ($user) {
+                $agent->utilisateur = $user;
+            } else {
+                $agent->utilisateur = null;
+            }
+        }
 
+        // dd($agents[0]);
         $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
 
 
         if (!$responsableAgent) {
            $equipe->responsable = null;
-           return view('dashboard.admin.equipes.edit', compact('equipe', 'utilisateurs'));
+           return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
         }
 
         $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
@@ -303,26 +312,27 @@ class AdminController extends Controller
         if (!$equipe) {
             return redirect()->route('error.404')->with('error', "Équipe introuvable");
         }
-        return view('dashboard.admin.equipes.edit', compact('equipe', 'utilisateurs'));
+        return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
     }
 
     // Traitement de la modification
     public function updateEquipe(Request $request, $id)
     {
-        $request->validate([
+        // dd($request->all());
+        $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
             'active' => 'required|boolean',
+            'responsable' => 'nullable|exists:agents,id',
         ]);
+
+        // dd($request->all());
         $equipe = $this->equipeRepository->trouver($id);
         if (!$equipe) {
             return redirect()->route('error.500')->with('error', "Équipe introuvable");
         }
-        $this->equipeRepository->mettreAJour($id, [
-            'nom' => $request->nom,
-            'description' => $request->description,
-            'active' => $request->active,
-        ]);
+
+        $this->equipeRepository->mettreAJour($id, $data);
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe modifiée avec succès');
     }
 
