@@ -23,6 +23,11 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
         return Utilisateur::where('actif', 1)->get();
     }
 
+    public function tousEnEquipeId($equipeId)
+    {
+        return Utilisateur::where('equipe_id', $equipeId)->get();
+    }
+
     public function trouver($id)
     {
         return Utilisateur::find($id);

@@ -13,4 +13,5 @@ interface UtilisateurRepositoryInterface
     public function rechercherParStatus(string $status);
     public function rechercherParRole(string $role);
     public function tousActifs();
+    public function tousEnEquipeId($equipeId);
 }
