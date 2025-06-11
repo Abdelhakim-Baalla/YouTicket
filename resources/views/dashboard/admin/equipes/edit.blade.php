@@ -388,6 +388,31 @@
                             Une équipe inactive ne peut plus recevoir de nouveaux tickets
                         </div>
                     </div>
+                    {{-- modifer le responsable de l'equipe --}}
+                    <div class="form-group">
+                        <label for="responsable" class="form-label">Responsable de l'équipe</label>
+                        <select name="responsable" 
+                                id="responsable" 
+                                class="form-control form-select @error('responsable') error @enderror">
+                            <option value="">Aucun responsable</option>
+                            @foreach($utilisateurs as $utilisateur)
+                                <option value="{{ $utilisateur->id }}" 
+                                    @if(!@empty($equipe->responsable->id)) 
+                                        {{ $utilisateur->id == $equipe->responsable->id ? 'selected' : '' }}
+                                    @endif>
+
+                                    {{ $utilisateur->prenom }} {{ $utilisateur->nom }} ({{ $utilisateur->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('responsable')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Sélectionnez un utilisateur pour être le responsable de cette équipe
+                        </div>
+                    </div>
+                    
 
                     <div class="form-actions">
                         <div class="flex gap-2">

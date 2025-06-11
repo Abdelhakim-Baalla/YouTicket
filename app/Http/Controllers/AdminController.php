@@ -285,10 +285,25 @@ class AdminController extends Controller
     public function editEquipe($id)
     {
         $equipe = $this->equipeRepository->trouver($id);
+        $utilisateurs = $this->utilisateurRepository->tousActifs();
+
+        $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
+
+
+        if (!$responsableAgent) {
+           $equipe->responsable = null;
+           return view('dashboard.admin.equipes.edit', compact('equipe', 'utilisateurs'));
+        }
+
+        $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
+
+    
+        $equipe->responsable = $responsableUser;
+
         if (!$equipe) {
             return redirect()->route('error.404')->with('error', "Équipe introuvable");
         }
-        return view('dashboard.admin.equipes.edit', compact('equipe'));
+        return view('dashboard.admin.equipes.edit', compact('equipe', 'utilisateurs'));
     }
 
     // Traitement de la modification
