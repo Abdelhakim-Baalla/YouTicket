@@ -429,6 +429,39 @@
                         @endif
                     </div>
                 </div>
+                <!-- Information sur le responsable-->
+                <div class="detail-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <span>Responsable de l'équipe</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if($equipe->responsable)
+                        <div class="member-item">
+                            <div class="member-avatar">
+                                @if($equipe->responsable->photo)
+                                    <img src="{{ asset('storage/' . $equipe->responsable->photo) }}" title="{{$equipe->responsable->prenom}} {{$equipe->responsable->nom}}" alt="Photo profile de {{$equipe->responsable->prenom}} {{$equipe->responsable->nom}}" class="w-full h-full rounded object-cover">
+                                @else
+                                    {{ substr($equipe->responsable->prenom ?? 'U', 0, 1) }}{{ substr($equipe->responsable->nom ?? 'U', 0, 1) }}
+                                @endif
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name">{{ $equipe->responsable->prenom }} {{ $equipe->responsable->nom }}</div>
+                                <div class="member-email">{{ $equipe->responsable->email }}</div>
+                            </div>
+                            <div class="member-role">{{ $equipe->responsable->poste ?? 'Aucun poste' }}</div>
+                            <div class="member-role">{{ $equipe->responsable->departement ?? 'Aucun departement' }}</div>
+                            <div class="member-role">{{ $equipe->responsable->role->nom ?? 'Utilisateur' }}</div>
+                        </div>
+                        @else
+                        <p>Aucun responsable assigné.</p>
+                        @endif
+                    </div>
+                </div>
 
                 <!-- Liste des membres -->
                 <div class="detail-card">

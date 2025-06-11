@@ -238,10 +238,10 @@ class AdminController extends Controller
             $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
 
             if (!$responsableAgent) {
-                continue; 
+                continue;
             }
 
-            
+
             $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
 
             if (!$responsableUser) {
@@ -261,6 +261,20 @@ class AdminController extends Controller
     public function showEquipe($id)
     {
         $equipe = $this->equipeRepository->trouver($id);
+        // dd($equipe->responsable);
+        $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
+
+
+        if (!$responsableAgent) {
+           $equipe->responsable = null;
+           return view('dashboard.admin.equipes.show', compact('equipe'));
+        }
+
+        $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
+
+    
+        $equipe->responsable = $responsableUser;
+
         if (!$equipe) {
             return redirect()->route('error.404')->with('error', "Équipe introuvable");
         }
