@@ -459,15 +459,15 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="role" class="form-label required">Rôle</label>
-                                <select name="role" 
-                                        id="role" 
-                                        class="form-control form-select @error('role') error @enderror" 
+                                <label for="role_id" class="form-label required">Rôle</label>
+                                <select name="role_id" 
+                                        id="role_id" 
+                                        class="form-control form-select @error('role_id') error @enderror" 
                                         required>
                                     <option value="">Sélectionner un rôle</option>
-                                    <option value="utilisateur" {{ old('role') == 'utilisateur' ? 'selected' : '' }}>👤 Utilisateur</option>
-                                    <option value="agent" {{ old('role') == 'agent' ? 'selected' : '' }}>🛠️ Agent</option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>⚡ Administrateur</option>
+                                    @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->nom }}</option>
+                                    @endforeach
                                 </select>
                                 @error('role')
                                     <div class="error-message">{{ $message }}</div>
@@ -501,6 +501,7 @@
                             </div>
                         </div>
                     </div>
+                    
 
                     <!-- Informations professionnelles -->
                     <div class="form-section">
@@ -539,6 +540,25 @@
                                 @error('departement')
                                     <div class="error-message">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <div class="form-group">
+                                {{-- defenir equipe a l'utilisateur --}}
+                                <label for="equipe_id" class="form-label">Équipe</label>
+                                <select name="equipe_id" 
+                                        id="equipe_id" 
+                                        class="form-control form-select @error('equipe_id') error @enderror">
+                                    <option value="">Sélectionner une équipe</option>
+                                    @foreach($equipes as $equipe)
+                                        <option value="{{ $equipe->id }}" {{ old('equipe_id') == $equipe->id ? 'selected' : '' }}>
+                                            {{ $equipe->nom }}
+                                        </option>
+                                    @endforeach
+                                    </select>
+                                @error('equipe_id')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                                <div class="form-help">Assigne l'utilisateur à une équipe spécifique</div>
                             </div>
                         </div>
                     </div>

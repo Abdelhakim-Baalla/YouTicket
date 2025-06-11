@@ -64,7 +64,9 @@ class AdminController extends Controller
 
     public function showAdminDashboardUtilisateursCreateModal()
     {
-        return view('dashboard.admin.utilisateurs.create');
+        $equipes = $this->equipeRepository->tous();
+        $roles = $this->roleRepository->tous();
+        return view('dashboard.admin.utilisateurs.create', compact('equipes', 'roles'));
     }
 
     public function showAdminDashboardUtilisateursEditModal(Request $request)
@@ -105,9 +107,10 @@ class AdminController extends Controller
             'poste' => 'required|string|max:255',
             'password' => 'required|string|min:8',
             'departement' => 'nullable|string|max:255',
-            'role' => 'required|string|max:255',
+            'role_id' => 'required|integer|exists:roles,id',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'actif' => 'required|integer|in:0,1',
+            'equipe_id' => 'nullable|integer|exists:equipes,id',
         ], [
             // Messages d'erreur personnalisés
             'nom.required' => 'Le nom est requis',
@@ -120,6 +123,8 @@ class AdminController extends Controller
             'telephone.required' => 'Le numéro de téléphone est requis',
             'role.required' => 'Le role est requis',
             'actif.required' => 'Le statut actif est requis',
+            'equipe_id.exists' => 'L\'équipe sélectionnée n\'existe pas',
+            'role_id.exists' => 'Le rôle sélectionné n\'existe pas',
         ]);
 
 
@@ -130,9 +135,6 @@ class AdminController extends Controller
         try {
             $data['password'] = Hash::make($data['password']);
 
-            $role = $this->roleRepository->trouverAvecNom($request->role);
-            $data['role_id'] = $role->id;
-
 
 
 
@@ -142,7 +144,7 @@ class AdminController extends Controller
                 // dd($path);
                 $data['photo'] = $path;
             } else {
-                unset($data['photo']); // Ne pas inclure la clé si pas d'upload
+                unset($data['photo']);
             }
 
             $user = $this->utilisateurRepository->creer($data);
@@ -239,7 +241,7 @@ class AdminController extends Controller
 
         try {
             $this->utilisateurRepository->supprimer($request->id);
-            
+
             return redirect()->route('dashboard.admin.utilisateurs')->with('success', 'Compte supprimé avec succès !');
         } catch (\Exception $e) {
             Log::error('Erreur lors de la suppression du compte: ' . $e->getMessage());
@@ -284,13 +286,13 @@ class AdminController extends Controller
 
 
         if (!$responsableAgent) {
-           $equipe->responsable = null;
-           return view('dashboard.admin.equipes.show', compact('equipe'));
+            $equipe->responsable = null;
+            return view('dashboard.admin.equipes.show', compact('equipe'));
         }
 
         $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
 
-    
+
         $equipe->responsable = $responsableUser;
 
         if (!$equipe) {
@@ -318,13 +320,13 @@ class AdminController extends Controller
 
 
         if (!$responsableAgent) {
-           $equipe->responsable = null;
-           return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
+            $equipe->responsable = null;
+            return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
         }
 
         $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
 
-    
+
         $equipe->responsable = $responsableUser;
 
         if (!$equipe) {
