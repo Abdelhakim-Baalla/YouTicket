@@ -415,42 +415,47 @@
 
                     {{-- Ajouter/Suppression d'agents dans l'équipe --}}
                     <div class="form-group">
-                        <label for="agents" class="form-label">Ajouter/Supprimer des agents</label>
-                        <select name="agents[]" 
-                                id="agents" 
-                                class="form-control form-select @error('agents') error @enderror" 
-                                multiple>
-                            @foreach($agents as $agent)
-                                @if(!@empty($equipe->responsable->id))
-                                    @if($agent->utilisateur_id == $equipe->responsable->id)
-                                        <option value="{{ $agent->id }}" disabled>
-                                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} ({{ $agent->utilisateur->email }}) - Responsable
-                                        </option>
-                                    @else
-                                        <option value="{{ $agent->id }}" 
-                                            @if($equipe->utilisateurs->contains($agent->utilisateur_id)) 
-                                                selected 
-                                            @endif>
-                                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} ({{ $agent->utilisateur->email }})
-                                        </option>
-                                    @endif
-                                @else
-                                <option value="{{ $agent->id }}" 
-                                    @if($equipe->utilisateurs->contains($agent->utilisateur_id)) 
-                                        selected 
-                                    @endif>
-                                    {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} ({{ $agent->utilisateur->email }})
-                                </option>
-                                @endif
-                            @endforeach
-                        </select>
-                        @error('agents')
-                            <div class="error-message">{{ $message }}</div>
-                        @enderror
-                        <div class="form-help">
-                            Sélectionnez les agents à ajouter ou supprimer de cette équipe
-                        </div>
+    <label class="form-label">Ajouter/Supprimer des agents</label>
+    
+    <div class="agents-list">
+        @foreach($agents as $agent)
+            <div class="agent-item">
+                @if(!empty($equipe->responsable->id) && $agent->utilisateur_id == $equipe->responsable->id)
+                    <div class="agent-disabled">
+                        <input type="checkbox" 
+                               id="agent-{{ $agent->id }}" 
+                               disabled
+                               checked>
+                        <label for="agent-{{ $agent->id }}">
+                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} 
+                            ({{ $agent->utilisateur->email }}) - Responsable
+                        </label>
                     </div>
+                @else
+                    <div class="agent-selectable">
+                        <input type="checkbox" 
+                               name="agents[]" 
+                               id="agent-{{ $agent->id }}" 
+                               value="{{ $agent->id }}"
+                               @if($equipe->utilisateurs->contains($agent->utilisateur_id)) checked @endif>
+                        <label for="agent-{{ $agent->id }}">
+                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} 
+                            ({{ $agent->utilisateur->email }})
+                        </label>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+    
+    @error('agents')
+        <div class="error-message">{{ $message }}</div>
+    @enderror
+    
+    <div class="form-help">
+        Cochez les cases des agents à ajouter ou décochez pour supprimer de cette équipe
+    </div>
+</div>
                     
 
                     <div class="form-actions">

@@ -338,30 +338,6 @@ class AdminController extends Controller
     // Traitement de la modification
     public function updateEquipe(Request $request, $id)
     {
-        // dd($request->agents);
-        // dd($request->all());
-        
-        foreach ($request->agents as $agentId) {
-            // dd($agentId);
-            $agent = $this->agentRepository->trouver($agentId);
-            if (!$agent) {
-                return redirect()->route('error.500')->with('error', "Agent introuvable");
-            }
-
-            // dd($agent->utilisateur_id);
-            $data = ['equipe_id' => $id];
-
-            // echo $agent->utilisateur_id . '<br>';
-            $user = $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, $data);
-            if (!$user) {
-                return redirect()->route('error.500')->with('error', "Utilisateur introuvable pour l'agent ID: $agentId");
-            }
-
-        }
-
-        // die();
-
-
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -369,13 +345,48 @@ class AdminController extends Controller
             'responsable' => 'nullable|exists:agents,id',
         ]);
 
-        // dd($request->all());
         $equipe = $this->equipeRepository->trouver($id);
         if (!$equipe) {
             return redirect()->route('error.500')->with('error', "Équipe introuvable");
         }
 
+        // Gestion des agents
+        $agentsSelectionnes = $request->agents ?? [];
+
+        $usersActuels = $this->utilisateurRepository->tousEnEquipeId($id);
+        foreach ($usersActuels as $user) {
+            $doitEtreDansEquipe = false;
+
+            // Vérifier si cet utilisateur doit rester dans l'équipe
+            foreach ($agentsSelectionnes as $agentId) {
+                $agent = $this->agentRepository->trouver($agentId);
+                if ($agent && $agent->utilisateur_id == $user->id) {
+                    $doitEtreDansEquipe = true;
+                    break;
+                }
+            }
+
+            if (!$doitEtreDansEquipe) {
+                $this->utilisateurRepository->mettreAJour($user->id, ['equipe_id' => null]);
+            }
+        }
+
+        // 2. Ensuite ajouter les nouveaux agents sélectionnés
+        foreach ($agentsSelectionnes as $agentId) {
+            $agent = $this->agentRepository->trouver($agentId);
+            if (!$agent) {
+                continue; 
+            }
+
+            // Vérifier si l'utilisateur associé à l'agent est déjà dans l'équipe
+            $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            if ($user && $user->equipe_id != $id) {
+                $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, ['equipe_id' => $id]);
+            }
+        }
+
         $this->equipeRepository->mettreAJour($id, $data);
+
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe modifiée avec succès');
     }
 
