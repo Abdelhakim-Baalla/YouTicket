@@ -594,7 +594,7 @@
             </button>
         </div>
         
-        <form id="deleteForm" method="POST" action="">
+        <form id="deleteForm" method="POST" action="{{ route('dashboard.admin.utilisateurs.delete', $utilisateur->id) }}">
             @csrf
             @method('DELETE')
             
@@ -637,7 +637,7 @@
     function openDeleteModal(userId, userName, userEmail) {
         document.getElementById('deleteUserName').textContent = userName;
         document.getElementById('deleteUserEmail').textContent = userEmail;
-        document.getElementById('deleteForm').action = `/admin/utilisateurs/${userId}`;
+        // document.getElementById('deleteForm').action = `/admin/utilisateurs/${userId}`;
         document.getElementById('deleteModal').classList.add('show');
     }
     
