@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Repositories\Interfaces\AdminRepositoryInterface;
+use App\Repositories\Interfaces\AgentRepositoryInterface;
 use App\Repositories\Interfaces\EquipeRepositoryInterface;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
@@ -18,13 +19,15 @@ class AdminController extends Controller
     protected $utilisateurRepository;
     protected $roleRepository;
     protected $equipeRepository;
+    protected $agentRepository;
 
-    public function __construct(EquipeRepositoryInterface $equipeRepository, AdminRepositoryInterface $adminRepository, UtilisateurRepositoryInterface $utilisateurRepository, RoleRepositoryInterface $roleRepository)
+    public function __construct(AgentRepositoryInterface $agentRepository, EquipeRepositoryInterface $equipeRepository, AdminRepositoryInterface $adminRepository, UtilisateurRepositoryInterface $utilisateurRepository, RoleRepositoryInterface $roleRepository)
     {
         $this->adminRepository = $adminRepository;
         $this->utilisateurRepository = $utilisateurRepository;
         $this->roleRepository = $roleRepository;
         $this->equipeRepository = $equipeRepository;
+        $this->agentRepository = $agentRepository;
     }
 
 
@@ -229,6 +232,28 @@ class AdminController extends Controller
     public function showAdminDashboardEquipes()
     {
         $equipes = $this->equipeRepository->tous();
+
+        foreach ($equipes as $equipe) {
+
+            $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
+
+            if (!$responsableAgent) {
+                continue; 
+            }
+
+            
+            $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
+
+            if (!$responsableUser) {
+                continue;
+            }
+
+            $equipe->responsable = $responsableUser;
+
+            // dd($equipe->responsable->nom);
+        }
+        // dd($equipes);
+
         return view('dashboard.admin.equipes.index', compact('equipes'));
     }
 
@@ -295,7 +320,7 @@ class AdminController extends Controller
     }
 
     // Suppression d'une équipe
-    public function equipeSupprimer(Request $request) 
+    public function equipeSupprimer(Request $request)
     {
         // dd($request->id);
         $equipe = $this->equipeRepository->trouver($request->id);

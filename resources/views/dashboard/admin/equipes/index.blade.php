@@ -302,6 +302,7 @@
                         <th>ID</th>
                         <th>Nom de l'Équipe</th>
                         <th>Description</th>
+                        <th>Responsable</th>
                         <th>Statut</th>
                         <th>Membres</th>
                         <th>Créée le</th>
@@ -321,6 +322,21 @@
                                 <div class="max-w-xs truncate" title="{{ $equipe->description }}">
                                     {{ $equipe->description ?: 'Aucune description' }}
                                 </div>
+                            </td>
+                            <td class="flex items-center space-x-2 gap-2">
+                                @if($equipe->responsable)
+                                <div class="inline-block mr-2">
+                                    <img src="{{asset('storage/' . ($equipe->responsable->photo ?? 'default.png'))}}" 
+                                         alt="{{ $equipe->responsable->prenom ?? 'Avatar' }}" 
+                                         class="w-8 h-8 rounded-full inline-block mr-2">
+                                </div>
+                                <div class="max-w-xs truncate  " title="{{ $equipe->responsable }}">
+                                    {{ $equipe->responsable->prenom ?? ''}}
+                                    {{$equipe->responsable->nom  ?? '' }}
+                                </div>
+                                @else
+                                    <span class="text-text-muted">Aucun responsable</span>
+                                @endif
                             </td>
                             <td>
                                 <span class="status-badge {{ $equipe->active ? 'status-active' : 'status-inactive' }}">
