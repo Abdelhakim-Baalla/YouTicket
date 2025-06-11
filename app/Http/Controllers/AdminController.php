@@ -82,7 +82,7 @@ class AdminController extends Controller
         }
         $equipe = $this->equipeRepository->trouver($utilisateur->equipe_id);
         if ($equipe) {
-            $utilisateur->equipe_id = $equipe->nom;
+            $utilisateur->equipe_id = $utilisateur->equipe_id;
         } else {
             $utilisateur->equipe_id = 'Aucune équipe attribuée';
         }
