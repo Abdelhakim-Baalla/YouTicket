@@ -306,6 +306,20 @@ class AdminController extends Controller
     {
         $equipe = $this->equipeRepository->trouver($id);
         $agents = $this->agentRepository->tous();
+        $equipes = $this->equipeRepository->tous();
+        // retirer l'agent de list des agents si et un responsable d'un n'amport q'uil equipe
+        // foreach($agents as $agent)
+        // {
+        //     foreach($equipes as $equipe)
+        //     {
+        //         if($agent->id == $equipe->responsable)
+        //         {
+        //            $agent = ''; 
+        //         }
+        //     }
+        // }
+
+        // dd($equipes);
         foreach ($agents as $agent) {
             $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
             if ($user) {
@@ -321,18 +335,19 @@ class AdminController extends Controller
 
         if (!$responsableAgent) {
             $equipe->responsable = null;
-            return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
+            return view('dashboard.admin.equipes.edit', compact('equipe', 'agents', 'equipes'));
         }
 
         $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
 
 
         $equipe->responsable = $responsableUser;
+        // dd($equipe->respnsable);
 
         if (!$equipe) {
             return redirect()->route('error.404')->with('error', "Équipe introuvable");
         }
-        return view('dashboard.admin.equipes.edit', compact('equipe', 'agents'));
+        return view('dashboard.admin.equipes.edit', compact('equipe', 'agents', 'equipes'));
     }
 
     // Traitement de la modification
@@ -393,22 +408,62 @@ class AdminController extends Controller
     // Formulaire d'ajout d'une équipe
     public function createEquipe()
     {
-        return view('dashboard.admin.equipes.create');
+        // Récupération de tous les agents pour le formulaire
+        $agents = $this->agentRepository->tous();
+        foreach ($agents as $agent) {
+            $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            if ($user) {
+                $agent->utilisateur = $user;
+            } else {
+                $agent->utilisateur = null;
+            }
+        }
+        // dd($agents[0]);
+        $equipes = $this->equipeRepository->tous();
+        if (count($equipes) >= 20) {
+            return redirect()->route('dashboard.admin.equipes')->withErrors(['general' => 'Vous avez atteint le nombre maximum d\'équipes autorisées.']);
+        }
+
+        foreach ($equipes as $equipe) {
+            $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
+            if ($responsableAgent) {
+                $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
+                $equipe->responsable = 1;
+            } else {
+                $equipe->responsable = 0;
+            }
+        }
+
+
+
+        return view('dashboard.admin.equipes.create', compact('agents', 'equipes'));
     }
 
     // Enregistrement d'une nouvelle équipe
     public function storeEquipe(Request $request)
     {
-        $request->validate([
+        // dd($request->all());
+        $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
             'active' => 'required|boolean',
+            'responsable' => 'nullable|exists:agents,id',
         ]);
-        $this->equipeRepository->creer([
-            'nom' => $request->nom,
-            'description' => $request->description,
-            'active' => $request->active,
-        ]);
+        
+
+        $equipe = $this->equipeRepository->creer($data);
+        // dd($equipe->id);
+        $agentsSelectionnes = $request->agents ?? [];
+
+        foreach ($agentsSelectionnes as $agentId) {
+            $agent = $this->agentRepository->trouver($agentId);
+            if (!$agent) {
+                continue; 
+            }
+
+            $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, ['equipe_id' => $equipe->id]);
+            
+        }
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe créée avec succès');
     }
 
@@ -421,6 +476,11 @@ class AdminController extends Controller
             return redirect()->route('error.500')->with('error', "Équipe introuvable");
         }
 
+        $usersInEquipe = $this->utilisateurRepository->tousEnEquipeId($request->id);
+        foreach ($usersInEquipe as $user) {
+            $this->utilisateurRepository->mettreAJour($user->id, ['equipe_id' => null]);
+        }
+        // dd($usersInEquipe);
         $this->equipeRepository->supprimer($request->id);
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe supprimée avec succès');
     }
