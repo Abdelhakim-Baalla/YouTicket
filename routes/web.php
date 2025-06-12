@@ -87,6 +87,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
     Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
     Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+    Route::delete('/admin/utilisateurs/delete/{id}', 'AdminSupprimerUtilisateur')->name('dashboard.admin.utilisateurs.delete');
 
     // Admin Equipes
     Route::get('/admin/equipes', 'showAdminDashboardEquipes')->name('dashboard.admin.equipes');

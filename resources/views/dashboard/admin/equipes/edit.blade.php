@@ -369,6 +369,57 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="email" class="form-label required">Email de l'équipe</label>
+                        <input type="email" 
+                               name="email" 
+                               id="email" 
+                               class="form-control @error('email') error @enderror" 
+                               value="{{ old('email', $equipe->email) }}" 
+                               placeholder="Ex: equipe@example.com"
+                               >
+                        @error('email')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez l'email' de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone" class="form-label required">Telephone de l'équipe</label>
+                        <input type="text" 
+                               name="telephone" 
+                               id="telephone" 
+                               class="form-control @error('telephone') error @enderror" 
+                               value="{{ old('telephone', $equipe->telephone) }}" 
+                               placeholder="Ex: +212X XXX XXX X"
+                               >
+                        @error('telephone')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez le numéro de telephone de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialite" class="form-label required">Spécialité de l'équipe</label>
+                        <input type="text" 
+                               name="specialite" 
+                               id="specialite" 
+                               class="form-control @error('specialite') error @enderror" 
+                               value="{{ old('specialite', $equipe->specialite) }}" 
+                               placeholder="Ex: Front-end"
+                               >
+                        @error('specialite')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez la Spécialité de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="active" class="form-label required">Statut</label>
                         <select name="active" 
                                 id="active" 
@@ -388,6 +439,78 @@
                             Une équipe inactive ne peut plus recevoir de nouveaux tickets
                         </div>
                     </div>
+                    {{-- modifer le responsable de l'equipe --}}
+                    <div class="form-group">
+                        <label for="responsable" class="form-label">Responsable de l'équipe</label>
+                        <select name="responsable" 
+                                id="responsable" 
+                                class="form-control form-select @error('responsable') error @enderror">
+                            <option value="">Aucun responsable</option>
+                            @foreach($agents as $agent)
+                                <option value="{{ $agent->id }}" 
+                                    @if(!@empty($equipe->responsable->id)) 
+                                        {{ $agent->utilisateur_id == $equipe->responsable->id ? 'selected' : '' }}
+                                    @endif>
+
+                                    {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} ({{ $agent->utilisateur->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('responsable')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Sélectionnez un utilisateur pour être le responsable de cette équipe
+                        </div>
+                    </div>
+
+                    {{-- Ajouter/Suppression d'agents dans l'équipe --}}
+                    <div class="form-group">
+                        <label class="form-label">Ajouter/Supprimer des agents</label>
+    
+                        <div class="agents-list">
+                        @foreach($agents as $agent)
+                            <div class="agent-item">
+                                @if(!empty($equipe->responsable->id) && $agent->utilisateur_id == $equipe->responsable->id)
+                                    <div class="agent-disabled">
+                                        <input type="checkbox" 
+                                               id="agent-{{ $agent->id }}" 
+                                               disabled
+                                               checked>
+                                        <label for="agent-{{ $agent->id }}">
+                                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} 
+                                            ({{ $agent->utilisateur->email }}) - Responsable
+                                        </label>
+                                    </div>
+                                @else
+                                    <div class="agent-selectable">
+                                        <input type="checkbox" 
+                                               name="agents[]" 
+                                               id="agent-{{ $agent->id }}" 
+                                               value="{{ $agent->id }}"
+                                               @if(!empty($agent->utilisateur->equipe_id) && $agent->utilisateur->equipe_id != $equipe->id) checked disabled @endif
+                                               @if(!empty($agent->utilisateur->equipe_id) && $agent->utilisateur->equipe_id == $equipe->id) checked @endif
+                                               @if($equipe->utilisateurs->contains($agent->utilisateur_id)) checked @endif>
+                                        <label for="agent-{{ $agent->id }}" class="cursor-pointer @if(!empty($agent->utilisateur->equipe_id) && $agent->utilisateur->equipe_id != $equipe->id) line-through cursor-not-allowed font-italic text-[15px] text-muted !important text-red-500 @endif">
+                                            {{ $agent->utilisateur->prenom }} {{ $agent->utilisateur->nom }} 
+                                            ({{ $agent->utilisateur->email }})
+                                        </label>
+                                        @if(!empty($agent->utilisateur->equipe_id)) <span class="text-muted text-[9px] text-gray-300">(Membre de l'équipe: {{ $agent->utilisateur->equipe->nom }})</span> @endif
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                        </div>
+
+                        @error('agents')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+
+                        <div class="form-help">
+                            Cochez les cases des agents à ajouter ou décochez pour supprimer de cette équipe
+                        </div>
+                    </div>
+                    
 
                     <div class="form-actions">
                         <div class="flex gap-2">

@@ -18,6 +18,15 @@ class UtilisateurRepository implements UtilisateurRepositoryInterface
     {
         return Utilisateur::orderBy('id', 'desc')->paginate(7);
     }
+    public function tousActifs()
+    {
+        return Utilisateur::where('actif', 1)->get();
+    }
+
+    public function tousEnEquipeId($equipeId)
+    {
+        return Utilisateur::where('equipe_id', $equipeId)->get();
+    }
 
     public function trouver($id)
     {
