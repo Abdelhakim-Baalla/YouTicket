@@ -240,8 +240,6 @@ function validatePersonalInfoForm() {
         }
     }
     
-   
-    
     return isValid;
 }
 
