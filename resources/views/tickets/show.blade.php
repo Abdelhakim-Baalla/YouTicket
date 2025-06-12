@@ -1,293 +1,667 @@
-@extends('layouts.app')
+@extends('layouts.user')
+
+@section('title', 'Ticket #1234 - YouTicket')
+@section('page-title', 'Détails du Ticket')
+@section('page-subtitle', 'Ticket #1234 - Problème de connexion à l\'application CRM')
+
+@section('styles')
+<style>
+    .ticket-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .ticket-main {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    
+    .ticket-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .ticket-header {
+        background: rgba(15, 15, 35, 0.9);
+        padding: 2rem;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .ticket-id {
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.875rem;
+        color: var(--primary-light);
+        margin-bottom: 0.5rem;
+    }
+    
+    .ticket-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+    
+    .ticket-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    .ticket-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .badge-status-nouveau { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge-status-en-attente { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .badge-status-en-cours { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-status-resolu { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+    .badge-status-ferme { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+    
+    .badge-priority-immediat { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .badge-priority-urgent { background: rgba(245, 101, 101, 0.2); color: #fca5a5; }
+    .badge-priority-standard { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge-priority-faible { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+    
+    .ticket-content {
+        padding: 2rem;
+    }
+    
+    .content-section {
+        margin-bottom: 2rem;
+    }
+    
+    .content-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .section-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--primary);
+    }
+    
+    .ticket-description {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1.5rem;
+        border-radius: 12px;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        white-space: pre-wrap;
+    }
+    
+    .attachments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .attachment-item {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .attachment-item:hover {
+        background: rgba(15, 23, 42, 0.7);
+        transform: translateY(-2px);
+    }
+    
+    .attachment-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+    
+    .attachment-info {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .attachment-name {
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .attachment-size {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+    
+    .info-card {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+    
+    .info-card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .info-label {
+        font-weight: 500;
+        color: var(--text-secondary);
+        min-width: 100px;
+    }
+    
+    .info-value {
+        color: var(--text-primary);
+        text-align: right;
+        flex: 1;
+    }
+    
+    .comments-section {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    
+    .comments-header {
+        background: rgba(15, 15, 35, 0.9);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: between;
+    }
+    
+    .comments-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+    
+    .comments-body {
+        padding: 1.5rem;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .comments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .comment-item {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+    
+    .comment-author {
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+    
+    .comment-date {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+    
+    .comment-content {
+        color: var(--text-secondary);
+        line-height: 1.5;
+        white-space: pre-wrap;
+    }
+    
+    .comment-form {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border);
+        background: rgba(15, 15, 35, 0.5);
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(15, 15, 35, 0.5);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 0.875rem;
+        resize: vertical;
+        min-height: 100px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+    }
+    
+    .btn {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875rem;
+    }
+    
+    .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    .btn-secondary {
+        background: rgba(71, 85, 105, 0.8);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(71, 85, 105, 1);
+    }
+    
+    .btn-danger {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-danger:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+    
+    .actions-bar {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-secondary);
+    }
+    
+    .empty-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(71, 85, 105, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+    }
+    
+    @media (max-width: 1024px) {
+        .ticket-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .ticket-sidebar {
+            order: -1;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .ticket-header {
+            padding: 1.5rem;
+        }
+        
+        .ticket-content {
+            padding: 1.5rem;
+        }
+        
+        .ticket-badges {
+            flex-direction: column;
+        }
+        
+        .actions-bar {
+            flex-direction: column;
+        }
+        
+        .attachments-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+@endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Ticket #1234</h1>
-        <div>
-            <a href="/tickets" class="btn btn-secondary me-2">
-                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+<div class="container">
+    <!-- Barre d'actions -->
+    <div class="actions-bar">
+        <a href="#" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Retour à la liste
+        </a>
+        
+        
+            <a href="#" class="btn btn-primary">
+                <i class="fas fa-edit"></i>
+                Modifier le ticket
             </a>
-            <a href="/tickets/1234/edit" class="btn btn-warning me-2">
-                <i class="fas fa-edit me-1"></i> Modifier
-            </a>
-            <button type="button" class="btn btn-danger">
-                <i class="fas fa-trash me-1"></i> Supprimer
-            </button>
-        </div>
+        
+        
+        <button onclick="window.print()" class="btn btn-secondary">
+            <i class="fas fa-print"></i>
+            Imprimer
+        </button>
+        
+        <button onclick="shareTicket()" class="btn btn-secondary">
+            <i class="fas fa-share"></i>
+            Partager
+        </button>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <!-- Détails du ticket -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Problème de connexion à l'application</h5>
+    <div class="ticket-container">
+        <!-- Contenu principal du ticket -->
+        <div class="ticket-main">
+            <!-- En-tête du ticket -->
+            <div class="ticket-header">
+                <div class="ticket-id">#1234</div>
+                <h1 class="ticket-title">Problème de connexion à l'application CRM</h1>
+                <div class="ticket-badges">
+                    <span class="ticket-badge badge-status-en-cours">
+                        <i class="fas fa-circle"></i>
+                        En cours
+                    </span>
+                    <span class="ticket-badge badge-priority-urgent">
+                        <i class="fas fa-flag"></i>
+                        Urgent
+                    </span>
+                    <span class="ticket-badge" style="background: rgba(139, 92, 246, 0.2); color: #a78bfa;">
+                        <i class="fas fa-tag"></i>
+                        Incident
+                    </span>
+                    <span class="ticket-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">
+                        <i class="fas fa-layer-group"></i>
+                        Moyen
+                    </span>
                 </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h6 class="fw-bold">Description</h6>
-                        <p>Les utilisateurs du département comptabilité signalent qu'ils ne peuvent pas se connecter à l'application CRM depuis ce matin. L'erreur affichée est "Connexion refusée". Les autres départements ne semblent pas affectés par ce problème.</p>
-                        <p>Nous avons déjà vérifié que les serveurs sont opérationnels et que les utilisateurs utilisent les bons identifiants.</p>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h6 class="fw-bold">Informations</h6>
-                            <table class="table table-sm">
-                                <tbody>
-                                    <tr>
-                                        <th style="width: 40%">Projet</th>
-                                        <td>CRM</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Type</th>
-                                        <td>Incident</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Impact</th>
-                                        <td>Bloquant/Critique</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Fréquence</th>
-                                        <td>Très forte/Tout le temps</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Priorité</th>
-                                        <td><span class="badge bg-danger">Urgent</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="fw-bold">Suivi</h6>
-                            <table class="table table-sm">
-                                <tbody>
-                                    <tr>
-                                        <th style="width: 40%">État</th>
-                                        <td><span class="badge bg-warning">En cours</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Assigné à</th>
-                                        <td>Martin Dupont</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Créé par</th>
-                                        <td>Sophie Martin</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date de création</th>
-                                        <td>20/05/2025 14:30</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Dernière mise à jour</th>
-                                        <td>21/05/2025 09:15</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            </div>
+            
+            <!-- Contenu du ticket -->
+            <div class="ticket-content">
+                <!-- Description -->
+                <div class="content-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-align-left section-icon"></i>
+                        Description
+                    </h3>
+                    <div class="ticket-description">L'application CRM est inaccessible depuis ce matin. Plusieurs utilisateurs sont impactés et ne peuvent pas accéder à leurs données. Veuillez intervenir rapidement.</div>
+                </div>
+                
+                <!-- Pièces jointes -->
+                
+                    <div class="content-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-paperclip section-icon"></i>
+                            Pièces jointes (0)
+                        </h3>
+                        <div class="attachments-grid">
+                            
                         </div>
                     </div>
-
-                    <div class="mb-4">
-                        <h6 class="fw-bold">Pièces jointes</h6>
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <div>
-                                    <i class="fas fa-file-image me-2"></i> capture_erreur.png
-                                </div>
-                                <span class="badge bg-primary rounded-pill">2.3 Mo</span>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <div>
-                                    <i class="fas fa-file-pdf me-2"></i> rapport_incident.pdf
-                                </div>
-                                <span class="badge bg-primary rounded-pill">1.5 Mo</span>
-                            </a>
-                        </div>
+                
+            </div>
+        </div>
+        
+        <!-- Sidebar avec informations -->
+        <div class="ticket-sidebar">
+            <!-- Informations du ticket -->
+            <div class="info-card">
+                <h3 class="info-card-title">
+                    <i class="fas fa-info-circle"></i>
+                    Informations
+                </h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Projet:</span>
+                        <span class="info-value">Projet Alpha</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value">Incident</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Impact:</span>
+                        <span class="info-value">Moyen</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Fréquence:</span>
+                        <span class="info-value">Ponctuel</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Priorité:</span>
+                        <span class="info-value">Urgent</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Statut:</span>
+                        <span class="info-value">En cours</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Commentaires -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Commentaires</h5>
+            
+            <!-- Dates importantes -->
+            <div class="info-card">
+                <h3 class="info-card-title">
+                    <i class="fas fa-calendar"></i>
+                    Dates
+                </h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Créé le:</span>
+                        <span class="info-value">20/05/2025 à 09:15</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mis à jour:</span>
+                        <span class="info-value">21/05/2025 à 10:00</span>
+                    </div>
+                    
+                        <div class="info-item">
+                            <span class="info-label">Affecté le:</span>
+                            <span class="info-value">20/05/2025 à 10:00</span>
+                        </div>
+                    
                 </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">Martin Dupont</h6>
-                                    <small class="text-muted">21/05/2025 09:15</small>
-                                </div>
-                                <p>J'ai commencé à investiguer le problème. Il semble que ce soit lié aux droits d'accès qui ont été modifiés lors de la dernière mise à jour. Je travaille sur une solution.</p>
-                            </div>
-                        </div>
+            </div>
+            
+            <!-- Assignation -->
+            <div class="info-card">
+                <h3 class="info-card-title">
+                    <i class="fas fa-user"></i>
+                    Assignation
+                </h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Créé par:</span>
+                        <span class="info-value">John Doe</span>
                     </div>
-
-                    <div class="mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">Sophie Martin</h6>
-                                    <small class="text-muted">20/05/2025 16:45</small>
-                                </div>
-                                <p>J'ai contacté le département informatique. Ils sont au courant du problème et travaillent dessus. Plusieurs utilisateurs sont affectés.</p>
-                            </div>
-                        </div>
+                    <div class="info-item">
+                        <span class="info-label">Assigné à:</span>
+                        <span class="info-value">Jane Smith</span>
                     </div>
-
-                    <div class="mb-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">Système</h6>
-                                    <small class="text-muted">20/05/2025 14:30</small>
-                                </div>
-                                <p>Ticket créé et assigné à Martin Dupont.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Formulaire de commentaire -->
-                    <form>
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">Ajouter un commentaire</label>
-                            <textarea class="form-control" id="comment" rows="3" placeholder="Votre commentaire..."></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="comment_attachments" class="form-label">Pièces jointes (optionnel)</label>
-                            <input class="form-control" type="file" id="comment_attachments" multiple>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Envoyer</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <!-- Actions -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Actions</h5>
+    </div>
+    
+    <!-- Section des commentaires -->
+    <div class="comments-section">
+        <div class="comments-header">
+            <h3 class="comments-title">
+                <i class="fas fa-comments"></i>
+                Commentaires et Historique
+            </h3>
+        </div>
+        
+        <div class="comments-body">
+            
+                <div class="comments-list">
+                    
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-author">John Doe</span>
+                                <span class="comment-date">20/05/2025 à 09:30</span>
+                            </div>
+                            <div class="comment-content">J'ai créé ce ticket pour signaler un problème de connexion.</div>
+                        </div>
+                    
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-author">Jane Smith</span>
+                                <span class="comment-date">20/05/2025 à 10:00</span>
+                            </div>
+                            <div class="comment-content">Je suis en train d'investiguer le problème.</div>
+                        </div>
+                    
                 </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-primary">
-                            <i class="fas fa-user-plus me-1"></i> Réassigner
-                        </button>
-                        <button type="button" class="btn btn-outline-success">
-                            <i class="fas fa-check-circle me-1"></i> Marquer comme résolu
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fas fa-clock me-1"></i> Mettre en attente
-                        </button>
-                        <button type="button" class="btn btn-outline-danger">
-                            <i class="fas fa-times-circle me-1"></i> Fermer le ticket
-                        </button>
-                        <button type="button" class="btn btn-outline-warning">
-                            <i class="fas fa-arrow-up me-1"></i> Escalader
-                        </button>
-                        <button type="button" class="btn btn-outline-info">
-                            <i class="fas fa-envelope me-1"></i> Envoyer une notification
-                        </button>
+            
+            
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-comment"></i>
                     </div>
+                    <p>Aucun commentaire pour le moment</p>
                 </div>
-            </div>
-
-            <!-- Historique -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title">Historique</h5>
+            
+        </div>
+        
+        <!-- Formulaire d'ajout de commentaire -->
+        <div class="comment-form">
+            <form action="#" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="comment" class="form-label">Ajouter un commentaire</label>
+                    <textarea name="comment" id="comment" class="form-textarea" placeholder="Décrivez votre problème, posez une question ou ajoutez des informations supplémentaires..." required></textarea>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item px-0">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <strong>Martin Dupont</strong> a mis à jour le statut
-                                </div>
-                                <small class="text-muted">21/05/2025 09:15</small>
-                            </div>
-                            <small class="text-muted">De "Nouveau" à "En cours"</small>
-                        </li>
-                        <li class="list-group-item px-0">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <strong>Sophie Martin</strong> a ajouté un commentaire
-                                </div>
-                                <small class="text-muted">20/05/2025 16:45</small>
-                            </div>
-                        </li>
-                        <li class="list-group-item px-0">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <strong>Admin</strong> a assigné le ticket
-                                </div>
-                                <small class="text-muted">20/05/2025 15:00</small>
-                            </div>
-                            <small class="text-muted">Assigné à Martin Dupont</small>
-                        </li>
-                        <li class="list-group-item px-0">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <strong>Sophie Martin</strong> a créé le ticket
-                                </div>
-                                <small class="text-muted">20/05/2025 14:30</small>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Tickets liés -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Tickets liés</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">#1220 - Problème d'accès au CRM</h6>
-                                <small class="text-muted">Résolu</small>
-                            </div>
-                            <small class="text-muted">Créé il y a 2 semaines</small>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">#1198 - Mise à jour des droits d'accès</h6>
-                                <small class="text-muted">Fermé</small>
-                            </div>
-                            <small class="text-muted">Créé il y a 3 semaines</small>
-                        </a>
-                    </div>
-                    <div class="mt-3">
-                        <button type="button" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-link me-1"></i> Lier un ticket
-                        </button>
-                    </div>
-                </div>
-            </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Envoyer le commentaire
+                </button>
+            </form>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function shareTicket() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Ticket #1234 - Problème de connexion à l\'application CRM',
+                text: 'Consultez ce ticket de support',
+                url: window.location.href
+            });
+        } else {
+            // Fallback: copier l'URL dans le presse-papiers
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                alert('Lien copié dans le presse-papiers !');
+            });
+        }
+    }
+    
+    // Auto-resize textarea
+    document.getElementById('comment').addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+    
+    // Confirmation avant suppression (si applicable)
+    function confirmDelete() {
+        return confirm('Êtes-vous sûr de vouloir supprimer ce ticket ? Cette action est irréversible.');
+    }
+</script>
 @endsection

@@ -17,7 +17,7 @@ class UtilisateurController extends Controller
      public function showUtilisateurDashboard()
     {
         $countTicketActif= $this->ticketRepository->tous()->count();
-        dd($countTicketActif);
+        // dd($countTicketActif);
         return view('dashboard.utilisateur.index');
     }
 }
