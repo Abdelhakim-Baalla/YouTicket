@@ -1,3 +1,4 @@
+@if(Auth::check())
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -510,7 +511,7 @@
                     <h3 class="sidebar-section-title">Menu principal</h3>
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="" class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}">
+                            <a href="/client" class="nav-link {{ request()->routeIs('dashboard.utilisateur') ? 'active' : '' }}">
                                 <div class="nav-icon">
                                     <i class="fas fa-home"></i>
                                 </div>
@@ -518,7 +519,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link {{ request()->routeIs('user.tickets.*') ? 'active' : '' }}">
+                            <a href="{{route('dashboard.utilisateur.tickets')}}" class="nav-link {{ request()->routeIs('dashboard.utilisateur.tickets.*') ? 'active' : '' }}">
                                 <div class="nav-icon">
                                     <i class="fas fa-ticket-alt"></i>
                                 </div>
@@ -642,3 +643,8 @@
     @yield('scripts')
 </body>
 </html>
+@else
+    <script>
+        window.location.href = "{{ route('login') }}";
+    </script>
+@endif
