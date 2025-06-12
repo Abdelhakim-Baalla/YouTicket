@@ -471,7 +471,7 @@
                             <td>
                                 <div class="user-info">
                                     <div class="user-avatar">
-                                        @if($history->user->photo)
+                                        @if(!empty($history->user->photo))
                                             <img src="{{ asset('storage/' . $history->user->photo) }}" 
                                                  alt="{{ $history->user->prenom }} {{ $history->user->nom }}" 
                                                  class="rounded-full w-8 h-8 object-cover">
