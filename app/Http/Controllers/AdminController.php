@@ -174,7 +174,7 @@ class AdminController extends Controller
             'prenom' => 'required|string|max:255',
             'email' =>  'required|string|email|max:255',
             'telephone' => 'required|string|max:15',
-            'poste' => 'required|string|max:255',
+            'poste' => 'nullable|string|max:255',
             'departement' => 'nullable|string|max:255',
             'role_id' => 'required|integer|exists:roles,id',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
