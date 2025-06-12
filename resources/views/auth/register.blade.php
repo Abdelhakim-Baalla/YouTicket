@@ -203,6 +203,23 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="role" class="form-label">Role a approprier</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <select name="role" id="role"  class="form-control @error('role') error @enderror" >
+                            <option value="utilisateur" selected>Utilisateur</option>
+                            <option value="agent">Agent du Support</option>
+                        </select>
+                    </div>
+                    @error('role')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
                 <div class="checkbox-wrapper">
                     <input type="checkbox" id="terms" name="terms" class="checkbox @error('terms') error @enderror" >
                     <label for="terms" class="checkbox-label">
