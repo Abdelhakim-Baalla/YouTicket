@@ -427,6 +427,37 @@
                             <p class="description-text">{{ $equipe->description }}</p>
                         </div>
                         @endif
+                        
+                         @if($equipe->email)
+                        <div class="description-section">
+                            <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </h3>
+                            <p class="description-text">{{ $equipe->email }}</p>
+                        </div>
+                        @endif
+
+                         @if($equipe->telephone)
+                        <div class="description-section">
+                            <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                                <i class="fas fa-phone"></i>
+                                Telephone
+                            </h3>
+                            <p class="description-text">{{ $equipe->telephone }}</p>
+                        </div>
+                        @endif
+
+                         @if($equipe->specialite)
+                        <div class="description-section">
+                            <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                                <i class="fas fa-briefcase"></i>
+                                Specialite
+                            </h3>
+                            <p class="description-text">{{ $equipe->specialite }}</p>
+                        </div>
+                        @endif
+                        
                     </div>
                 </div>
                 <!-- Information sur le responsable-->

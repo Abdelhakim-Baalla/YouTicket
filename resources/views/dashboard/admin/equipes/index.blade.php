@@ -303,6 +303,7 @@
                         <th>Nom de l'Équipe</th>
                         <th>Description</th>
                         <th>Responsable</th>
+                        <th>Spécialité</th>
                         <th>Statut</th>
                         <th>Membres</th>
                         <th>Créée le</th>
@@ -337,6 +338,11 @@
                                 @else
                                     <span class="text-text-muted">Aucun responsable</span>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="max-w-xs truncate" title="{{ $equipe->specialite }}">
+                                    {{ Str::limit($equipe->specialite, 15) }}
+                                </div>
                             </td>
                             <td>
                                 <span class="status-badge {{ $equipe->active ? 'status-active' : 'status-inactive' }}">

@@ -358,6 +358,9 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'active' => 'required|boolean',
             'responsable' => 'nullable|exists:agents,id',
+            'email' => 'nullable|string|email|max:255|unique:equipes,email',
+            'telephone' => 'nullable|string',
+            'specialite' => 'nullable|string',
         ]);
 
         $equipe = $this->equipeRepository->trouver($id);
@@ -448,6 +451,9 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'active' => 'required|boolean',
             'responsable' => 'nullable|exists:agents,id',
+            'email' => 'nullable|string|email|max:255|unique:equipes,email',
+            'telephone' => 'nullable|string',
+            'specialite' => 'nullable|string',
         ]);
         
 

@@ -369,6 +369,57 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="email" class="form-label required">Email de l'équipe</label>
+                        <input type="email" 
+                               name="email" 
+                               id="email" 
+                               class="form-control @error('email') error @enderror" 
+                               value="{{ old('email', $equipe->email) }}" 
+                               placeholder="Ex: equipe@example.com"
+                               >
+                        @error('email')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez l'email' de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone" class="form-label required">Telephone de l'équipe</label>
+                        <input type="text" 
+                               name="telephone" 
+                               id="telephone" 
+                               class="form-control @error('telephone') error @enderror" 
+                               value="{{ old('telephone', $equipe->telephone) }}" 
+                               placeholder="Ex: +212X XXX XXX X"
+                               >
+                        @error('telephone')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez le numéro de telephone de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialite" class="form-label required">Spécialité de l'équipe</label>
+                        <input type="text" 
+                               name="specialite" 
+                               id="specialite" 
+                               class="form-control @error('specialite') error @enderror" 
+                               value="{{ old('specialite', $equipe->specialite) }}" 
+                               placeholder="Ex: Front-end"
+                               >
+                        @error('specialite')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                        <div class="form-help">
+                            Modifiez la Spécialité de votre équipe si nécessaire
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="active" class="form-label required">Statut</label>
                         <select name="active" 
                                 id="active" 
