@@ -109,7 +109,7 @@ Route::controller(AgentController::class)->group(function () {
 });
 
 Route::controller(UtilisateurController::class)->group(function () {
-    Route::get('/utilisateur', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
+    Route::get('/client', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
     // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
     // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
