@@ -78,10 +78,8 @@ class AdminController extends Controller
         $role = $this->roleRepository->trouver($utilisateur->role_id);
 
         if ($role) {
-            $utilisateur->role_id = $role->nom;
-        } else {
-            $utilisateur->role_id = 'Aucun rôle attribué';
-        }
+            $utilisateur->role_id = $role->id;
+        } 
         $equipe = $this->equipeRepository->trouver($utilisateur->equipe_id);
         if ($equipe) {
             $utilisateur->equipe_id = $utilisateur->equipe_id;
