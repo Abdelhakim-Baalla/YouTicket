@@ -112,7 +112,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::get('/client', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
     Route::get('/client/tickets', 'showUtilisateurTickets')->name('dashboard.utilisateur.tickets');
     Route::get('/client/ticket/show/{id}', 'showTicket')->name('dashboard.utilisateur.ticket.show');
-    Route::get('/client/ticket/show/{id}/comment/store', 'showTicketCommentStore')->name('dashboard.utilisateur.ticket.show.comment.store');
+    Route::post('/client/ticket/show/{id}/comment/store', 'showTicketCommentStore')->name('dashboard.utilisateur.ticket.show.comment.store');
     Route::get('/client/tickets/create', 'showUtilisateurTicketsCreateModal')->name('dashboard.utilisateur.tickets.create');
     Route::get('/client/tickets/create/store', 'utilisateurStoreCreateTickets')->name('dashboard.utilisateur.tickets.create.store');
     Route::get('/client/tickets/edit/{id}', 'showUtilisateurTicketsEditModal')->name('dashboard.utilisateur.tickets.edit');
