@@ -42,4 +42,17 @@ class UtilisateurController extends Controller
         // dd($tickets);
         return view('dashboard.utilisateur.tickets.index', compact('tickets'));
     }
+
+    public function showTicket(Request $request)
+    {
+        // dd($request->id);
+        $ticket = $this->ticketRepository->trouver($request->id);
+        $ticketCreePar = $this->utilisateurRepository->trouver($ticket->demandeur_id);
+        $ticketAssigne_A = $this->utilisateurRepository->trouver($ticket->assigne_a_id);
+
+        $ticket->cree_par = $ticketCreePar;
+        $ticket->assigne_a = $ticketAssigne_A;
+        // dd($ticket);
+        return view('dashboard.utilisateur.tickets.show', compact('ticket'));
+    }
 }
