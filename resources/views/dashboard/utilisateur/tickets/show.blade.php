@@ -686,6 +686,15 @@
 
 @section('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Wait a tiny bit to ensure all content is rendered
+    setTimeout(function() {
+        const commentsBody = document.querySelector('.comments-body');
+        if (commentsBody) {
+            commentsBody.scrollTop = commentsBody.scrollHeight;
+        }
+    }, 100);
+    });
     function shareTicket() {
         if (navigator.share) {
             navigator.share({
