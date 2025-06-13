@@ -610,7 +610,7 @@
         
         <!-- Formulaire d'ajout de commentaire -->
         <div class="comment-form">
-            <form action="#" method="POST">
+            <form action="{{route('dashboard.utilisateur.ticket.show.comment.store', $ticket->id)}}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="comment" class="form-label">Ajouter un commentaire</label>
