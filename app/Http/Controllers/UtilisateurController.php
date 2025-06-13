@@ -65,4 +65,29 @@ class UtilisateurController extends Controller
 
         return view('dashboard.utilisateur.tickets.show', compact('ticket', 'commentaires'));
     }
+
+    public function showTicketCommentStore(Request $request)
+    {
+        // dd($request->comment);
+        if(!Auth::user()->id)
+        {
+            return redirect()->route('login')->with('error', 'Please log in to Comment in a ticket.');
+        }
+
+        $data = [
+            'ticket_id' => $request->id,
+            'utilisateur_id' => Auth::user()->id,
+            'contenu' => $request->comment
+        ];
+
+        $commentaire = $this->commentaireRepository->creer($data);
+
+        if(!$commentaire)
+        {
+            return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)->with('error', 'Probleme dans la creation de commentaire, ressayer autrefois.');
+        }
+
+       return redirect()->to(route('dashboard.utilisateur.ticket.show', $request->id) . '#comments-section');
+
+    }
 }
