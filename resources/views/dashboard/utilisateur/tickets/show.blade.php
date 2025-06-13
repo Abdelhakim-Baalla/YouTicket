@@ -584,34 +584,27 @@
         </div>
         
         <div class="comments-body">
-            
+            @if(!$commentaires->isEmpty())
                 <div class="comments-list">
-                    
+                    @foreach($commentaires as $commentaire)
                         <div class="comment-item">
                             <div class="comment-header">
-                                <span class="comment-author">John Doe</span>
-                                <span class="comment-date">20/05/2025 à 09:30</span>
+                                <span class="comment-author">{{$commentaire->utilisateur->prenom}} {{$commentaire->utilisateur->nom}}</span>
+                                <span class="comment-date">{{$commentaire->created_at}}</span>
                             </div>
-                            <div class="comment-content">J'ai créé ce ticket pour signaler un problème de connexion.</div>
+                            <div class="comment-content">{{$commentaire->contenu}}</div>
                         </div>
-                    
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <span class="comment-author">Jane Smith</span>
-                                <span class="comment-date">20/05/2025 à 10:00</span>
-                            </div>
-                            <div class="comment-content">Je suis en train d'investiguer le problème.</div>
-                        </div>
-                    
+                    @endforeach
                 </div>
             
-            
+            @else
                 <div class="empty-state">
                     <div class="empty-icon">
                         <i class="fas fa-comment"></i>
                     </div>
                     <p>Aucun commentaire pour le moment</p>
                 </div>
+            @endif
             
         </div>
         
