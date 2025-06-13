@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\AgentRepositoryInterface;
+use App\Repositories\Interfaces\CommentaireRepositoryInterface;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Http\Request;
@@ -13,12 +14,14 @@ class UtilisateurController extends Controller
     protected $ticketRepository;
     protected $utilisateurRepository;
     protected $agentRepository;
+    protected $commentaireRepository;
 
-    public function __construct(AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
+    public function __construct(CommentaireRepositoryInterface $commentaireRepository, AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
     {
         $this->ticketRepository = $ticketRepository;
         $this->utilisateurRepository = $utilisateurRepository;
         $this->agentRepository = $agentRepository;
+        $this->commentaireRepository = $commentaireRepository;
     }
 
      public function showUtilisateurDashboard()
@@ -46,13 +49,20 @@ class UtilisateurController extends Controller
     public function showTicket(Request $request)
     {
         // dd($request->id);
+        // tickets
         $ticket = $this->ticketRepository->trouver($request->id);
         $ticketCreePar = $this->utilisateurRepository->trouver($ticket->demandeur_id);
         $ticketAssigne_A = $this->utilisateurRepository->trouver($ticket->assigne_a_id);
-
         $ticket->cree_par = $ticketCreePar;
         $ticket->assigne_a = $ticketAssigne_A;
         // dd($ticket);
-        return view('dashboard.utilisateur.tickets.show', compact('ticket'));
+
+
+
+        // commentaires
+        $commentaires = $this->commentaireRepository->trouverParTicketId($request->id);
+        // dd($commentaires);
+
+        return view('dashboard.utilisateur.tickets.show', compact('ticket', 'commentaires'));
     }
 }
