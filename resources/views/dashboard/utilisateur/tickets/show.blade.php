@@ -575,7 +575,7 @@
     </div>
     
     <!-- Section des commentaires -->
-    <div class="comments-section">
+    <div class="comments-section" id="comments-section">
         <div class="comments-header">
             <h3 class="comments-title">
                 <i class="fas fa-comments"></i>
