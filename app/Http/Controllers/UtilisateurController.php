@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\AgentRepositoryInterface;
 use App\Repositories\Interfaces\CommentaireRepositoryInterface;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Http\Request;
@@ -15,13 +16,15 @@ class UtilisateurController extends Controller
     protected $utilisateurRepository;
     protected $agentRepository;
     protected $commentaireRepository;
+    protected $roleRepository;
 
-    public function __construct(CommentaireRepositoryInterface $commentaireRepository, AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
+    public function __construct(RoleRepositoryInterface $roleRepository, CommentaireRepositoryInterface $commentaireRepository, AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
     {
         $this->ticketRepository = $ticketRepository;
         $this->utilisateurRepository = $utilisateurRepository;
         $this->agentRepository = $agentRepository;
         $this->commentaireRepository = $commentaireRepository;
+        $this->roleRepository = $roleRepository;
     }
 
      public function showUtilisateurDashboard()
@@ -52,7 +55,18 @@ class UtilisateurController extends Controller
         // tickets
         $ticket = $this->ticketRepository->trouver($request->id);
         $ticketCreePar = $this->utilisateurRepository->trouver($ticket->demandeur_id);
-        $ticketAssigne_A = $this->utilisateurRepository->trouver($ticket->assigne_a_id);
+        $ticketAssigne_A = $this->agentRepository->trouver($ticket->assigne_a_id);
+        $ticketAssigne_A = $this->utilisateurRepository->trouver($ticketAssigne_A->utilisateur_id);
+        // dd($ticketCreePar->id);
+        $roleUserAuth = $this->roleRepository->trouver(Auth::user()->role_id);
+        $roleUserAuth = $roleUserAuth->nom;
+        // dd($roleUserAuth);
+        if($ticketCreePar->id != Auth::user()->id && $ticketAssigne_A->id != Auth::user()->id && $roleUserAuth != "admin")
+        {
+            // dd(Auth::user()->role_id);
+            return redirect('/403');
+        }
+        
         $ticket->cree_par = $ticketCreePar;
         $ticket->assigne_a = $ticketAssigne_A;
         // dd($ticket);
