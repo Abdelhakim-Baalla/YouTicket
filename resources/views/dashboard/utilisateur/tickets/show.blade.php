@@ -66,13 +66,13 @@
     .badge-status-nouveau { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
     .badge-status-en-attente { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
     .badge-status-en-cours { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-    .badge-status-résolu { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-    .badge-status-fermé { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+    .badge-status-resolu { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+    .badge-status-ferme { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
     
-    .badge-priority-critique { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-    .badge-priority-haute { background: rgba(245, 101, 101, 0.2); color: #fca5a5; }
-    .badge-priority-moyenne { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-    .badge-priority-basse { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+    .badge-priority-immediat { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .badge-priority-urgent { background: rgba(245, 101, 101, 0.2); color: #fca5a5; }
+    .badge-priority-standard { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge-priority-faible { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
     
     .ticket-content {
         padding: 2rem;
@@ -256,9 +256,47 @@
         margin-bottom: 0.75rem;
     }
     
+    .comment-author-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .comment-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    
+    .comment-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .comment-user-details {
+        display: flex;
+        flex-direction: column;
+    }
+    
     .comment-author {
         font-weight: 500;
         color: var(--text-primary);
+        line-height: 1.2;
+    }
+    
+    .comment-role {
+        font-size: 0.75rem;
+        color: var(--primary-light);
+        font-weight: 500;
     }
     
     .comment-date {
@@ -270,6 +308,8 @@
         color: var(--text-secondary);
         line-height: 1.5;
         white-space: pre-wrap;
+        margin-top: 0.5rem;
+        padding-left: 3.25rem; /* Aligner avec l'avatar */
     }
     
     .comment-form {
@@ -412,6 +452,11 @@
         
         .attachments-grid {
             grid-template-columns: 1fr;
+        }
+        
+        .comment-content {
+            padding-left: 0;
+            margin-top: 1rem;
         }
     }
 </style>
@@ -589,9 +634,22 @@
                     @foreach($commentaires as $commentaire)
                         <div class="comment-item">
                             <div class="comment-header">
-                                <span class="comment-author">{{$commentaire->utilisateur->prenom}} {{$commentaire->utilisateur->nom}}</span>
+                                <div class="comment-author-info">
+                                    <div class="comment-avatar">
+                                        <img src="{{asset('storage/'. $commentaire->utilisateur->photo)}}" alt="John Doe">
+                                    </div>
+                                    <div class="comment-user-details">
+                                        <span class="comment-author">{{$commentaire->utilisateur->prenom}} {{$commentaire->utilisateur->nom}}</span>
+                                        @if($commentaire->utilisateur->role->nom == 'admin')
+                                        <span class="comment-role" style="color: rgb(255, 238, 0);"><i class="fas fa-shield"></i> Admin</span>
+                                        @else
+                                        <span class="comment-role">{{$commentaire->utilisateur->poste}}</span>
+                                        @endif
+                                    </div>
+                                </div>
                                 <span class="comment-date">{{$commentaire->created_at}}</span>
                             </div>
+                            
                             <div class="comment-content">{{$commentaire->contenu}}</div>
                         </div>
                     @endforeach
