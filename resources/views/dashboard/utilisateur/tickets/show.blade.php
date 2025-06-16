@@ -535,7 +535,11 @@
                             Pièces jointes ({{$ticket->pieceJointes->count()}})
                         </h3>
                         <div class="attachments-grid">
+                            @if($ticket->pieceJointes->isEmpty())
+                            <p>Aucun Piece Jointe</p>
+                            @else
                             {{$ticket->pieceJointes[0]}}
+                            @endif
                         </div>
                     </div>
                 
