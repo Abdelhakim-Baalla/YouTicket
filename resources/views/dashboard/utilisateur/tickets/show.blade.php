@@ -5,7 +5,7 @@
 @section('page-subtitle', $ticket->numero . ' - ' . $ticket->titre)
 
 @section('styles')
-<link rel="stylesheet" href="{{asset('css/dashboarUtilisateurTicketShow.css')}}">
+<link rel="stylesheet" href="{{asset('css/dashboardUtilisateurTicketShow.css')}}">
 @endsection
 
 @section('content')

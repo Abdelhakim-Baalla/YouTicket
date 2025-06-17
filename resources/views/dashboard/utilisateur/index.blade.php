@@ -5,7 +5,7 @@
 @section('page-subtitle', 'Bienvenue sur votre espace personnel, Jean Dupont')
 
 @section('styles')
-<link rel="stylesheet" href="{{asset('css/dashboardUtilisateurIndex.js')}}">
+<link rel="stylesheet" href="{{asset('css/dashboardUtilisateurIndex.css')}}">
 @endsection
 
 @section('content')
