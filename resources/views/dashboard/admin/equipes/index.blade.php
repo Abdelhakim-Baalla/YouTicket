@@ -406,5 +406,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{asset('js/dashboardAdminEquipesIndex')}}"></script>
+<script src="{{asset('js/dashboardAdminEquipesIndex.js')}}"></script>
 @endsection
