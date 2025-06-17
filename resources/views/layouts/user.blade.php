@@ -434,6 +434,36 @@
         .notification-footer a:hover {
             text-decoration: underline;
         }
+        /* Styles pour les messages flash */
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
     </style>
     @yield('styles')
 </head>
@@ -449,7 +479,8 @@
             <div class="sidebar-header">
                 <a href="{{ route('dashboard.utilisateur') }}" class="logo">
                     <div class="logo-icon">
-                        <i class="fas fa-ticket-alt"></i>
+                        {{-- <i class="fas fa-ticket-alt"></i> --}}
+                        <img src="{{asset('images/YouTicketLogo.jpg')}}" class="rounded-lg" alt="YouTicket Logo">
                     </div>
                     <div class="logo-text">YouTicket</div>
                 </a>
@@ -574,11 +605,17 @@
             <div class="sidebar-footer">
                 <div class="user-menu" id="userMenu">
                     <div class="user-avatar">
-                        JD
+                         @if(auth()->user()->photo)
+                            <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Photo de profil" style="height:40px; width:40px; object-fit:cover;">
+                        @else
+                            <div style="height:40px; width:40px; border-radius:50%; background:#444; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.1rem; border:2px solid var(--primary);">
+                                {{ substr(auth()->user()->prenom ?? 'U', 0, 1) }}{{ substr(auth()->user()->nom ?? 'U', 0, 1) }}
+                            </div>
+                        @endif
                     </div>
                     <div class="user-info">
-                        <div class="user-name">Jean Dupont</div>
-                        <div class="user-role">Utilisateur</div>
+                        <div class="user-name">{{auth::user()->prenom}} {{auth::user()->nom}}</div>
+                        <div class="user-role">{{auth::user()->role->nom}}</div>
                     </div>
                     <div>
                         <i class="fas fa-chevron-down text-text-muted"></i>
@@ -589,6 +626,45 @@
 
         <!-- Contenu principal -->
         <main class="main-content">
+            <div class="fixed top-20 right-4 z-50 w-96 max-w-full">
+        @if(session('success'))
+            <div class="bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg mb-4 flex justify-between items-center fade-in">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div class="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg mb-4 flex justify-between items-center fade-in">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+        
+        @if($errors->any())
+            <div class="bg-yellow-500 text-white px-4 py-3 rounded-lg shadow-lg mb-4 fade-in">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span>Veuillez corriger les erreurs suivantes :</span>
+                </div>
+                <ul class="list-disc list-inside text-sm">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
             <div class="page-header">
                 <h1 class="page-title">@yield('page-title', 'Tableau de bord')</h1>
                 <p class="page-subtitle">@yield('page-subtitle', 'Bienvenue sur votre espace personnel')</p>
@@ -640,6 +716,27 @@
             // Afficher un menu déroulant ou rediriger vers la page de profil
             window.location.href = '{{ route("profile") }}';
         });
+
+        // Fermeture automatique des messages après 5 secondes
+document.addEventListener('DOMContentLoaded', function() {
+    const flashMessages = document.querySelectorAll('.fixed > div');
+    
+    flashMessages.forEach(message => {
+        setTimeout(() => {
+            message.classList.add('fade-out');
+            setTimeout(() => message.remove(), 300);
+        }, 5000);
+        
+        // Fermeture au clic sur le bouton
+        const closeBtn = message.querySelector('button');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                message.classList.add('fade-out');
+                setTimeout(() => message.remove(), 300);
+            });
+        }
+    });
+});
     </script>
     
     @yield('scripts')
