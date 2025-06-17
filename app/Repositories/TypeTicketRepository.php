@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\TypeTicket;
 use App\Repositories\Interfaces\TypeTicketRepositoryInterface;
 
-class TicketRepository implements TypeTicketRepositoryInterface
+class TypeTicketRepository implements TypeTicketRepositoryInterface
 {
     public function tous()
     {
