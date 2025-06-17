@@ -555,26 +555,40 @@
                     Informations
                 </h3>
                 <div class="info-list">
+                    @if($ticket->projet)
                     <div class="info-item">
                         <span class="info-label">Projet:</span>
                         <span class="info-value">{{$ticket->projet->nom}}</span>
                     </div>
+                    @endif
+
+                    @if($ticket->typeTicket)
                     <div class="info-item">
                         <span class="info-label">Type:</span>
                         <span class="info-value">{{$ticket->typeTicket->nom}}</span>
                     </div>
+                    @endif
+
+                     @if($ticket->frequence)
                     <div class="info-item">
                         <span class="info-label">Fréquence:</span>
                         <span class="info-value">{{$ticket->frequence->nom}}</span>
                     </div>
+                    @endif
+
+                    @if($ticket->priorite)
                     <div class="info-item">
                         <span class="info-label">Priorité:</span>
                         <span class="info-value">{{$ticket->priorite->nom}}</span>
                     </div>
+                    @endif
+
+                    @if($ticket->etat)
                     <div class="info-item">
                         <span class="info-label">Statut:</span>
                         <span class="info-value">{{$ticket->etat->nom}}</span>
                     </div>
+                    @endif
                 </div>
             </div>
             
@@ -614,10 +628,12 @@
                         <span class="info-label">Créé par:</span>
                         <span class="info-value">{{$ticket->cree_par->prenom}} {{$ticket->cree_par->nom}}</span>
                     </div>
+                    @if($ticket->assigne_a)
                     <div class="info-item">
                         <span class="info-label">Assigné à:</span>
                         <span class="info-value">{{$ticket->assigne_a->prenom}} {{$ticket->assigne_a->nom}}</span>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

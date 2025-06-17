@@ -423,7 +423,7 @@
         </div>
         
         <div class="form-body">
-            <form action="" method="POST" enctype="multipart/form-data" id="ticketForm">
+            <form action="{{route('dashboard.utilisateur.tickets.create.store')}}" method="POST" enctype="multipart/form-data" id="ticketForm">
                 @csrf
                 
                 <!-- Informations de base -->
@@ -435,11 +435,9 @@
                         </label>
                         <select name="projet" id="projet" class="form-select">
                             <option value="">Sélectionner un projet</option>
-                            <option value="site-web">Site Web</option>
-                            <option value="application-mobile">Application Mobile</option>
-                            <option value="systeme-erp">Système ERP</option>
-                            <option value="infrastructure">Infrastructure</option>
-                            <option value="autre">Autre</option>
+                           @foreach($projets as $projet)
+                           <option value="{{$projet->id}}">{{$projet->nom}}</option>
+                           @endforeach
                         </select>
                         <div class="form-help">Choisissez le projet concerné par votre demande</div>
                     </div>
@@ -451,10 +449,9 @@
                         </label>
                         <select name="type" id="type" class="form-select" required>
                             <option value="">Sélectionner un type</option>
-                            <option value="incident">Incident</option>
-                            <option value="demande">Demande de service</option>
-                            <option value="probleme">Problème</option>
-                            <option value="changement">Demande de changement</option>
+                            @foreach($typeTickets as $type)
+                           <option value="{{$type->id}}">{{$type->nom}}</option>
+                           @endforeach
                         </select>
                         <div class="form-help">Précisez la nature de votre demande</div>
                     </div>
@@ -489,42 +486,52 @@
                         Priorité <span class="required">*</span>
                     </label>
                     <div class="priority-grid">
-                        <div class="priority-option priority-immediat">
-                            <input type="radio" name="priorite" value="immediat" id="priority-immediat" class="priority-input" required>
-                            <label for="priority-immediat" class="priority-label">
-                                <div class="priority-icon">
-                                    <i class="fas fa-exclamation"></i>
+
+                        @foreach($priorites as $priorite)
+                            @if($priorite->nom == 'Critique')
+                                 <div class="priority-option priority-immediat">
+                                    <input type="radio" name="priorite" value="{{$priorite->id}}" id="priority-immediat" class="priority-input" required>
+                                    <label for="priority-immediat" class="priority-label">
+                                        <div class="priority-icon">
+                                            <i class="fas fa-exclamation"></i>
+                                        </div>
+                                        <div class="priority-text">Critique</div>
+                                    </label>
                                 </div>
-                                <div class="priority-text">Immédiat</div>
-                            </label>
-                        </div>
-                        <div class="priority-option priority-urgent">
-                            <input type="radio" name="priorite" value="urgent" id="priority-urgent" class="priority-input">
-                            <label for="priority-urgent" class="priority-label">
-                                <div class="priority-icon">
-                                    <i class="fas fa-arrow-up"></i>
+                            @elseif($priorite->nom == 'Haute')
+                                 <div class="priority-option priority-urgent">
+                                    <input type="radio" name="priorite" value="{{$priorite->id}}" id="priority-urgent" class="priority-input">
+                                    <label for="priority-urgent" class="priority-label">
+                                        <div class="priority-icon">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </div>
+                                        <div class="priority-text">Haute</div>
+                                    </label>
                                 </div>
-                                <div class="priority-text">Urgent</div>
-                            </label>
-                        </div>
-                        <div class="priority-option priority-standard">
-                            <input type="radio" name="priorite" value="standard" id="priority-standard" class="priority-input">
-                            <label for="priority-standard" class="priority-label">
-                                <div class="priority-icon">
-                                    <i class="fas fa-minus"></i>
+                            @elseif($priorite->nom == 'Moyenne')
+                                <div class="priority-option priority-standard">
+                                    <input type="radio" name="priorite" value="{{$priorite->id}}" id="priority-standard" class="priority-input">
+                                    <label for="priority-standard" class="priority-label">
+                                        <div class="priority-icon">
+                                            <i class="fas fa-minus"></i>
+                                        </div>
+                                        <div class="priority-text">Moyenne</div>
+                                    </label>
                                 </div>
-                                <div class="priority-text">Standard</div>
-                            </label>
-                        </div>
-                        <div class="priority-option priority-faible">
-                            <input type="radio" name="priorite" value="faible" id="priority-faible" class="priority-input">
-                            <label for="priority-faible" class="priority-label">
-                                <div class="priority-icon">
-                                    <i class="fas fa-arrow-down"></i>
-                                </div>
-                                <div class="priority-text">Faible</div>
-                            </label>
-                        </div>
+                            @else    
+                                <div class="priority-option priority-faible">
+                                    <input type="radio" name="priorite" value="{{$priorite->id}}" id="priority-faible" class="priority-input">
+                                    <label for="priority-faible" class="priority-label">
+                                        <div class="priority-icon">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </div>
+                                        <div class="priority-text">Basse</div>
+                                    </label>
+                                </div>   
+                            @endif
+
+                        @endforeach
+
                     </div>
                     <div class="form-help">Évaluez l'urgence de votre demande</div>
                 </div>
@@ -532,18 +539,17 @@
                 <!-- Impact et Fréquence -->
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="impact" class="form-label">
+                        <label for="etat" class="form-label">
                             <i class="fas fa-layer-group"></i>
-                            Impact <span class="required">*</span>
+                            Etat <span class="required">*</span>
                         </label>
-                        <select name="impact" id="impact" class="form-select" required>
-                            <option value="">Sélectionner l'impact</option>
-                            <option value="bloquant">Bloquant/Critique</option>
-                            <option value="majeur">Majeur/Grave</option>
-                            <option value="moyen">Moyen</option>
-                            <option value="mineur">Mineur/Faible</option>
+                        <select name="etat" id="etat" class="form-select" required>
+                            <option value="">Sélectionner l'etat</option>
+                           @foreach($etats as $etat)
+                           <option value="{{$etat->id}}">{{$etat->nom}}</option>
+                           @endforeach
                         </select>
-                        <div class="form-help">Quel est l'impact sur votre travail ?</div>
+                        <div class="form-help">Quel est l'etat sur votre travail ?</div>
                     </div>
                     
                     <div class="form-group">
@@ -553,12 +559,45 @@
                         </label>
                         <select name="frequence" id="frequence" class="form-select" required>
                             <option value="">Sélectionner la fréquence</option>
-                            <option value="tres-forte">Très forte/Tout le temps</option>
-                            <option value="forte">Forte/Souvent</option>
-                            <option value="faible">Faible/De temps en temps</option>
-                            <option value="tres-faible">Très faible/Rarement</option>
+                            @foreach($frequences as $frequence)
+                            <option value="{{$frequence->id}}">{{$frequence->nom}}</option>
+                            @endforeach
                         </select>
                         <div class="form-help">À quelle fréquence le problème survient-il ?</div>
+                    </div>
+                </div>
+
+                <!-- Assigne a-->
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="assigne_a_id" class="form-label">
+                            <i class="fa-solid fa-user-tie"></i>
+                            Assigné à <span class="required">*</span>
+                        </label>
+                        <select name="assigne_a_id" id="assigne_a_id" class="form-select" required>
+                            <option value="">Sélectionner l'expert</option>
+                           @foreach($experts as $expert)
+                           <option value="{{$expert->id}}"> {{$expert->utilisateur->prenom}} {{$expert->utilisateur->nom}} @if($expert->utilisateur->poste)({{$expert->utilisateur->poste}})@endif</option>
+                           @endforeach
+                        </select>
+                        <div class="form-help">Séléctionnez l'expert assigné</div>
+                    </div>
+                </div>
+
+                <!-- SLA-->
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="sla" class="form-label">
+                            <i class="fa-solid fa-handshake"></i>
+                            SLA (Service Level Agreement) <span class="required">*</span>
+                        </label>
+                        <select name="sla" id="sla" class="form-select" required>
+                            <option value="">Sélectionner le type de contrat</option>
+                           @foreach($slas as $sla)
+                           <option value="{{$sla->id}}"> {{$sla->nom}} ({{$sla->description}})</option>
+                           @endforeach
+                        </select>
+                        <div class="form-help">Choisir votre Service Level Agreement</div>
                     </div>
                 </div>
                 
@@ -584,7 +623,7 @@
                 
                 <!-- Actions -->
                 <div class="form-actions">
-                    <a href="" class="btn btn-secondary">
+                    <a href="{{route('dashboard.utilisateur.tickets')}}" class="btn btn-secondary">
                         <i class="fas fa-times"></i>
                         Annuler
                     </a>

@@ -490,7 +490,9 @@
                             <div class="ticket-dates">
                                 <div><strong>Créé:</strong> {{$ticket->created_at}}</div>
                                 <div><strong>Mis à jour:</strong> {{$ticket->updated_at}}</div>
+                                @if($ticket->assigne_a)
                                 <div><strong>Assigné à:</strong> {{$ticket->assigne_a->prenom}} {{$ticket->assigne_a->nom}}</div>
+                                @endif
                             </div>
                             <div class="ticket-actions">
                                 <a href="{{route('dashboard.utilisateur.ticket.show', $ticket->id)}}" class="btn btn-secondary btn-sm">
