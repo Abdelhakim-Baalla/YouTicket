@@ -632,5 +632,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{asset('js/dashboardAdminUtilisateursIndex')}}"></script>
+<script src="{{asset('js/dashboardAdminUtilisateursIndex.js')}}"></script>
 @endsection
