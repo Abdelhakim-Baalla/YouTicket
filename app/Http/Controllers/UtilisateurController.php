@@ -210,11 +210,10 @@ class UtilisateurController extends Controller
         }
 
         try {
-            $lastTicket = $this->ticketRepository->tous()->count();
-            $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
-
+            // $lastTicket = $this->ticketRepository->tous()->count();
+            // $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
+            
             $data = [
-                'numero' => $ticketNumber,
                 'titre' => $validated['titre'],
                 'description' => $validated['description'],
                 'demandeur_id' => Auth::id(),
@@ -228,6 +227,13 @@ class UtilisateurController extends Controller
             ];
 
             $ticket = $this->ticketRepository->creer($data);
+            $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($ticket->id, 6, '0', STR_PAD_LEFT);
+            $data = [
+                'numero' => $ticketNumber,
+            ];
+
+            $this->ticketRepository->mettreAJour($ticket->id, $data);
+            // dd($data);
 
             if ($ticket && $request->hasFile('pieces_jointes')) {
                 foreach ($request->file('pieces_jointes') as $file) {
