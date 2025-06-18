@@ -34,7 +34,7 @@
                 <div class="notification-dropdown">
                     <div class="notification-icon" id="notificationToggle">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge">{{auth::user()->notifications->where('lu', 0)->count()}}</span>
                     </div>
                     <div class="notification-menu" id="notificationMenu">
                         <div class="notification-header">
@@ -104,11 +104,11 @@
                                     <i class="fas fa-ticket-alt"></i>
                                 </div>
                                 <span>Mes tickets</span>
-                                <span class="nav-badge">5</span>
+                                <span class="nav-badge">{{auth::user()->ticketsDemandes->count()}}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link {{ request()->routeIs('user.tickets.create') ? 'active' : '' }}">
+                            <a href="{{route('dashboard.utilisateur.tickets.create')}}" class="nav-link">
                                 <div class="nav-icon">
                                     <i class="fas fa-plus-circle"></i>
                                 </div>
