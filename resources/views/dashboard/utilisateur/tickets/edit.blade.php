@@ -239,24 +239,27 @@
                 @endif
                 
                 <!-- Nouvelle pièce jointe -->
-                <div class="form-group full-width" id="nouvellePieceJointe">
-                    <label class="form-label">
-                        <i class="fas fa-paperclip"></i>
-                        Ajouter des pièces jointes
-                    </label>
-                    <div class="file-upload" id="fileUpload">
-                        <input type="file" name="pieces_jointes[]" id="fileInput" class="file-upload-input" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip">
-                        <div class="file-upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="file-upload-text">
-                            <div class="file-upload-title">Glissez vos fichiers ici ou cliquez pour parcourir</div>
-                            <div>Formats acceptés: JPG, PNG, PDF, DOC, TXT, ZIP (max 10MB par fichier)</div>
-                        </div>
-                    </div>
-                    <div class="file-list" id="fileList"></div>
-                    <div class="form-help">Ajoutez des captures d'écran, documents ou fichiers qui peuvent aider à résoudre votre problème</div>
-                </div>
+               <!-- Pièces jointes -->
+<div class="form-group full-width">
+    <label class="form-label">
+        <i class="fas fa-paperclip"></i>
+        Pièces jointes
+    </label>
+    <div class="file-upload" id="fileUpload">
+        <input type="file" name="pieces_jointes[]" id="fileInput" class="file-upload-input" multiple 
+               accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip,.mp4,.mp3,.xls,.xlsx,.ppt,.pptx">
+        <div class="file-upload-icon">
+            <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <div class="file-upload-text">
+            <div class="file-upload-title">Glissez vos fichiers ici ou cliquez pour parcourir</div>
+            <div>Formats acceptés: Images, Documents, PDF, Audio, Vidéo (max 10MB par fichier)</div>
+        </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <div class="preview-container" id="previewContainer"></div>
+    <div class="form-help">Ajoutez des captures d'écran, documents ou fichiers qui peuvent aider à résoudre votre problème</div>
+</div>
                 
                 <!-- Actions -->
                 <div class="form-actions">
