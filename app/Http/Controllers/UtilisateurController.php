@@ -14,6 +14,9 @@ use App\Repositories\Interfaces\SlaRepositoryInterface;
 use App\Repositories\Interfaces\TicketRepositoryInterface;
 use App\Repositories\Interfaces\TypeTicketRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+use App\Mail\confirmationTicket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -224,6 +227,7 @@ class UtilisateurController extends Controller
             ];
 
             $ticket = $this->ticketRepository->creer($data);
+            // dd($ticket->titre);
             $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($ticket->id, 6, '0', STR_PAD_LEFT);
             $data = [
                 'numero' => $ticketNumber,
@@ -246,6 +250,16 @@ class UtilisateurController extends Controller
                     ]);
                 }
             }
+
+            $user = Auth::user();
+            // Générer un lien signé valable 24h
+            $ticketUrl = URL::temporarySignedRoute(
+                'dashboard.utilisateur.ticket.show',
+                now()->addHours(24),
+                ['id' => $ticket->id]
+            );
+
+            Mail::to($user->email)->send(new confirmationTicket($user, $ticket, $ticketUrl));
 
             return redirect()->route('dashboard.utilisateur.ticket.show', $ticket->id)
                 ->with('success', 'Ticket créé avec succès!');
