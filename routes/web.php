@@ -117,6 +117,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::post('/client/tickets/create/store', 'utilisateurStoreCreateTickets')->name('dashboard.utilisateur.tickets.create.store');
     Route::get('/client/tickets/edit/{id}', 'showUtilisateurTicketsEditModal')->name('dashboard.utilisateur.tickets.edit');
     Route::get('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
+    Route::get('/client/ticket/{ticket}/supprimer/pieceJointe/{pieceJointe}', 'utilisateurTicketsSupprimmerPieceJointe')->name('dashboard.utilisateur.tickets.pieces-jointes.supprimer');
     Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
     // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
