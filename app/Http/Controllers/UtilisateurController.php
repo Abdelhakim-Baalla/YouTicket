@@ -63,8 +63,7 @@ class UtilisateurController extends Controller
         foreach ($tickets as $ticket) {
             $assigne_a_agent = $this->agentRepository->trouver($ticket->assigne_a_id);
             // dd($assigne_a_agent->utilisateur_id);
-            if(!$assigne_a_agent)
-            {
+            if (!$assigne_a_agent) {
                 continue;
             }
             $utilisateur_a_assigne = $this->utilisateurRepository->trouver($assigne_a_agent->utilisateur_id);
@@ -80,8 +79,7 @@ class UtilisateurController extends Controller
         // dd($request->id);
         // tickets
         $ticket = $this->ticketRepository->trouver($request->id);
-        if(!$ticket)
-        {
+        if (!$ticket) {
             return redirect()->route('dashboard.utilisateur.tickets')
                 ->with('error', 'Ticket non trouver');
         }
@@ -90,8 +88,7 @@ class UtilisateurController extends Controller
         $ticketCreePar = $this->utilisateurRepository->trouver($ticket->demandeur_id);
         $ticketAssigne_A = $this->agentRepository->trouver($ticket->assigne_a_id);
         // dd($ticketAssigne_A);
-        if($ticketAssigne_A)
-        {
+        if ($ticketAssigne_A) {
             $ticketAssigne_A = $this->utilisateurRepository->trouver($ticketAssigne_A->utilisateur_id);
         }
 
@@ -212,7 +209,7 @@ class UtilisateurController extends Controller
         try {
             // $lastTicket = $this->ticketRepository->tous()->count();
             // $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
-            
+
             $data = [
                 'titre' => $validated['titre'],
                 'description' => $validated['description'],
@@ -257,5 +254,65 @@ class UtilisateurController extends Controller
                 ->withInput()
                 ->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
+    }
+
+
+    public function showUtilisateurTicketsEditModal(Request $request)
+    {
+        // dd($request->id);    
+
+        $ticket = $this->ticketRepository->trouver($request->id);
+        // dd(Auth::user()->role->nom);
+
+        if (!$ticket) {
+            return redirect()->route('dashboard.utilisateur.tickets')
+                ->with('error', 'Cette Tickets N\'exist pas!');
+        }
+
+        if ($ticket->demandeur_id != Auth::user()->id && Auth::user()->role->nom != "admin") {
+            return redirect()->route('dashboard.utilisateur.tickets')
+                ->with('error', 'Vous N\'avez pas l\'accèes a cette Tickets');
+        }
+
+        $projets = $this->projetRepository->tous()->where('statut', '!=', 'annule')->where('statut', '!=', 'termine');
+        $typeTickets = $this->typeTicketRepository->tous();
+        $priorites = $this->prioriteRepository->tous();
+        $frequences = $this->frequenceRepository->tous();
+        $etats = $this->etatRepository->tous();
+        $experts = $this->agentRepository->tous()->where('disponible', 1);
+        $slas = $this->slaRepository->tous();
+
+        return view('dashboard.utilisateur.tickets.edit', compact('ticket', 'projets', 'typeTickets', 'priorites', 'frequences', 'etats', 'experts', 'slas'));
+    }
+
+
+    public function utilisateurTicketsSupprimmerPieceJointe(Request $request)
+    {
+        // dd($request->pieceJointe);
+        $piceJointe = $this->pienceJointeRepository->supprimer($request->pieceJointe);
+
+        if (!$piceJointe) {
+            $nbPiceJointe = $this->pienceJointeRepository->tous()->where('ticket_id', $request->ticket)->count();
+
+            if ($nbPiceJointe > 0) {
+                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#pieceJointeActuelle')
+                ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+            } else {
+                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe')
+                ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+            }
+
+            
+        }
+
+        $nbPiceJointe = $this->pienceJointeRepository->tous()->where('ticket_id', $request->ticket)->count();
+
+        if ($nbPiceJointe > 0) {
+            return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#pieceJointeActuelle');
+        } else {
+            return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe');
+        }
+
+        // dd($nbPiceJointe);
     }
 }
