@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Utilisateur;
 use App\Mail\ValidationEmail;
 use App\Notifications\ValidationSms;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Password;
@@ -19,10 +20,12 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     protected $utilisateurRepository;
+    protected $roleRepository;
 
-    public function __construct(UtilisateurRepositoryInterface $utilisateurRepository)
+    public function __construct(RoleRepositoryInterface $roleRepository, UtilisateurRepositoryInterface $utilisateurRepository)
     {
         $this->utilisateurRepository = $utilisateurRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     public function login(Request $request)
@@ -63,6 +66,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -71,6 +75,7 @@ class AuthController extends Controller
             'telephone' => 'required|string|max:15',
             'post' => 'required|string|max:255',
             'terms' => 'required|accepted',
+            'role' => 'required|string',
         ], [
             // Messages d'erreur personnalisés
             'nom.required' => 'Le nom est requis',
@@ -84,33 +89,56 @@ class AuthController extends Controller
             'post.required' => 'Le poste est requis',
             'terms.required' => 'Vous devez accepter les conditions d\'utilisation',
             'terms.accepted' => 'Vous devez accepter les conditions d\'utilisation',
+            'role.required' => 'Le role est requis',
         ]);
 
-        try {
+        // dd($data['role']);
+
+        if($data['role'] == 'admin')
+        {
+           return back()->withErrors([
+                'role' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
+            ])->withInput();
+        }
+
+        $role_id = $this->roleRepository->trouverParNom($data['role']);
+
+        if(!$role_id)
+        {
+           return back()->withErrors([
+                'role' => 'Le role et requit.',
+            ])->withInput(); 
+        }
+
+        $data['role_id'] = $role_id->id;
+
+
+        // dd($data);
+
+
+        
             $data['password'] = Hash::make($data['password']);
 
             // Retirer le champ 'terms' avant de créer l'utilisateur
             unset($data['terms']);
 
             $user = Utilisateur::create($data);
-
+            // dd($user);
             if ($user) {
                 Auth::login($user);
                 $request->session()->regenerate();
 
                 return redirect()->route('profile')->with('success', 'Compte créé avec succès !');
             }
+            
+            // if (Auth::attempt($user)) {
+            //     $request->session()->regenerate();
+            //     return redirect()->route('profile');
+            // }
 
             return back()->withErrors([
                 'general' => 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.',
             ])->withInput();
-        } catch (\Exception $e) {
-            Log::error('Erreur lors de la création du compte: ' . $e->getMessage());
-
-            return back()->withErrors([
-                'general' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
-            ])->withInput();
-        }
     }
 
     public function logout()

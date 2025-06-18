@@ -118,6 +118,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Interfaces\RoleRepositoryInterface::class,
             \App\Repositories\RoleRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\Interfaces\TypeTicketRepositoryInterface::class,
+            \App\Repositories\TypeTicketRepository::class
+        );
     }
 
     /**

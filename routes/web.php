@@ -109,7 +109,15 @@ Route::controller(AgentController::class)->group(function () {
 });
 
 Route::controller(UtilisateurController::class)->group(function () {
-    Route::get('/utilisateur', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
+    Route::get('/client', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
+    Route::get('/client/tickets', 'showUtilisateurTickets')->name('dashboard.utilisateur.tickets');
+    Route::get('/client/ticket/show/{id}', 'showTicket')->name('dashboard.utilisateur.ticket.show');
+    Route::post('/client/ticket/show/{id}/comment/store', 'showTicketCommentStore')->name('dashboard.utilisateur.ticket.show.comment.store');
+    Route::get('/client/tickets/create', 'showUtilisateurTicketsCreateModal')->name('dashboard.utilisateur.tickets.create');
+    Route::post('/client/tickets/create/store', 'utilisateurStoreCreateTickets')->name('dashboard.utilisateur.tickets.create.store');
+    Route::get('/client/tickets/edit/{id}', 'showUtilisateurTicketsEditModal')->name('dashboard.utilisateur.tickets.edit');
+    Route::get('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
+    Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
     // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
     // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');

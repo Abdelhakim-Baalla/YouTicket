@@ -21,6 +21,11 @@ class TicketRepository implements TicketRepositoryInterface
     {
         return Ticket::create($donnees);
     }
+
+    public function trouverParDemandeurId($id)
+    {
+        return Ticket::where('demandeur_id', $id)->paginate(3);
+    }
     
     public function mettreAJour($id, array $donnees)
     {
