@@ -296,13 +296,11 @@ class UtilisateurController extends Controller
 
             if ($nbPiceJointe > 0) {
                 return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#pieceJointeActuelle')
-                ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+                    ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
             } else {
                 return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe')
-                ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+                    ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
             }
-
-            
         }
 
         $nbPiceJointe = $this->pienceJointeRepository->tous()->where('ticket_id', $request->ticket)->count();
@@ -314,5 +312,109 @@ class UtilisateurController extends Controller
         }
 
         // dd($nbPiceJointe);
+    }
+
+    public function utilisateurStoreEditTickets(Request $request)
+    {
+        // dd($request->all());
+
+        $validated = $request->validate([
+            'projet' => 'nullable|integer|exists:projets,id',
+            'type' => 'required|integer|exists:type_tickets,id',
+            'titre' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'priorite' => 'required|integer|exists:priorites,id',
+            'etat' => 'required|integer|exists:etats,id',
+            'frequence' => 'nullable|integer|exists:frequences,id',
+            'assigne_a_id' => 'nullable|integer|exists:agents,id',
+            'sla' => 'nullable|integer|exists:slas,id',
+            'pieces_jointes.*' => 'nullable|file|max:5120', // 5MB max
+        ]);
+
+        // Validation manuelle des types MIME
+        if ($request->hasFile('pieces_jointes')) {
+            $allowedMimeTypes = [
+                // Images
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/webp',
+
+                // Documents
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'text/plain',
+                'text/csv',
+
+                // Archives
+                'application/zip',
+                'application/x-zip-compressed',
+                'application/x-rar-compressed',
+                'application/octet-stream',
+
+                // Autres
+                'application/json',
+                'application/xml'
+            ];
+
+            foreach ($request->file('pieces_jointes') as $file) {
+                if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', 'Type de fichier non autorisé: ' . $file->getClientOriginalName());
+                }
+            }
+        }
+
+
+
+        try {
+            // $lastTicket = $this->ticketRepository->tous()->count();
+            // $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
+
+            $data = [
+                'titre' => $validated['titre'],
+                'description' => $validated['description'],
+                'demandeur_id' => Auth::id(),
+                'assigne_a_id' => $validated['assigne_a_id'],
+                'etat_id' => $validated['etat'],
+                'priorite_id' => $validated['priorite'],
+                'type_ticket_id' => $validated['type'],
+                'projet_id' => $validated['projet'],
+                'sla_id' => $validated['sla'],
+                'frequence_id' => $validated['frequence'],
+            ];
+
+            $ticket = $this->ticketRepository->mettreAJour($request->id, $data);
+            // dd($data);
+
+            if ($ticket && $request->hasFile('pieces_jointes')) {
+                foreach ($request->file('pieces_jointes') as $file) {
+                    $path = $file->store('pieces_jointes', 'public');
+
+                    $this->pienceJointeRepository->creer([
+                        'ticket_id' => $request->id,
+                        'utilisateur_id' => Auth::id(),
+                        'nom_original' => $file->getClientOriginalName(),
+                        'chemin' => $path,
+                        'type_mime' => $file->getMimeType(),
+                        'taille' => $file->getSize(),
+                    ]);
+                }
+            }
+
+            return redirect()->route('dashboard.utilisateur.tickets.edit', $request->id)
+                ->with('success', 'Ticket Modifier avec succès!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Une erreur est survenue: ' . $e->getMessage());
+        }
     }
 }
