@@ -119,6 +119,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::put('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
     Route::get('/client/ticket/{ticket}/supprimer/pieceJointe/{pieceJointe}', 'utilisateurTicketsSupprimmerPieceJointe')->name('dashboard.utilisateur.tickets.pieces-jointes.supprimer');
     Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
+    Route::get('/client/notifications/redirect', 'utilisateurNotificationsRedirect')->name('dashboard.utilisateur.notifications.redirect');
 });
 
 

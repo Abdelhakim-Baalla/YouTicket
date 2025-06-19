@@ -20,6 +20,7 @@ use App\Mail\confirmationTicket;
 use App\Mail\assignationTicket;
 use App\Mail\editTicketUtilisateur;
 use App\Mail\editTicketAgent;
+use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,8 +38,9 @@ class UtilisateurController extends Controller
     protected $etatRepository;
     protected $slaRepository;
     protected $pienceJointeRepository;
+    protected $notificationRepository;
 
-    public function __construct(PieceJointeRepositoryInterface $pienceJointeRepository, SlaRepositoryInterface $slaRepository, EtatRepositoryInterface $etatRepository, FrequenceRepositoryInterface $frequenceRepository, PrioriteRepositoryInterface $prioriteRepository, TypeTicketRepositoryInterface $typeTicketRepository, ProjetRepositoryInterface $projetRepository, RoleRepositoryInterface $roleRepository, CommentaireRepositoryInterface $commentaireRepository, AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
+    public function __construct(NotificationRepositoryInterface $notificationRepository, PieceJointeRepositoryInterface $pienceJointeRepository, SlaRepositoryInterface $slaRepository, EtatRepositoryInterface $etatRepository, FrequenceRepositoryInterface $frequenceRepository, PrioriteRepositoryInterface $prioriteRepository, TypeTicketRepositoryInterface $typeTicketRepository, ProjetRepositoryInterface $projetRepository, RoleRepositoryInterface $roleRepository, CommentaireRepositoryInterface $commentaireRepository, AgentRepositoryInterface $agentRepository, UtilisateurRepositoryInterface $utilisateurRepository, TicketRepositoryInterface $ticketRepository)
     {
         $this->ticketRepository = $ticketRepository;
         $this->utilisateurRepository = $utilisateurRepository;
@@ -52,6 +54,7 @@ class UtilisateurController extends Controller
         $this->etatRepository = $etatRepository;
         $this->slaRepository = $slaRepository;
         $this->pienceJointeRepository = $pienceJointeRepository;
+        $this->notificationRepository = $notificationRepository;
     }
 
     public function showUtilisateurDashboard()
@@ -458,5 +461,44 @@ class UtilisateurController extends Controller
                 ->withInput()
                 ->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
+    }
+
+    public function utilisateurNotificationsRedirect(Request $request)
+    {
+        // dd($request->notification);
+
+        $notification = $this->notificationRepository->trouver($request->notification);
+
+        if(!$notification)
+        {
+            return redirect()->route('dashboard.utilisateur.tickets')
+                ->with('error', 'Une Probleme et survenu');
+        }
+
+        $notification->lu = 1;
+        $notification->save();
+
+        
+        
+        if($notification->type == 'commentaire')
+        {
+            return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id) . '#comments-body');
+        }
+
+
+        if($notification->type == 'mettre a jour')
+        {
+            return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
+        }
+
+        if($notification->type == 'resolu')
+        {
+            return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
+        }
+
+        return redirect()->back();
+
+        // dd($notification);
+
     }
 }

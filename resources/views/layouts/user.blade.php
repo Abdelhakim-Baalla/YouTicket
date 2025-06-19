@@ -47,7 +47,12 @@
                             @foreach(auth()->user()->notifications()->orderBy('date_envoi', 'desc')->take(4)->get() as $notification)
                            
                             @if($notification->type == "resolu")
-                             <div class="notification-item @if($notification->lu) unread @endif">
+                            <form action="{{route('dashboard.utilisateur.notifications.redirect')}}">
+                                <input type="hidden" name="type" value="commentaire">
+                                <input type="hidden" name="notification" value="{{$notification->id}}">
+                                {{-- <input type="hidden" name="type" value="commentaire"> --}}
+                            <button type="submit">
+                             <div class="notification-item @if(!$notification->lu) unread @endif">
                                 <div class="notification-icon-wrapper" style="background: var(--gradient-success);">
                                     <i class="fas fa-check"></i>
                                 </div>
@@ -56,8 +61,15 @@
                                     <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
                             </div>
+                            </button>
+                            </form>
                             @elseif($notification->type == 'maintenance')
-                             <div class="notification-item @if($notification->lu) unread @endif">
+                            <form action="{{route('dashboard.utilisateur.notifications.redirect')}}">
+                                <input type="hidden" name="type" value="commentaire">
+                                <input type="hidden" name="notification" value="{{$notification->id}}">
+                                {{-- <input type="hidden" name="type" value="commentaire"> --}}
+                            <button type="submit">
+                             <div class="notification-item @if(!$notification->lu) unread @endif">
                                 <div class="notification-icon-wrapper" style="background: var(--gradient-info);">
                                     <i class="fas fa-info-circle"></i>
                                 </div>
@@ -65,27 +77,43 @@
                                     <div class="notification-text">Maintenance planifiée ce weekend.</div>
                                     <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
-                            </div> 
+                            </div>
+                            </button>
+                            </form> 
                             @elseif($notification->type == 'mettre a jour') 
-                            <div class="notification-item @if($notification->lu) unread @endif">
-                                <div class="notification-icon-wrapper" style="background: var(--gradient-warning);">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-text">votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
-                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
-                                </div>
-                            </div>
+                             <form action="{{route('dashboard.utilisateur.notifications.redirect')}}">
+                                <input type="hidden" name="type" value="commentaire">
+                                <input type="hidden" name="notification" value="{{$notification->id}}">
+                                <button type="submit">
+                                    <div class="notification-item @if(!$notification->lu) unread @endif">
+                                        <div class="notification-icon-wrapper" style="background: var(--gradient-warning);">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-text">votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
+                                            <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
+                                        </div>
+                                    </div>
+                                </button>
+                             </form>
                             @elseif($notification->type == 'commentaire') 
-                            <div class="notification-item @if($notification->lu) unread @endif">
-                                <div class="notification-icon-wrapper" style="background: var(--gradient-primary);">
-                                    <i class="fas fa-comment"></i>
+                            <form action="{{route('dashboard.utilisateur.notifications.redirect')}}">
+                                <input type="hidden" name="type" value="commentaire">
+                                <input type="hidden" name="notification" value="{{$notification->id}}">
+                                {{-- <input type="hidden" name="type" value="commentaire"> --}}
+                            <button type="submit">
+                                <div class="notification-item @if(!$notification->lu) unread @endif">
+                                    <div class="notification-icon-wrapper" style="background: var(--gradient-primary);">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-text">Nouveau commentaire sur votre ticket <strong>{{$notification->ticket->numero}}</strong>.</div>
+                                        <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
+                                    </div>
                                 </div>
-                                <div class="notification-content">
-                                    <div class="notification-text">Nouveau commentaire sur votre ticket <strong>{{$notification->ticket->numero}}</strong>.</div>
-                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
-                                </div>
-                            </div>
+                            </button>
+                            </form>
+                           
                             @endif
 
                             @endforeach
