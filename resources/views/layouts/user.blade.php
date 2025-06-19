@@ -39,45 +39,64 @@
                     <div class="notification-menu" id="notificationMenu">
                         <div class="notification-header">
                             <div class="notification-title">Notifications</div>
-                            <a href="#" class="text-sm text-primary-light">Marquer tout comme lu</a>
+                            <a href="#" class="text-sm text-primary-light">Marquer tout comme lu </a>
                         </div>
                         <div class="notification-list">
-                            <div class="notification-item unread">
+                            @if(!auth::user()->notifications->isEmpty())
+
+                            @foreach(auth()->user()->notifications()->orderBy('date_envoi', 'desc')->take(4)->get() as $notification)
+                           
+                            @if($notification->type == "resolu")
+                             <div class="notification-item @if($notification->lu) unread @endif">
                                 <div class="notification-icon-wrapper" style="background: var(--gradient-success);">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="notification-content">
-                                    <div class="notification-text">Votre ticket <strong>#1234</strong> a été résolu.</div>
-                                    <div class="notification-time">Il y a 10 minutes</div>
+                                    <div class="notification-text">Votre Ticket <strong>{{$notification->ticket->numero}}</strong> a été résolu.</div>
+                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
                             </div>
-                            <div class="notification-item unread">
-                                <div class="notification-icon-wrapper" style="background: var(--gradient-primary);">
-                                    <i class="fas fa-comment"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-text">Nouveau commentaire sur votre ticket <strong>#1235</strong>.</div>
-                                    <div class="notification-time">Il y a 30 minutes</div>
-                                </div>
-                            </div>
-                            <div class="notification-item unread">
-                                <div class="notification-icon-wrapper" style="background: var(--gradient-warning);">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-text">Le statut de votre ticket <strong>#1236</strong> a été mis à jour.</div>
-                                    <div class="notification-time">Il y a 1 heure</div>
-                                </div>
-                            </div>
-                            <div class="notification-item">
+                            @elseif($notification->type == 'maintenance')
+                             <div class="notification-item @if($notification->lu) unread @endif">
                                 <div class="notification-icon-wrapper" style="background: var(--gradient-info);">
                                     <i class="fas fa-info-circle"></i>
                                 </div>
                                 <div class="notification-content">
                                     <div class="notification-text">Maintenance planifiée ce weekend.</div>
-                                    <div class="notification-time">Il y a 1 jour</div>
+                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
+                                </div>
+                            </div> 
+                            @elseif($notification->type == 'mettre a jour') 
+                            <div class="notification-item @if($notification->lu) unread @endif">
+                                <div class="notification-icon-wrapper" style="background: var(--gradient-warning);">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-text">votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
+                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
                             </div>
+                            @elseif($notification->type == 'commentaire') 
+                            <div class="notification-item @if($notification->lu) unread @endif">
+                                <div class="notification-icon-wrapper" style="background: var(--gradient-primary);">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-text">Nouveau commentaire sur votre ticket <strong>{{$notification->ticket->numero}}</strong>.</div>
+                                    <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                            @endif
+
+                            @endforeach
+                            @else
+                            <div class="notification-item unread">
+                                
+                                <div class="notification-content">
+                                    <div class="notification-text">Aucun Notification a ce moments</div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                         <div class="notification-footer">
                             <a href="#">Voir toutes les notifications</a>
