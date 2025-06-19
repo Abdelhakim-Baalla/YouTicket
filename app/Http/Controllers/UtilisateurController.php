@@ -145,6 +145,26 @@ class UtilisateurController extends Controller
             return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)->with('error', 'Probleme dans la creation de commentaire, ressayer autrefois.');
         }
 
+
+        $ticket = $this->ticketRepository->trouver($commentaire->ticket_id);
+        // dd($commentaire->contenu);
+
+        if($ticket && $ticket->demandeur_id != $commentaire->utilisateur_id)
+        {
+            $data = [
+                "utilisateur_id" => $ticket->demandeur_id,
+                "ticket_id" => $ticket->id,
+                "type" => 'commentaire',
+                "titre" => $commentaire->utilisateur->prenom . $commentaire->utilisateur->nom . 'A commenter sur votre ticket',
+                "message" => $commentaire->contenu,
+                "date_envoi" => now(),
+            ];
+        
+            $this->notificationRepository->creer($data);
+        }
+
+        
+
         return redirect()->to(route('dashboard.utilisateur.ticket.show', $request->id) . '#comments-section');
     }
 
@@ -451,8 +471,8 @@ class UtilisateurController extends Controller
 
             // dd($ticket);
 
-            Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket,$ticketUrl));
-            Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy,$ticket,$ticketUrl));
+            Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket, $ticketUrl));
+            Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy, $ticket, $ticketUrl));
 
             return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)
                 ->with('success', 'Ticket Modifier avec succès!');
@@ -469,8 +489,7 @@ class UtilisateurController extends Controller
 
         $notification = $this->notificationRepository->trouver($request->notification);
 
-        if(!$notification)
-        {
+        if (!$notification) {
             return redirect()->route('dashboard.utilisateur.tickets')
                 ->with('error', 'Une Probleme et survenu');
         }
@@ -478,21 +497,18 @@ class UtilisateurController extends Controller
         $notification->lu = 1;
         $notification->save();
 
-        
-        
-        if($notification->type == 'commentaire')
-        {
+
+
+        if ($notification->type == 'commentaire') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id) . '#comments-body');
         }
 
 
-        if($notification->type == 'mettre a jour')
-        {
+        if ($notification->type == 'mettre a jour') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
         }
 
-        if($notification->type == 'resolu')
-        {
+        if ($notification->type == 'resolu') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
         }
 
@@ -505,24 +521,22 @@ class UtilisateurController extends Controller
     public function utilisateurNotificationsMetterToutCommeLu(Request $request)
     {
         // dd($request->id);
-        
+
         $notifications = $this->notificationRepository->trouverNotificationsParUtilisateurId($request->id);
-        if(!$notifications)
-        {
-             return redirect()->back()
+        if (!$notifications) {
+            return redirect()->back()
                 ->with('error', 'Aucun Notification pour mettre comme lu');
         }
 
-        
-        foreach($notifications as $notification)
-        {
+
+        foreach ($notifications as $notification) {
             $notification->lu = 1;
             $notification->save();
             // dd($notification->lu);
         }
 
-         return redirect()->back()
-                ->with('success', 'Tout les notification ont mettre comme lu');
+        return redirect()->back()
+            ->with('success', 'Tout les notification ont mettre comme lu');
 
         // dd($notifications[0]->lu);
     }
