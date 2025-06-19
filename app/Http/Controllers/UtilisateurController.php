@@ -451,7 +451,7 @@ class UtilisateurController extends Controller
             Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket,$ticketUrl));
             Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy,$ticket,$ticketUrl));
 
-            return redirect()->route('dashboard.utilisateur.tickets.edit', $request->id)
+            return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)
                 ->with('success', 'Ticket Modifier avec succès!');
         } catch (\Exception $e) {
             return redirect()->back()
