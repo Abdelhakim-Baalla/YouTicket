@@ -38,7 +38,7 @@
                         </div>
                         
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:12px;">
-                            Priorité : <span style="color:{{ $ticket->priorite === 'Haute' ? '#EF4444' : ($ticket->priorite === 'Moyenne' ? '#F59E0B' : '#10B981') }};font-weight:600;">{{ $ticket->priorite }}</span>
+                            Priorité : <span style="color:{{ $ticket->priorite->nom === 'Haute' ? '#EF4444' : ($ticket->priorite->nom === 'Moyenne' ? '#F59E0B' : '#10B981') }};font-weight:600;">{{ $ticket->priorite->nom }}</span>
                         </p>
                     </td>
                 </tr>

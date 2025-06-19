@@ -17,6 +17,7 @@ use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Mail\confirmationTicket;
+use App\Mail\assignationTicket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,6 +80,10 @@ class UtilisateurController extends Controller
 
     public function showTicket(Request $request)
     {
+        if(!Auth::check())
+        {
+            return redirect()->route('login')->with('error', 'Please log in to Show a ticket.');
+        }
         // dd($request->id);
         // tickets
         $ticket = $this->ticketRepository->trouver($request->id);
@@ -252,6 +257,9 @@ class UtilisateurController extends Controller
             }
 
             $user = Auth::user();
+            $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
+            $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            // dd($agent);
             // Générer un lien signé valable 24h
             $ticketUrl = URL::temporarySignedRoute(
                 'dashboard.utilisateur.ticket.show',
@@ -260,6 +268,7 @@ class UtilisateurController extends Controller
             );
 
             Mail::to($user->email)->send(new confirmationTicket($user, $ticket, $ticketUrl));
+            Mail::to($agent->email)->send(new assignationTicket($agent, $ticket, $ticketUrl));
 
             return redirect()->route('dashboard.utilisateur.ticket.show', $ticket->id)
                 ->with('success', 'Ticket créé avec succès!');

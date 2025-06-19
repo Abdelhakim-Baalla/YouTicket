@@ -35,7 +35,7 @@
                         
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:14px;line-height:22px;">
                             <strong>Titre :</strong> {{ $ticket->titre }}<br>
-                            <strong>Priorité :</strong> {{ $ticket->priorite }}<br>
+                            <strong>Priorité :</strong> {{ $ticket->priorite->nom }}<br>
                             <strong>Date de création :</strong> {{ $ticket->created_at->format('d/m/Y H:i') }}
                         </p>
                         
