@@ -185,7 +185,7 @@
                         <select name="assigne_a_id" id="assigne_a_id" class="form-select" required>
                             <option value="">Sélectionner l'expert</option>
                            @foreach($experts as $expert)
-                           <option value="{{$expert->id}}"> {{$expert->utilisateur->prenom}} {{$expert->utilisateur->nom}} @if($expert->utilisateur->poste)({{$expert->utilisateur->poste}})@endif</option>
+                           <option value="{{$expert->id}}"> {{$expert->utilisateur->prenom}} {{$expert->utilisateur->nom}} @if($expert->utilisateur->poste)({{$expert->utilisateur->poste}})@endif @if($expert->utilisateur->email)({{$expert->utilisateur->email}})@endif</option>
                            @endforeach
                         </select>
                         <div class="form-help">Séléctionnez l'expert assigné</div>
