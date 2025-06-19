@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Mail\confirmationTicket;
 use App\Mail\assignationTicket;
+use App\Mail\editTicketUtilisateur;
+use App\Mail\editTicketAgent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,8 +82,7 @@ class UtilisateurController extends Controller
 
     public function showTicket(Request $request)
     {
-        if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Please log in to Show a ticket.');
         }
         // dd($request->id);
@@ -431,6 +432,24 @@ class UtilisateurController extends Controller
                     ]);
                 }
             }
+
+            $ticket = $this->ticketRepository->trouver($request->id);
+
+            $user = Auth::user();
+            $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
+            $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            $modifiedBy = $user;
+            // Générer un lien signé valable 24h
+            $ticketUrl = URL::temporarySignedRoute(
+                'dashboard.utilisateur.ticket.show',
+                now()->addHours(24),
+                ['id' => $ticket->id]
+            );
+
+            // dd($ticket);
+
+            Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket,$ticketUrl));
+            Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy,$ticket,$ticketUrl));
 
             return redirect()->route('dashboard.utilisateur.tickets.edit', $request->id)
                 ->with('success', 'Ticket Modifier avec succès!');

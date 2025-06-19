@@ -22,7 +22,7 @@
                     <td align="center">
                         <h1 style="font-family:Inter,sans-serif;color:{{ $textColor }};font-size:24px;font-weight:600;margin-bottom:20px;">Nouveau ticket assigné</h1>
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:15px;line-height:22px;">
-                            Bonjour {{ $agent->prenom }},<br>
+                            Bonjour {{ $agent->prenom }} {{ $agent->nom }},<br>
                             Un nouveau ticket vous a été assigné.
                         </p>
                         

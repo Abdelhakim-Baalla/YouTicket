@@ -22,22 +22,13 @@
                     <td align="center">
                         <h1 style="font-family:Inter,sans-serif;color:{{ $textColor }};font-size:24px;font-weight:600;margin-bottom:20px;">Votre ticket a été mis à jour</h1>
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:15px;line-height:22px;">
-                            Bonjour {{ $user->prenom }},<br>
+                            Bonjour {{ $user->prenom }}  {{ $user->nom }},<br>
                             Votre ticket #{{ $ticket->id }} a été modifié.
                         </p>
                         
-                        <div style="margin:20px 0;background-color:#F3F4F6;padding:15px;border-radius:8px;text-align:left;">
-                            <p style="margin:0 0 5px 0;font-weight:600;color:{{ $textColor }};">Modifications récentes :</p>
-                            <ul style="margin:0;padding-left:20px;color:{{ $lightText }};">
-                                @foreach($modifications as $modif)
-                                <li>{{ $modif }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        
                         <div style="margin:30px 0;">
                             <a href="{{ $ticketUrl }}" style="background:linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $secondaryColor }} 100%);color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;">
-                                Voir les détails
+                                Voir les Modifications
                             </a>
                         </div>
                         

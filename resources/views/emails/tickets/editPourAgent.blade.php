@@ -26,20 +26,7 @@
                             Le ticket qui vous est assigné a été mis à jour.
                         </p>
                         
-                        <div style="margin:20px 0;background-color:#F3F4F6;padding:15px;border-radius:8px;text-align:left;">
-                            <p style="margin:0 0 10px 0;font-weight:600;color:{{ $textColor }};">Résumé des modifications :</p>
-                            <table style="width:100%;border-collapse:collapse;">
-                                @foreach($modifications as $field => $values)
-                                <tr>
-                                    <td style="padding:5px 0;border-bottom:1px solid #E5E7EB;color:{{ $lightText }};"><strong>{{ ucfirst($field) }} :</strong></td>
-                                    <td style="padding:5px 0;border-bottom:1px solid #E5E7EB;color:{{ $lightText }};">
-                                        <span style="text-decoration:line-through;color:#EF4444;">{{ $values['old'] }}</span> → 
-                                        <span style="color:#10B981;font-weight:600;">{{ $values['new'] }}</span>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </table>
-                        </div>
+                       
                         
                         <div style="margin:30px 0;">
                             <a href="{{ $ticketUrl }}" style="background:linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $secondaryColor }} 100%);color:#FFFFFF;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;">
@@ -48,7 +35,7 @@
                         </div>
                         
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:12px;">
-                            Modifié par : {{ $modifiedBy->name }} à {{ now()->format('H:i') }}
+                            Modifié par : {{ $modifiedBy->prenom }}  {{ $modifiedBy->nom }} à {{ now()->format('H:i') }}
                         </p>
                     </td>
                 </tr>

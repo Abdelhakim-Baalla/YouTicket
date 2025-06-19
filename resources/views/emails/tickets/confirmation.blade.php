@@ -23,7 +23,7 @@
                     <td align="center">
                         <h1 style="font-family:Inter,sans-serif;color:{{ $textColor }};font-size:24px;font-weight:600;margin-bottom:20px;">Votre ticket a été créé avec succès</h1>
                         <p style="font-family:Inter,sans-serif;color:{{ $lightText }};font-size:15px;line-height:22px;">
-                            Bonjour {{ $user->prenom }},<br>
+                            Bonjour {{ $user->prenom }} {{ $user->nom }},<br>
                             Votre ticket #{{ $ticket->id }} a bien été enregistré dans notre système.
                         </p>
                         
