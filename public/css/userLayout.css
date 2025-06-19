@@ -332,7 +332,7 @@
         .notification-menu {
             position: absolute;
             top: 100%;
-            right: 0;
+            left: 0; /* Changed from right: 0 to left: 0 */
             width: 320px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
@@ -340,6 +340,20 @@
             box-shadow: var(--shadow);
             z-index: 100;
             display: none;
+            /* Add these properties to handle overflow */
+            max-width: calc(100vw - 2rem); /* Ensure it doesn't exceed viewport width */
+        }
+        
+        /* Alternative solution: Position relative to viewport for better control */
+        @media (max-width: 1024px) {
+            .notification-menu {
+                position: fixed;
+                top: 4rem; /* Adjust based on your header height */
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+                max-width: none;
+            }
         }
         
         .notification-menu.show {
