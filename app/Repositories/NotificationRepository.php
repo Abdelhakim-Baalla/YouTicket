@@ -43,5 +43,10 @@ class NotificationRepository implements NotificationRepositoryInterface
         }
         return false;
     }
+
+    public function trouverNotificationsParUtilisateurId(int $id)
+    {
+        return Notification::where('utilisateur_id', $id)->get();
+    }
     
 }
