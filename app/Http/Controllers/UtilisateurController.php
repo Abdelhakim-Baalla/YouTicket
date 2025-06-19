@@ -501,4 +501,29 @@ class UtilisateurController extends Controller
         // dd($notification);
 
     }
+
+    public function utilisateurNotificationsMetterToutCommeLu(Request $request)
+    {
+        // dd($request->id);
+        
+        $notifications = $this->notificationRepository->trouverNotificationsParUtilisateurId($request->id);
+        if(!$notifications)
+        {
+             return redirect()->back()
+                ->with('error', 'Aucun Notification pour mettre comme lu');
+        }
+
+        
+        foreach($notifications as $notification)
+        {
+            $notification->lu = 1;
+            $notification->save();
+            // dd($notification->lu);
+        }
+
+         return redirect()->back()
+                ->with('success', 'Tout les notification ont mettre comme lu');
+
+        // dd($notifications[0]->lu);
+    }
 }

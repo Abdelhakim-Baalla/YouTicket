@@ -39,7 +39,7 @@
                     <div class="notification-menu" id="notificationMenu">
                         <div class="notification-header">
                             <div class="notification-title">Notifications</div>
-                            <a href="#" class="text-sm text-primary-light">Marquer tout comme lu </a>
+                            <a href="{{route('dashboard.utlisateur.notifications.metterToutCommeLu', auth::user()->id)}}" class="text-sm text-primary-light">Marquer tout comme lu </a>
                         </div>
                         <div class="notification-list">
                             @if(!auth::user()->notifications->isEmpty())

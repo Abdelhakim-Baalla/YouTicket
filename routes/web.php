@@ -120,6 +120,7 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::get('/client/ticket/{ticket}/supprimer/pieceJointe/{pieceJointe}', 'utilisateurTicketsSupprimmerPieceJointe')->name('dashboard.utilisateur.tickets.pieces-jointes.supprimer');
     Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
     Route::get('/client/notifications/redirect', 'utilisateurNotificationsRedirect')->name('dashboard.utilisateur.notifications.redirect');
+    Route::get('/client/notifications/metterToutCommeLu/{id}', 'utilisateurNotificationsMetterToutCommeLu')->name('dashboard.utlisateur.notifications.metterToutCommeLu');
 });
 
 
