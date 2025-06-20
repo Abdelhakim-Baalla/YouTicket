@@ -149,8 +149,7 @@ class UtilisateurController extends Controller
         $ticket = $this->ticketRepository->trouver($commentaire->ticket_id);
         // dd($commentaire->contenu);
 
-        if($ticket && $ticket->demandeur_id != $commentaire->utilisateur_id)
-        {
+        if ($ticket && $ticket->demandeur_id != $commentaire->utilisateur_id) {
             $data = [
                 "utilisateur_id" => $ticket->demandeur_id,
                 "ticket_id" => $ticket->id,
@@ -159,11 +158,11 @@ class UtilisateurController extends Controller
                 "message" => $commentaire->contenu,
                 "date_envoi" => now(),
             ];
-        
+
             $this->notificationRepository->creer($data);
         }
 
-        
+
 
         return redirect()->to(route('dashboard.utilisateur.ticket.show', $request->id) . '#comments-section');
     }
@@ -293,6 +292,23 @@ class UtilisateurController extends Controller
 
             Mail::to($user->email)->send(new confirmationTicket($user, $ticket, $ticketUrl));
             Mail::to($agent->email)->send(new assignationTicket($agent, $ticket, $ticketUrl));
+
+            $ticket = $this->ticketRepository->trouver($ticket->id);
+
+            // dd($agent);
+
+            if ($ticket) {
+                $data = [
+                    "utilisateur_id" => $agent->id,
+                    "ticket_id" => $ticket->id,
+                    "type" => 'assigne',
+                    "titre" => $ticket->demandeur->prenom . $ticket->demandeur->nom . 'A assigne a vous une ticket',
+                    "message" => 'Ticket ' . $ticket->numero,
+                    "date_envoi" => now(),
+                ];
+
+                $this->notificationRepository->creer($data);
+            }
 
             return redirect()->route('dashboard.utilisateur.ticket.show', $ticket->id)
                 ->with('success', 'Ticket créé avec succès!');
@@ -457,11 +473,11 @@ class UtilisateurController extends Controller
             }
 
             $ticket = $this->ticketRepository->trouver($request->id);
-
             $user = Auth::user();
             $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
             $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
             $modifiedBy = $user;
+            // dd($ticket);
             // Générer un lien signé valable 24h
             $ticketUrl = URL::temporarySignedRoute(
                 'dashboard.utilisateur.ticket.show',
@@ -473,6 +489,23 @@ class UtilisateurController extends Controller
 
             Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket, $ticketUrl));
             Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy, $ticket, $ticketUrl));
+
+            // $ticket = $this->ticketRepository->trouver($ticket->id);
+
+            // dd($agent);
+
+            if ($ticket) {
+                $data = [
+                    "utilisateur_id" => $user->id,
+                    "ticket_id" => $ticket->id,
+                    "type" => 'mettre a jour',
+                    "titre" => $ticket->demandeur->prenom . $ticket->demandeur->nom . 'A modifier des information de ticket qui a vous une ticket',
+                    "message" => 'Ticket: ' . $ticket->numero,
+                    "date_envoi" => now(),
+                ];
+
+                $this->notificationRepository->creer($data);
+            }
 
             return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)
                 ->with('success', 'Ticket Modifier avec succès!');
@@ -509,6 +542,10 @@ class UtilisateurController extends Controller
         }
 
         if ($notification->type == 'resolu') {
+            return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
+        }
+
+        if ($notification->type == 'assigne') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
         }
 

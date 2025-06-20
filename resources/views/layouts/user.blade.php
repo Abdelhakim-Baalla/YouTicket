@@ -90,7 +90,24 @@
                                             <i class="fas fa-clock"></i>
                                         </div>
                                         <div class="notification-content">
-                                            <div class="notification-text">votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
+                                            <div class="notification-text">Votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
+                                            <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
+                                        </div>
+                                    </div>
+                                </button>
+                             </form>
+                             </form> 
+                            @elseif($notification->type == 'assigne') 
+                             <form action="{{route('dashboard.utilisateur.notifications.redirect')}}">
+                                <input type="hidden" name="type" value="commentaire">
+                                <input type="hidden" name="notification" value="{{$notification->id}}">
+                                <button type="submit">
+                                    <div class="notification-item @if(!$notification->lu) unread @endif">
+                                        <div class="notification-icon-wrapper" style="background: var(--gradient-danger);">
+                                            <i class="fa-solid fa-circle-exclamation"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="notification-text">Le ticket <strong>{{$notification->ticket->numero}}</strong> a été assigné a vous.</div>
                                             <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                         </div>
                                     </div>
