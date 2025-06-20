@@ -27,6 +27,6 @@ class Notification extends Model
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 }

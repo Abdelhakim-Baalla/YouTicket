@@ -16,6 +16,11 @@ class CommentaireRepository implements CommentaireRepositoryInterface
     {
         return Commentaire::find($id);
     }
+
+    public function trouverParTicketId($id)
+    {
+        return Commentaire::where('ticket_id', $id)->get();
+    } 
     
     public function creer(array $donnees)
     {

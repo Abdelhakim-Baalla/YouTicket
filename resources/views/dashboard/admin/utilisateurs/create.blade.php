@@ -1,117 +1,299 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des Utilisateurs - YouTicket')
+@section('title', 'Créer un Utilisateur - YouTicket')
+@section('page-title', 'Créer un Utilisateur')
 
-@section('page-title', 'Crée Utilisateurs')
+@section('styles')
+<link rel="stylesheet" href="{{asset('css/dashboardAdminUtilisateursCreate.css')}}">
+@endsection
 
 @section('content')
+<div class="fade-in">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ route('dashboard.admin') }}">
+            <i class="fas fa-home"></i>
+            Dashboard
+        </a>
+        <i class="fas fa-chevron-right"></i>
+        <a href="{{ route('dashboard.admin.utilisateurs') }}">Utilisateurs</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>Nouvel utilisateur</span>
+    </nav>
 
-<div class="container mx-auto px-4 py-6 fade-in">
-    <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-4 rounded-t-lg">
-        <h3 class="text-lg font-medium text-white flex items-center">
-            <i class="fas fa-user-plus mr-2"></i>
-            Créer un nouvel utilisateur
-        </h3>
-    </div>
-    <form id="createUserForm" method="POST" action="{{route('dashboard.admin.utilisateurs.create.submit')}}" enctype="multipart/form-data" class="px-6 py-4 space-y-6">
-        @csrf
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-                <label for="nom" class="block text-sm font-medium text-gray-300 mb-2">Nom</label>
-                <input type="text" id="nom" name="nom" required 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="prenom" class="block text-sm font-medium text-gray-300 mb-2">Prénom</label>
-                <input type="text" id="prenom" name="prenom" required 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                <input type="email" id="email" name="email" required 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="telephone" class="block text-sm font-medium text-gray-300 mb-2">Téléphone</label>
-                <input type="text" id="telephone" name="telephone" 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
-                <input type="password" id="password" name="password" required 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-gray-300 mb-2">Confirmation</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" required 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="poste" class="block text-sm font-medium text-gray-300 mb-2">Poste</label>
-                <input type="text" id="poste" name="poste" 
-                       class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="departement" class="block text-sm font-medium text-gray-300 mb-2">Département</label>
-                <select id="departement" name="departement" 
-                        class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-                    <option value="">Sélectionner un département</option>
-                    <option value="it">IT</option>
-                    <option value="accounting">Comptabilité</option>
-                    <option value="hr">Ressources Humaines</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Ventes</option>
-                    <option value="management">Direction</option>
-                </select>
-            </div>
-            <div>
-                <label for="role" class="block text-sm font-medium text-gray-300 mb-2">Rôle</label>
-                <select id="role" name="role" 
-                        class="w-full px-4 py-2 rounded-md border border-gray-700 bg-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500">
-                    <option value="admin">Administrateur</option>
-                    <option value="agent">Agent</option>
-                    <option value="utilisateur" selected>Utilisateur</option>
-                </select>
-            </div>
-        </div>
-        <div class="mt-4">
-            <div class="flex items-center space-x-4 gap-4 ">
-                <label class="block text-sm font-medium text-gray-300 mb-3">Photo de profil</label>
-                <div>
-                    <label for="photo" class="cursor-pointer inline-block rounded-md border border-gray-700 bg-gray-700 py-2 px-4 text-sm font-medium text-gray-300 hover:bg-gray-600 transition">
-                        Choisir une image
-                        <input id="photo" name="photo" type="file" class="sr-only">
-                    </label>
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-header">
+                <div class="form-title">
+                    <div class="form-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <span>Créer un nouvel utilisateur</span>
                 </div>
+                <a href="{{ route('dashboard.admin.utilisateurs') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour
+                </a>
             </div>
-        </div>
-        <div class="flex items-center mt-6">
-            <label for="actif" class="block text-sm text-gray-300 mr-4">Compte actif</label>
-            <div class="flex items-center space-x-4">
-            <label class="inline-flex items-center">
-                <input type="radio" id="oui" name="actif" value="1" checked
-                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-700 rounded bg-gray-700">
-                <span class="ml-2 text-gray-300">Oui</span>
-            </label>
-            <label class="inline-flex items-center">
-                <input type="radio" id="non" name="actif" value="0" 
-                class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-700 rounded bg-gray-700">
-                <span class="ml-2 text-gray-300">Non</span>
-            </label>
-            </div>
-        </div>
-        <div class="flex justify-end space-x-4 pt-6 border-t border-gray-700 mt-6">
-            <button type="reset" 
-                    class="px-5 py-2.5 rounded-lg border border-gray-700 bg-gray-700 text-gray-300 hover:bg-gray-600 transition">
-                Annuler
-            </button>
-            <button type="submit" 
-                    class="px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition flex items-center">
-                <i class="fas fa-save mr-2"></i>
-                Enregistrer
-            </button>
-        </div>
-    </form>
-</div>
 
+            <div class="form-body">
+                <form action="{{ route('dashboard.admin.utilisateurs.create.submit') }}" method="POST" enctype="multipart/form-data" id="createUserForm">
+                    @csrf
+                    
+                    <!-- Informations personnelles -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            Informations personnelles
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="prenom" class="form-label required">Prénom</label>
+                                <input type="text" 
+                                       name="prenom" 
+                                       id="prenom" 
+                                       class="form-control @error('prenom') error @enderror" 
+                                       value="{{ old('prenom') }}" 
+                                       placeholder="Ex: Jean"
+                                       required>
+                                @error('prenom')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nom" class="form-label required">Nom</label>
+                                <input type="text" 
+                                       name="nom" 
+                                       id="nom" 
+                                       class="form-control @error('nom') error @enderror" 
+                                       value="{{ old('nom') }}" 
+                                       placeholder="Ex: Dupont"
+                                       required>
+                                @error('nom')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label required">Adresse email</label>
+                                <input type="email" 
+                                       name="email" 
+                                       id="email" 
+                                       class="form-control @error('email') error @enderror" 
+                                       value="{{ old('email') }}" 
+                                       placeholder="jean.dupont@entreprise.com"
+                                       required>
+                                @error('email')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                                <div class="form-help">L'email servira d'identifiant de connexion</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <input type="tel" 
+                                       name="telephone" 
+                                       id="telephone" 
+                                       class="form-control @error('telephone') error @enderror" 
+                                       value="{{ old('telephone') }}" 
+                                       placeholder="+33 1 23 45 67 89">
+                                @error('telephone')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sécurité -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-lock"></i>
+                            Sécurité et accès
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="password" class="form-label required">Mot de passe</label>
+                                <input type="password" 
+                                       name="password" 
+                                       id="password" 
+                                       class="form-control @error('password') error @enderror" 
+                                       placeholder="Minimum 8 caractères"
+                                       required>
+                                @error('password')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                                <div class="password-strength" id="passwordStrength" style="display: none;">
+                                    <div class="strength-bar">
+                                        <div class="strength-fill" id="strengthFill"></div>
+                                    </div>
+                                    <div class="form-help" id="strengthText">Force du mot de passe</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password_confirmation" class="form-label required">Confirmer le mot de passe</label>
+                                <input type="password" 
+                                       name="password_confirmation" 
+                                       id="password_confirmation" 
+                                       class="form-control @error('password_confirmation') error @enderror" 
+                                       placeholder="Retapez le mot de passe"
+                                       required>
+                                @error('password_confirmation')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role_id" class="form-label required">Rôle</label>
+                                <select name="role_id" 
+                                        id="role_id" 
+                                        class="form-control form-select @error('role_id') error @enderror" 
+                                        required>
+                                    <option value="">Sélectionner un rôle</option>
+                                    @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->nom }}</option>
+                                    @endforeach
+                                </select>
+                                @error('role')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                                <div class="form-help">Définit les permissions de l'utilisateur</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Statut du compte</label>
+                                <div class="radio-group">
+                                    <div class="radio-item">
+                                        <input type="radio" 
+                                               name="actif" 
+                                               id="actif_oui" 
+                                               value="1" 
+                                               class="radio-input" 
+                                               {{ old('actif', '1') == '1' ? 'checked' : '' }}>
+                                        <label for="actif_oui" class="form-label">✅ Actif</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" 
+                                               name="actif" 
+                                               id="actif_non" 
+                                               value="0" 
+                                               class="radio-input" 
+                                               {{ old('actif') == '0' ? 'checked' : '' }}>
+                                        <label for="actif_non" class="form-label">❌ Inactif</label>
+                                    </div>
+                                </div>
+                                <div class="form-help">Un compte inactif ne peut pas se connecter</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <!-- Informations professionnelles -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-briefcase"></i>
+                            Informations professionnelles
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="poste" class="form-label">Poste</label>
+                                <input type="text" 
+                                       name="poste" 
+                                       id="poste" 
+                                       class="form-control @error('poste') error @enderror" 
+                                       value="{{ old('poste') }}" 
+                                       placeholder="Ex: Développeur, Manager...">
+                                @error('poste')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="departement" class="form-label">Département</label>
+                                <select name="departement" 
+                                        id="departement" 
+                                        class="form-control form-select @error('departement') error @enderror">
+                                    <option value="">Sélectionner un département</option>
+                                    <option value="it" {{ old('departement') == 'it' ? 'selected' : '' }}>💻 IT</option>
+                                    <option value="accounting" {{ old('departement') == 'accounting' ? 'selected' : '' }}>💰 Comptabilité</option>
+                                    <option value="hr" {{ old('departement') == 'hr' ? 'selected' : '' }}>👥 Ressources Humaines</option>
+                                    <option value="marketing" {{ old('departement') == 'marketing' ? 'selected' : '' }}>📈 Marketing</option>
+                                    <option value="sales" {{ old('departement') == 'sales' ? 'selected' : '' }}>💼 Ventes</option>
+                                    <option value="management" {{ old('departement') == 'management' ? 'selected' : '' }}>🏢 Direction</option>
+                                </select>
+                                @error('departement')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                {{-- defenir equipe a l'utilisateur --}}
+                                <label for="equipe_id" class="form-label">Équipe</label>
+                                <select name="equipe_id" 
+                                        id="equipe_id" 
+                                        class="form-control form-select @error('equipe_id') error @enderror">
+                                    <option value="">Sélectionner une équipe</option>
+                                    @foreach($equipes as $equipe)
+                                        <option value="{{ $equipe->id }}" {{ old('equipe_id') == $equipe->id ? 'selected' : '' }}>
+                                            {{ $equipe->nom }}
+                                        </option>
+                                    @endforeach
+                                    </select>
+                                @error('equipe_id')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                                <div class="form-help">Assigne l'utilisateur à une équipe spécifique</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo de profil -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-camera"></i>
+                            Photo de profil
+                        </h3>
+                        
+                        <div class="photo-upload">
+                            <div class="photo-preview" id="photoPreview">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <label for="photo" class="upload-btn">
+                                    <i class="fas fa-upload"></i>
+                                    Choisir une photo
+                                </label>
+                                <input type="file" 
+                                       name="photo" 
+                                       id="photo" 
+                                       accept="image/*" 
+                                       style="display: none;">
+                                <div class="form-help mt-2">PNG, JPG, GIF jusqu'à 2MB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{{ route('dashboard.admin.utilisateurs') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Créer l'utilisateur
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script src="{{asset('js/dashboardAdminUtilisateursCreate.js')}}"></script>
 @endsection

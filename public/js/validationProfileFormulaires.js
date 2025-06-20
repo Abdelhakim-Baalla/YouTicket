@@ -240,15 +240,6 @@ function validatePersonalInfoForm() {
         }
     }
     
-    // Validate poste
-    const poste = document.getElementById('poste');
-    if (!poste.value.trim()) {
-        showError(poste, 'Le poste est requis');
-        isValid = false;
-    } else {
-        clearError(poste);
-    }
-    
     return isValid;
 }
 

@@ -81,11 +81,22 @@ Route::controller(DashboardController::class)->group(function () {
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'showAdminDashboard')->name('dashboard.admin');
+    // Admin Utilisateurs
     Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
     Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
     Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
     Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
     Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+    Route::delete('/admin/utilisateurs/delete/{id}', 'AdminSupprimerUtilisateur')->name('dashboard.admin.utilisateurs.delete');
+
+    // Admin Equipes
+    Route::get('/admin/equipes', 'showAdminDashboardEquipes')->name('dashboard.admin.equipes');
+    Route::get('/admin/equipes/create', 'createEquipe')->name('dashboard.admin.equipes.create');
+    Route::get('/admin/equipes/{id}', 'showEquipe')->name('dashboard.admin.equipes.show');
+    Route::get('/admin/equipes/{id}/edit', 'editEquipe')->name('dashboard.admin.equipes.edit');
+    Route::put('/admin/equipes/{id}', 'updateEquipe')->name('dashboard.admin.equipes.update');
+    Route::post('/admin/equipes', 'storeEquipe')->name('dashboard.admin.equipes.store');
+    Route::delete('/admin/equipes/{id}/supprimer', 'equipeSupprimer')->name('dashboard.admin.equipes.delete');
 });
 
 Route::controller(AgentController::class)->group(function () {
@@ -98,12 +109,18 @@ Route::controller(AgentController::class)->group(function () {
 });
 
 Route::controller(UtilisateurController::class)->group(function () {
-    Route::get('/utilisateur', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
-    // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
-    // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
-    // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
-    // Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
-    // Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+    Route::get('/client', 'showUtilisateurDashboard')->name('dashboard.utilisateur');
+    Route::get('/client/tickets', 'showUtilisateurTickets')->name('dashboard.utilisateur.tickets');
+    Route::get('/client/ticket/show/{id}', 'showTicket')->name('dashboard.utilisateur.ticket.show');
+    Route::post('/client/ticket/show/{id}/comment/store', 'showTicketCommentStore')->name('dashboard.utilisateur.ticket.show.comment.store');
+    Route::get('/client/tickets/create', 'showUtilisateurTicketsCreateModal')->name('dashboard.utilisateur.tickets.create');
+    Route::post('/client/tickets/create/store', 'utilisateurStoreCreateTickets')->name('dashboard.utilisateur.tickets.create.store');
+    Route::get('/client/tickets/edit/{id}', 'showUtilisateurTicketsEditModal')->name('dashboard.utilisateur.tickets.edit');
+    Route::put('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
+    Route::get('/client/ticket/{ticket}/supprimer/pieceJointe/{pieceJointe}', 'utilisateurTicketsSupprimmerPieceJointe')->name('dashboard.utilisateur.tickets.pieces-jointes.supprimer');
+    Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
+    Route::get('/client/notifications/redirect', 'utilisateurNotificationsRedirect')->name('dashboard.utilisateur.notifications.redirect');
+    Route::get('/client/notifications/metterToutCommeLu/{id}', 'utilisateurNotificationsMetterToutCommeLu')->name('dashboard.utlisateur.notifications.metterToutCommeLu');
 });
 
 

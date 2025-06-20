@@ -26,8 +26,8 @@ class DashboardController extends Controller
             } elseif ($role->nom === 'agent') {
                 return redirect()->route('dashboard.agent');
             }
-        } else {
+            } else {
             return redirect()->route('login')->with('error', 'Please log in to access the dashboard.');
-        }
+            }
     }
 }

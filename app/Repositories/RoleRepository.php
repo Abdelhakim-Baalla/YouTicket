@@ -17,6 +17,11 @@ class RoleRepository implements RoleRepositoryInterface
         return Role::find($id);
     }
 
+    public function trouverParNom($nom)
+    {
+        return Role::where('nom', $nom)->first();
+    }
+
     public function trouverAvecNom($nom)
     {
         return Role::where('nom', $nom)->get()->first();

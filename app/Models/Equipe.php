@@ -14,6 +14,10 @@ class Equipe extends Model
         'nom',
         'description',
         'active',
+        'responsable',
+        'email',
+        'telephone',
+        'specialite',
     ];
 
     public function utilisateurs()
