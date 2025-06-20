@@ -162,6 +162,21 @@ class UtilisateurController extends Controller
             $this->notificationRepository->creer($data);
         }
 
+        if ($ticket && $ticket->demandeur_id == $commentaire->utilisateur_id) {
+            $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
+            $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
+            $data = [
+                "utilisateur_id" => $agent->id,
+                "ticket_id" => $ticket->id,
+                "type" => 'commentaire',
+                "titre" => $commentaire->utilisateur->prenom . ' ' . $commentaire->utilisateur->nom . ' A commenter sur le ticket: ' . $ticket->numero,
+                "message" => $commentaire->contenu,
+                "date_envoi" => now(),
+            ];
+
+            $this->notificationRepository->creer($data);
+        }
+
 
 
         return redirect()->to(route('dashboard.utilisateur.ticket.show', $request->id) . '#comments-section');
@@ -302,7 +317,7 @@ class UtilisateurController extends Controller
                     "utilisateur_id" => $agent->id,
                     "ticket_id" => $ticket->id,
                     "type" => 'assigne',
-                    "titre" => $ticket->demandeur->prenom . $ticket->demandeur->nom . 'A assigne a vous une ticket',
+                    "titre" => $ticket->demandeur->prenom . ' ' . $ticket->demandeur->nom . ' A assigne a vous une ticket',
                     "message" => 'Ticket ' . $ticket->numero,
                     "date_envoi" => now(),
                 ];
@@ -499,7 +514,7 @@ class UtilisateurController extends Controller
                     "utilisateur_id" => $user->id,
                     "ticket_id" => $ticket->id,
                     "type" => 'mettre a jour',
-                    "titre" => $ticket->demandeur->prenom . $ticket->demandeur->nom . 'A modifier des information de ticket qui a vous une ticket',
+                    "titre" => $ticket->demandeur->prenom . ' ' . $ticket->demandeur->nom . ' A modifier des information de ticket qui a vous assigne',
                     "message" => 'Ticket: ' . $ticket->numero,
                     "date_envoi" => now(),
                 ];

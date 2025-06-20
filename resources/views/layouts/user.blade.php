@@ -57,7 +57,7 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="notification-content">
-                                    <div class="notification-text">Votre Ticket <strong>{{$notification->ticket->numero}}</strong> a été résolu.</div>
+                                    <div class="notification-text">{{$notification->titre}}</div>
                                     <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                                     <i class="fas fa-info-circle"></i>
                                 </div>
                                 <div class="notification-content">
-                                    <div class="notification-text">Maintenance planifiée ce weekend.</div>
+                                    <div class="notification-text">{{$notification->titre}}</div>
                                     <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                             <i class="fas fa-clock"></i>
                                         </div>
                                         <div class="notification-content">
-                                            <div class="notification-text">Votre ticket <strong>{{$notification->ticket->numero}}</strong> a été mis à jour.</div>
+                                            <div class="notification-text">{{$notification->titre}}</div>
                                             <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                         </div>
                                     </div>
@@ -107,7 +107,7 @@
                                             <i class="fa-solid fa-circle-exclamation"></i>
                                         </div>
                                         <div class="notification-content">
-                                            <div class="notification-text">Le ticket <strong>{{$notification->ticket->numero}}</strong> a été assigné a vous.</div>
+                                            <div class="notification-text">{{$notification->titre}}</div>
                                             <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                         <i class="fas fa-comment"></i>
                                     </div>
                                     <div class="notification-content">
-                                        <div class="notification-text">Nouveau commentaire sur votre ticket <strong>{{$notification->ticket->numero}}</strong>.</div>
+                                        <div class="notification-text">{{$notification->titre}}</div>
                                         <div class="notification-time">{{ \Carbon\Carbon::parse($notification->date_envoi)->diffForHumans() }}</div>
                                     </div>
                                 </div>
