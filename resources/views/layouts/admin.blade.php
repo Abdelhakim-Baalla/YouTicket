@@ -68,12 +68,6 @@
                                 <span>Equipes</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('tickets.create') }}" class="nav-link {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
-                                <span class="nav-icon"><i class="fas fa-plus-circle"></i></span>
-                                <span>Nouveau Ticket</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
