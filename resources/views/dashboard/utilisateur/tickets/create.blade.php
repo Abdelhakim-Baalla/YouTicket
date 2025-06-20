@@ -185,7 +185,7 @@
                         <select name="assigne_a_id" id="assigne_a_id" class="form-select" required>
                             <option value="">Sélectionner l'expert</option>
                            @foreach($experts as $expert)
-                           <option value="{{$expert->id}}"> {{$expert->utilisateur->prenom}} {{$expert->utilisateur->nom}} @if($expert->utilisateur->poste)({{$expert->utilisateur->poste}})@endif</option>
+                           <option value="{{$expert->id}}"> {{$expert->utilisateur->prenom}} {{$expert->utilisateur->nom}} @if($expert->utilisateur->poste)({{$expert->utilisateur->poste}})@endif @if($expert->utilisateur->email)({{$expert->utilisateur->email}})@endif</option>
                            @endforeach
                         </select>
                         <div class="form-help">Séléctionnez l'expert assigné</div>
@@ -210,24 +210,26 @@
                 </div>
                 
                 <!-- Pièces jointes -->
-                <div class="form-group full-width">
-                    <label class="form-label">
-                        <i class="fas fa-paperclip"></i>
-                        Pièces jointes
-                    </label>
-                    <div class="file-upload" id="fileUpload">
-                        <input type="file" name="pieces_jointes[]" id="fileInput" class="file-upload-input" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip">
-                        <div class="file-upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="file-upload-text">
-                            <div class="file-upload-title">Glissez vos fichiers ici ou cliquez pour parcourir</div>
-                            <div>Formats acceptés: JPG, PNG, PDF, DOC, TXT, ZIP (max 10MB par fichier)</div>
-                        </div>
-                    </div>
-                    <div class="file-list" id="fileList"></div>
-                    <div class="form-help">Ajoutez des captures d'écran, documents ou fichiers qui peuvent aider à résoudre votre problème</div>
-                </div>
+<div class="form-group full-width">
+    <label class="form-label">
+        <i class="fas fa-paperclip"></i>
+        Pièces jointes
+    </label>
+    <div class="file-upload" id="fileUpload">
+        <input type="file" name="pieces_jointes[]" id="fileInput" class="file-upload-input" multiple 
+               accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip,.mp4,.mp3,.xls,.xlsx,.ppt,.pptx">
+        <div class="file-upload-icon">
+            <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <div class="file-upload-text">
+            <div class="file-upload-title">Glissez vos fichiers ici ou cliquez pour parcourir</div>
+            <div>Formats acceptés: Images, Documents, PDF, Audio, Vidéo (max 10MB par fichier)</div>
+        </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <div class="preview-container" id="previewContainer"></div>
+    <div class="form-help">Ajoutez des captures d'écran, documents ou fichiers qui peuvent aider à résoudre votre problème</div>
+</div>
                 
                 <!-- Actions -->
                 <div class="form-actions">

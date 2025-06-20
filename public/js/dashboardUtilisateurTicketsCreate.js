@@ -2,6 +2,7 @@
 const fileUpload = document.getElementById("fileUpload");
 const fileInput = document.getElementById("fileInput");
 const fileList = document.getElementById("fileList");
+const previewContainer = document.getElementById("previewContainer");
 let selectedFiles = [];
 
 // Drag and drop
@@ -24,16 +25,105 @@ fileInput.addEventListener("change", (e) => {
     handleFiles(e.target.files);
 });
 
+function getFileIcon(file) {
+    const extension = file.name.split(".").pop().toLowerCase();
+    const fileType = file.type.split("/")[0];
+
+    const icons = {
+        image: "fa-file-image",
+        pdf: "fa-file-pdf",
+        word: "fa-file-word",
+        excel: "fa-file-excel",
+        powerpoint: "fa-file-powerpoint",
+        audio: "fa-file-audio",
+        video: "fa-file-video",
+        archive: "fa-file-archive",
+        text: "fa-file-alt",
+        code: "fa-file-code",
+        default: "fa-file",
+    };
+
+    if (fileType === "image") return icons.image;
+    if (extension === "pdf") return icons.pdf;
+    if (["doc", "docx"].includes(extension)) return icons.word;
+    if (["xls", "xlsx"].includes(extension)) return icons.excel;
+    if (["ppt", "pptx"].includes(extension)) return icons.powerpoint;
+    if (["mp3", "wav", "ogg"].includes(extension)) return icons.audio;
+    if (["mp4", "mov", "avi"].includes(extension)) return icons.video;
+    if (["zip", "rar", "7z"].includes(extension)) return icons.archive;
+    if (["txt", "rtf"].includes(extension)) return icons.text;
+    if (["js", "html", "css", "php", "json"].includes(extension))
+        return icons.code;
+
+    return icons.default;
+}
+
+function createPreview(file) {
+    const previewItem = document.createElement("div");
+    previewItem.className = "preview-item";
+    previewItem.dataset.fileName = file.name;
+    previewItem.dataset.fileSize = file.size;
+
+    const fileType = file.type.split("/")[0];
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (fileType === "image") {
+        // Prévisualisation d'image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewItem.innerHTML = `
+                <div class="preview-content">
+                    <img src="${e.target.result}" alt="${
+                file.name
+            }" class="preview-image">
+                    <div class="preview-info">
+                        <div class="preview-name">${file.name}</div>
+                        <div class="preview-size">${formatFileSize(
+                            file.size
+                        )}</div>
+                    </div>
+                    <button type="button" class="preview-remove" onclick="removeFile('${
+                        file.name
+                    }', ${file.size})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        // Prévisualisation pour autres types de fichiers
+        const icon = getFileIcon(file);
+        previewItem.innerHTML = `
+            <div class="preview-content">
+                <div class="preview-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="preview-info">
+                    <div class="preview-name">${file.name}</div>
+                    <div class="preview-size">${formatFileSize(file.size)}</div>
+                </div>
+                <button type="button" class="preview-remove" onclick="removeFile('${
+                    file.name
+                }', ${file.size})">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+    }
+
+    return previewItem;
+}
+
 function handleFiles(files) {
     Array.from(files).forEach((file) => {
         if (file.size > 10 * 1024 * 1024) {
-            // 10MB limit
             alert(`Le fichier "${file.name}" est trop volumineux (max 10MB)`);
             return;
         }
 
         if (
-            selectedFiles.find(
+            selectedFiles.some(
                 (f) => f.name === file.name && f.size === file.size
             )
         ) {
@@ -42,7 +132,8 @@ function handleFiles(files) {
         }
 
         selectedFiles.push(file);
-        addFileToList(file);
+        const previewItem = createPreview(file);
+        previewContainer.appendChild(previewItem);
     });
 
     updateFileInput();
@@ -74,14 +165,22 @@ function removeFile(fileName, fileSize) {
     selectedFiles = selectedFiles.filter(
         (f) => !(f.name === fileName && f.size === fileSize)
     );
+
+    // Supprimer la prévisualisation correspondante
+    const previewItem = document.querySelector(
+        `.preview-item[data-file-name="${fileName}"][data-file-size="${fileSize}"]`
+    );
+    if (previewItem) {
+        previewItem.remove();
+    }
+
     updateFileInput();
-    renderFileList();
 }
 
-function renderFileList() {
-    fileList.innerHTML = "";
-    selectedFiles.forEach((file) => addFileToList(file));
-}
+// function renderFileList() {
+//     fileList.innerHTML = "";
+//     selectedFiles.forEach((file) => addFileToList(file));
+// }
 
 function updateFileInput() {
     const dt = new DataTransfer();

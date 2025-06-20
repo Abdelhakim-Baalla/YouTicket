@@ -116,13 +116,11 @@ Route::controller(UtilisateurController::class)->group(function () {
     Route::get('/client/tickets/create', 'showUtilisateurTicketsCreateModal')->name('dashboard.utilisateur.tickets.create');
     Route::post('/client/tickets/create/store', 'utilisateurStoreCreateTickets')->name('dashboard.utilisateur.tickets.create.store');
     Route::get('/client/tickets/edit/{id}', 'showUtilisateurTicketsEditModal')->name('dashboard.utilisateur.tickets.edit');
-    Route::get('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
+    Route::put('/client/tickets/edit/store/{id}', 'utilisateurStoreEditTickets')->name('dashboard.utilisateur.tickets.edit.store');
+    Route::get('/client/ticket/{ticket}/supprimer/pieceJointe/{pieceJointe}', 'utilisateurTicketsSupprimmerPieceJointe')->name('dashboard.utilisateur.tickets.pieces-jointes.supprimer');
     Route::delete('/client/ticket/delete/{id}', 'utilisateurDeleteTicket')->name('dashboard.utilisateur.ticket.delete');
-    // Route::get('/admin/utilisateurs', 'showAdminDashboardUtilisateurs')->name('dashboard.admin.utilisateurs');
-    // Route::get('/admin/utilisateurs/cree', 'showAdminDashboardUtilisateursCreateModal')->name('dashboard.admin.utilisateurs.create');
-    // Route::post('/admin/utilisateurs/cree/submit', 'AdminCreeUtilisateur')->name('dashboard.admin.utilisateurs.create.submit');
-    // Route::get('/admin/utilisateurs/modifier', 'showAdminDashboardUtilisateursEditModal')->name('dashboard.admin.utilisateurs.edit');
-    // Route::put('/admin/utilisateurs/modifier/submit', 'AdminModifierUtilisateur')->name('dashboard.admin.utilisateurs.edit.submit');
+    Route::get('/client/notifications/redirect', 'utilisateurNotificationsRedirect')->name('dashboard.utilisateur.notifications.redirect');
+    Route::get('/client/notifications/metterToutCommeLu/{id}', 'utilisateurNotificationsMetterToutCommeLu')->name('dashboard.utlisateur.notifications.metterToutCommeLu');
 });
 
 

@@ -194,7 +194,7 @@
             </h3>
         </div>
         
-        <div class="comments-body">
+        <div class="comments-body" id="comments-body">
             @if(!$commentaires->isEmpty())
                 <div class="comments-list">
                     @foreach($commentaires as $commentaire)
