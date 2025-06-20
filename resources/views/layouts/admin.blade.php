@@ -33,7 +33,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-brand">
                     <div class="sidebar-logo">
-                        <i class="fas fa-ticket-alt"></i>
+                        <img src="{{asset('images/YouTicketLogo.jpg')}}" alt="Youticket Logo" class="rounded-lg">
                     </div>
                     <span class="sidebar-title">YouTicket</span>
                 </div>
