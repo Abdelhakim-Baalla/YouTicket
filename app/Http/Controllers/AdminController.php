@@ -356,7 +356,7 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'active' => 'required|boolean',
             'responsable' => 'nullable|exists:agents,id',
-            'email' => 'nullable|string|email|max:255|unique:equipes,email',
+            'email' => 'nullable|string|email|max:255',
             'telephone' => 'nullable|string',
             'specialite' => 'nullable|string',
         ]);
