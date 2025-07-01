@@ -11,6 +11,7 @@ use App\Repositories\Interfaces\UtilisateurRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -33,6 +34,11 @@ class AdminController extends Controller
 
     public function showAdminDashboard()
     {
+        if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         $countTickets = $this->adminRepository->countTickets();
         $countAgents = $this->adminRepository->countAgents();
         $countTicketsResolu = $this->adminRepository->countTicketsResolu();
@@ -42,6 +48,11 @@ class AdminController extends Controller
 
     public function showAdminDashboardUtilisateurs(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         if ($request->has('search') && $request->search != '') {
             $utilisateurs = $this->utilisateurRepository->rechercher($request->search);
         } else if ($request->has('role') && $request->role != '') {
@@ -64,6 +75,11 @@ class AdminController extends Controller
 
     public function showAdminDashboardUtilisateursCreateModal()
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         $equipes = $this->equipeRepository->tous();
         $roles = $this->roleRepository->tous();
         return view('dashboard.admin.utilisateurs.create', compact('equipes', 'roles'));
@@ -71,6 +87,10 @@ class AdminController extends Controller
 
     public function showAdminDashboardUtilisateursEditModal(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         $utilisateur = $this->utilisateurRepository->trouver($request->id);
         if (!$utilisateur) {
             return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Utilisateur non trouvé.']);
@@ -96,6 +116,10 @@ class AdminController extends Controller
 
     public function AdminCreeUtilisateur(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
@@ -166,6 +190,10 @@ class AdminController extends Controller
 
     public function AdminModifierUtilisateur(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
@@ -231,6 +259,10 @@ class AdminController extends Controller
 
     public function AdminSupprimerUtilisateur(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // dd($request->id);
         $utilisateur = $this->utilisateurRepository->trouver($request->id);
         if (!$utilisateur) {
@@ -249,6 +281,11 @@ class AdminController extends Controller
 
     public function showAdminDashboardEquipes()
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         $equipes = $this->equipeRepository->tous();
 
         foreach ($equipes as $equipe) {
@@ -278,6 +315,11 @@ class AdminController extends Controller
     // Afficher une équipe
     public function showEquipe($id)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         $equipe = $this->equipeRepository->trouver($id);
         // dd($equipe->responsable);
         $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
@@ -302,6 +344,11 @@ class AdminController extends Controller
     // Formulaire de modification d'une équipe
     public function editEquipe($id)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
+
         $equipe = $this->equipeRepository->trouver($id);
         $agents = $this->agentRepository->tous();
         $equipes = $this->equipeRepository->tous();
@@ -351,6 +398,10 @@ class AdminController extends Controller
     // Traitement de la modification
     public function updateEquipe(Request $request, $id)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -409,6 +460,10 @@ class AdminController extends Controller
     // Formulaire d'ajout d'une équipe
     public function createEquipe()
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // Récupération de tous les agents pour le formulaire
         $agents = $this->agentRepository->tous();
         foreach ($agents as $agent) {
@@ -443,6 +498,10 @@ class AdminController extends Controller
     // Enregistrement d'une nouvelle équipe
     public function storeEquipe(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
@@ -474,6 +533,10 @@ class AdminController extends Controller
     // Suppression d'une équipe
     public function equipeSupprimer(Request $request)
     {
+         if(!Auth::check())
+        {
+            return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
+        }
         // dd($request->id);
         $equipe = $this->equipeRepository->trouver($request->id);
         if (!$equipe) {
