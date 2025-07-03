@@ -119,15 +119,43 @@
                 </div>
 
                 <div class="topbar-actions">
+                    @php
+                        $allNotifications = \App\Models\Notification::latest()->take(10)->get(); 
+                        $allNotificationsCount = \App\Models\Notification::count(); 
+                    @endphp
                     <div class="search-wrapper">
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" class="search-input" placeholder="Rechercher...">
                     </div>
-                    
-                    <button class="notification-btn" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
+
+                    <div class="relative notification-dropdown-wrapper">
+                        <button class="notification-btn" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">{{ $allNotificationsCount }}</span>
+                        </button>
+                        <div class="dropdown-menu notification-dropdown" id="notificationDropdown">
+                            <div class="px-4 py-3 border-b border-gray-700 font-semibold">
+                                Notifications
+                            </div>
+                            @if($allNotifications->count())
+                                @foreach($allNotifications as $notification)
+                                    <div class="dropdown-item">
+                                        <div class="text-sm font-medium">{{ $notification->titre ?? 'Notification' }}</div>
+                                        <div class="text-xs text-gray-400">{{ $notification->message ?? '' }}</div>
+                                        <div class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="dropdown-item text-center text-gray-400">
+                                    Aucune notification.
+                                </div>
+                            @endif
+                            <div class="dropdown-divider"></div>
+                            <a href="" class="dropdown-item text-center text-blue-500">
+                                Voir toutes les notifications
+                            </a>
+                        </div>
+                    </div>
                     
                     <div class="relative">
                         <button class="user-avatar" id="topbarProfileBtn">
@@ -144,7 +172,7 @@
                                 <div class="text-sm text-gray-400">{{ auth()->user()->email }}</div>
                             </div>
                             <a href="{{ route('profile') }}" class="dropdown-item">
-                                <i class="fas fa-user"></i>
+                                <i class="fas fa-user"></i> 
                                 <span>Mon Profil</span>
                             </a>
                             @can('view-settings')
