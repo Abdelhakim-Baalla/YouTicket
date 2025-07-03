@@ -234,17 +234,10 @@
         window.location.href = "{{ route('valider.compte') }}";
     </script>
 @endif
-@elseif(auth()->user()->role == 'utilisateur')
-    <script>
-        window.location.href = "{{ route('dashboard.utilisateur') }}";
-    </script>
-@elseif(auth()->user()->role == 'agent')
-    <script>
-        window.location.href = "{{ route('dashboard.agent') }}";
-    </script>
 @else
     <script>
-        window.location.href = "{{ route('error.403') }}";
+        window.location.href = "{{ route('dashboard') }}";
+        alert('Vous n\'avez pas les droits pour accéder à cette page.');
     </script>
 @endif
 @else
