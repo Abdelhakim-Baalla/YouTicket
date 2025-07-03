@@ -1,5 +1,7 @@
 @if(Auth::check())
+@if(auth()->user()->actif == 1)
     @if(Auth::user()->role->nom == 'utilisateur' || Auth::user()->role->nom == 'admin')
+
     <!DOCTYPE html>
     <html lang="fr">
     <head>
@@ -294,6 +296,12 @@
     @else
     <script>
         window.location.href = "{{ route('dashboard') }}";
+        alert('Vous n\'avez pas les droits pour accéder à cette page.');
+    </script>
+    @endif
+    @else
+    <script>
+        window.location.href = "{{ route('valider.compte') }}";
     </script>
     @endif
 @else
