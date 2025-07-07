@@ -1,34 +1,43 @@
 // Toggle sidebar mobile
-document
-    .getElementById("mobileMenuToggle")
-    .addEventListener("click", function () {
-        document.getElementById("sidebar").classList.toggle("open");
-    });
-
-// Gestion des dropdowns
-const dropdowns = {
-    topbarProfileBtn: document.getElementById("topbarProfileBtn"),
-    topbarDropdown: document.getElementById("topbarDropdown"),
-    notificationBtn: document.getElementById("notificationBtn"),
-};
-
-// Toggle dropdown
-dropdowns.topbarProfileBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    dropdowns.topbarDropdown.classList.toggle("show");
+document.getElementById("mobileMenuToggle").addEventListener("click", function () {
+    document.getElementById("sidebar").classList.toggle("open");
 });
 
-// Fermer le dropdown quand on clique ailleurs
+// Éléments DOM
+const topbarProfileBtn = document.getElementById("topbarProfileBtn");
+const topbarDropdown = document.getElementById("topbarDropdown");
+const notificationBtn = document.getElementById("notificationBtn");
+const notificationDropdown = document.getElementById("notificationDropdown");
+
+// Toggle dropdown profil
+topbarProfileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    topbarDropdown.classList.toggle("show");
+    notificationDropdown.classList.remove("show"); // Fermer l'autre dropdown
+});
+
+// Toggle dropdown notifications
+notificationBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    notificationDropdown.classList.toggle("show");
+    topbarDropdown.classList.remove("show"); // Fermer l'autre dropdown
+});
+
+// Fermer les dropdowns au clic extérieur
 document.addEventListener("click", function (e) {
-    if (
-        !dropdowns.topbarProfileBtn.contains(e.target) &&
-        !dropdowns.topbarDropdown.contains(e.target)
-    ) {
-        dropdowns.topbarDropdown.classList.remove("show");
+    // Profil
+    if (!topbarProfileBtn.contains(e.target) && !topbarDropdown.contains(e.target)) {
+        topbarDropdown.classList.remove("show");
+    }
+    
+    // Notifications
+    if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+        notificationDropdown.classList.remove("show");
     }
 });
 
-// Notifications (exemple)
-dropdowns.notificationBtn.addEventListener("click", function () {
-    alert("Fonctionnalité de notifications à implémenter");
+// Fermer au scroll
+window.addEventListener("scroll", () => {
+    topbarDropdown.classList.remove("show");
+    notificationDropdown.classList.remove("show");
 });

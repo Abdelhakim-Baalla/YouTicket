@@ -1,3 +1,12 @@
+@if(auth()->check())
+<script>
+    
+    if(auth()->user()->actif == 1)
+    {
+        window.location.href = "{{ route('dashboard') }}";
+    }
+</script>
+@endif
 <!DOCTYPE html>
 <html lang="fr">
 <head>
