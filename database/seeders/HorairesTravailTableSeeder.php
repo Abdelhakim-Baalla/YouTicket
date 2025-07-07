@@ -14,16 +14,16 @@ class HorairesTravailTableSeeder extends Seeder
                 'id' => 1,
                 'nom' => 'Standard',
                 'horaires' => json_encode([
-                    "jeudi" => ["fin" => "18:00", "debut" => "09:00"],
-                    "lundi" => ["fin" => "18:00", "debut" => "09:00"],
-                    "mardi" => ["fin" => "18:00", "debut" => "09:00"],
-                    "mercredi" => ["fin" => "18:00", "debut" => "09:00"],
-                    "vendredi" => ["fin" => "18:00", "debut" => "09:00"]
+                    "lundi" => ["debut" => "09:00", "fin" => "18:00"],
+                    "mardi" => ["debut" => "09:00", "fin" => "18:00"],
+                    "mercredi" => ["debut" => "09:00", "fin" => "18:00"],
+                    "jeudi" => ["debut" => "09:00", "fin" => "18:00"],
+                    "vendredi" => ["debut" => "09:00", "fin" => "18:00"]
                 ]),
                 'fuseau_horaire' => 'Europe/Paris',
                 'par_defaut' => 1,
-                'created_at' => '2025-06-03 11:29:49',
-                'updated_at' => '2025-06-03 11:29:49',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }
