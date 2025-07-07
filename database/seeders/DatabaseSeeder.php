@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SlasTableSeeder::class,
             EquipesTableSeeder::class,
             AgentsTableSeeder::class,
+            UtilisateursTableSeeder::class,
             TicketsTableSeeder::class,
             CommentairesTableSeeder::class,
             PieceJointesTableSeeder::class,
