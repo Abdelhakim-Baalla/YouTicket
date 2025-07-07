@@ -16,8 +16,8 @@ class EtatsTableSeeder extends Seeder
                 'description' => 'Ticket nouvellement créé',
                 'couleur' => '#3498db',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:01',
-                'updated_at' => '2025-06-03 11:29:01',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 2,
@@ -25,8 +25,8 @@ class EtatsTableSeeder extends Seeder
                 'description' => 'Ticket en cours de traitement',
                 'couleur' => '#f39c12',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:01',
-                'updated_at' => '2025-06-03 11:29:01',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 3,
@@ -34,8 +34,8 @@ class EtatsTableSeeder extends Seeder
                 'description' => 'En attente d\'informations',
                 'couleur' => '#e74c3c',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:01',
-                'updated_at' => '2025-06-03 11:29:01',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 4,
@@ -43,8 +43,8 @@ class EtatsTableSeeder extends Seeder
                 'description' => 'Ticket résolu',
                 'couleur' => '#2ecc71',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:01',
-                'updated_at' => '2025-06-03 11:29:01',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 5,
@@ -52,8 +52,8 @@ class EtatsTableSeeder extends Seeder
                 'description' => 'Ticket fermé',
                 'couleur' => '#95a5a6',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:01',
-                'updated_at' => '2025-06-03 11:29:01',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
