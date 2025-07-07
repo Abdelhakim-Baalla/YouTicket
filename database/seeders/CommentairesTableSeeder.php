@@ -11,9 +11,9 @@ class CommentairesTableSeeder extends Seeder
     {
         DB::table('commentaires')->insert([
             [
-                'ticket_id' => 76,
+                'ticket_id' => 1,
                 'utilisateur_id' => 1,
-                'contenu' => 'Premier commentaire sur le ticket 76.',
+                'contenu' => 'Premier commentaire sur le ticket 1.',
                 'interne' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
