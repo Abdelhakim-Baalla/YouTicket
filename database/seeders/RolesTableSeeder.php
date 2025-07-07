@@ -12,24 +12,24 @@ class RolesTableSeeder extends Seeder
         DB::table('roles')->insert([
             [
                 'id' => 1,
-                'nom' => 'agent',
-                'description' => 'this is agent role',
-                'created_at' => '2025-06-04 10:44:19',
-                'updated_at' => '2025-06-04 10:44:19',
+                'nom' => 'admin',
+                'description' => 'Rôle administrateur',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 2,
-                'nom' => 'admin',
-                'description' => 'this is admin role',
-                'created_at' => '2025-06-04 10:44:49',
-                'updated_at' => '2025-06-04 10:44:49',
+                'nom' => 'agent',
+                'description' => 'Rôle agent',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 3,
                 'nom' => 'utilisateur',
-                'description' => 'this is user or client role',
-                'created_at' => '2025-06-04 10:45:09',
-                'updated_at' => '2025-06-04 10:45:09',
+                'description' => 'Rôle utilisateur',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

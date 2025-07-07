@@ -12,25 +12,14 @@ class ProjetsTableSeeder extends Seeder
         DB::table('projets')->insert([
             [
                 'id' => 1,
-                'nom' => 'Site Web',
-                'description' => 'Développement du site web corporate',
-                'responsable_id' => 3,
-                'date_debut' => '2025-01-01',
-                'date_fin' => '2025-12-31',
-                'statut' => 'annule',
-                'created_at' => '2025-06-03 11:29:39',
-                'updated_at' => '2025-06-03 11:29:39',
-            ],
-            [
-                'id' => 2,
-                'nom' => 'Application Mobile',
-                'description' => 'Développement de l\'application mobile',
-                'responsable_id' => 3,
-                'date_debut' => '2025-03-01',
-                'date_fin' => '2025-11-30',
+                'nom' => 'Projet Démo',
+                'description' => 'Projet de démonstration initial.',
+                'responsable_id' => 1,
+                'date_debut' => now()->toDateString(),
+                'date_fin' => null,
                 'statut' => 'en_cours',
-                'created_at' => '2025-06-03 11:29:39',
-                'updated_at' => '2025-06-03 11:29:39',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

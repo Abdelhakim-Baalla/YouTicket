@@ -12,7 +12,7 @@ class NotificationsTableSeeder extends Seeder
         DB::table('notifications')->insert([
             [
                 'utilisateur_id' => 1,
-                'ticket_id' => 76,
+                'ticket_id' => 1,
                 'type' => 'nouveau_ticket',
                 'titre' => 'Nouveau ticket créé',
                 'message' => 'Un nouveau ticket a été créé.',

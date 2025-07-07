@@ -16,8 +16,8 @@ class TypeTicketsTableSeeder extends Seeder
                 'description' => 'Problème technique à résoudre',
                 'icone' => 'bug_report',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:22',
-                'updated_at' => '2025-06-03 11:29:22',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 2,
@@ -25,8 +25,8 @@ class TypeTicketsTableSeeder extends Seeder
                 'description' => 'Demande de service ou fonctionnalité',
                 'icone' => 'help_outline',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:22',
-                'updated_at' => '2025-06-03 11:29:22',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 3,
@@ -34,8 +34,8 @@ class TypeTicketsTableSeeder extends Seeder
                 'description' => 'Problème nécessitant une investigation',
                 'icone' => 'warning',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:22',
-                'updated_at' => '2025-06-03 11:29:22',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 4,
@@ -43,8 +43,8 @@ class TypeTicketsTableSeeder extends Seeder
                 'description' => 'Question ou demande d\'information',
                 'icone' => 'help',
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:22',
-                'updated_at' => '2025-06-03 11:29:22',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

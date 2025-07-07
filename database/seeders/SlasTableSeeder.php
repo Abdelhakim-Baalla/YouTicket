@@ -19,8 +19,8 @@ class SlasTableSeeder extends Seeder
                 'priorite_id' => 3,
                 'horaire_travail_id' => 1,
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:49',
-                'updated_at' => '2025-06-03 11:29:49',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 2,
@@ -31,8 +31,8 @@ class SlasTableSeeder extends Seeder
                 'priorite_id' => 2,
                 'horaire_travail_id' => 1,
                 'actif' => 1,
-                'created_at' => '2025-06-03 11:29:49',
-                'updated_at' => '2025-06-03 11:29:49',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
