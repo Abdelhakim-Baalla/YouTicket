@@ -16,11 +16,13 @@ class Proprietaire extends Model
         'type',
     ];
 
+    // Définition de la relation entre le modèle Proprietaire et Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class);
     }
 
+    // Définition de la relation entre le modèle Proprietaire et Ticket
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
