@@ -15,6 +15,7 @@ class DashboardController extends Controller
         $this->roleRepository = $roleRepository;
     }
 
+    // Redirecter vers le tableau de bord approprié en fonction du rôle de l'utilisateur Authentifié
     public function showDashboard()
     {
         if (Auth::check()) {
@@ -26,8 +27,8 @@ class DashboardController extends Controller
             } elseif ($role->nom === 'agent') {
                 return redirect()->route('dashboard.agent');
             }
-            } else {
+        } else {
             return redirect()->route('login')->with('error', 'Please log in to access the dashboard.');
-            }
+        }
     }
 }
