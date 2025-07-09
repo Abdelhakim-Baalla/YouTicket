@@ -32,10 +32,10 @@ class AdminController extends Controller
     }
 
 
+    // Afficher le tableau de bord de l'administrateur
     public function showAdminDashboard()
     {
-        if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
@@ -46,10 +46,10 @@ class AdminController extends Controller
         return view('dashboard.admin.index', compact('countTickets', 'countAgents', 'countTicketsResolu'));
     }
 
+    // Afficher le tableau de bord des utilisateurs pour l'administrateur
     public function showAdminDashboardUtilisateurs(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
@@ -73,10 +73,10 @@ class AdminController extends Controller
         return view('dashboard.admin.utilisateurs.index', compact('utilisateurs', 'roles'));
     }
 
+    // Afficher le modal de création d'un utilisateur pour l'administrateur
     public function showAdminDashboardUtilisateursCreateModal()
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
@@ -85,21 +85,24 @@ class AdminController extends Controller
         return view('dashboard.admin.utilisateurs.create', compact('equipes', 'roles'));
     }
 
+    // Afficher le modal de modification d'un utilisateur pour l'administrateur
     public function showAdminDashboardUtilisateursEditModal(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
+
         $utilisateur = $this->utilisateurRepository->trouver($request->id);
         if (!$utilisateur) {
             return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Utilisateur non trouvé.']);
         }
+
         $role = $this->roleRepository->trouver($utilisateur->role_id);
 
         if ($role) {
             $utilisateur->role_id = $role->id;
-        } 
+        }
+
         $equipe = $this->equipeRepository->trouver($utilisateur->equipe_id);
         if ($equipe) {
             $utilisateur->equipe_id = $utilisateur->equipe_id;
@@ -109,18 +112,17 @@ class AdminController extends Controller
 
         $equipes = $this->equipeRepository->tous();
         $roles = $this->roleRepository->tous();
-        // dd($utilisateur);
 
         return view('dashboard.admin.utilisateurs.edit', compact('utilisateur', 'equipes', 'roles'));
     }
 
+    // Création d'un nouvel utilisateur pour l'administrateur
     public function AdminCreeUtilisateur(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // dd($request->all());
+
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -134,7 +136,6 @@ class AdminController extends Controller
             'actif' => 'required|integer|in:0,1',
             'equipe_id' => 'nullable|integer|exists:equipes,id',
         ], [
-            // Messages d'erreur personnalisés
             'nom.required' => 'Le nom est requis',
             'prenom.required' => 'Le prénom est requis',
             'email.required' => 'L\'adresse email est requise',
@@ -149,21 +150,13 @@ class AdminController extends Controller
             'role_id.exists' => 'Le rôle sélectionné n\'existe pas',
         ]);
 
-
-
-        // dd($request->role);
-        // dd($data);
-
         try {
             $data['password'] = Hash::make($data['password']);
-
-
-
 
             if ($request->hasFile('photo')) {
                 $file = $request->file('photo');
                 $path = $file->store('photos', 'public');
-                // dd($path);
+
                 $data['photo'] = $path;
             } else {
                 unset($data['photo']);
@@ -188,13 +181,12 @@ class AdminController extends Controller
         }
     }
 
+    // Modification des informations d'un utilisateur pour l'administrateur
     public function AdminModifierUtilisateur(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -207,7 +199,6 @@ class AdminController extends Controller
             'actif' => 'required|integer|in:0,1',
             'equipe_id' => 'nullable|integer|exists:equipes,id',
         ], [
-            // Messages d'erreur personnalisés
             'nom.required' => 'Le nom est requis',
             'prenom.required' => 'Le prénom est requis',
             'email.required' => 'L\'adresse email est requise',
@@ -221,18 +212,12 @@ class AdminController extends Controller
             'role_id.exists' => 'Le rôle sélectionné n\'existe pas',
         ]);
 
-
-
-        // dd($request->role);
-        // dd($data);
-
-
         try {
 
             if ($request->hasFile('photo')) {
                 $file = $request->file('photo');
                 $path = $file->store('photos', 'public');
-                // dd($path);
+
                 $data['photo'] = $path;
             } else {
                 unset($data['photo']);
@@ -257,13 +242,13 @@ class AdminController extends Controller
         }
     }
 
+    // Suppression un utilisateur pour un admin
     public function AdminSupprimerUtilisateur(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // dd($request->id);
+
         $utilisateur = $this->utilisateurRepository->trouver($request->id);
         if (!$utilisateur) {
             return redirect()->route('dashboard.admin.utilisateurs')->withErrors(['general' => 'Utilisateur non trouvé.']);
@@ -279,10 +264,10 @@ class AdminController extends Controller
         }
     }
 
+    // Afficher le tableau de bord des équipes pour l'administrateur
     public function showAdminDashboardEquipes()
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
@@ -304,10 +289,7 @@ class AdminController extends Controller
             }
 
             $equipe->responsable = $responsableUser;
-
-            // dd($equipe->responsable->nom);
         }
-        // dd($equipes);
 
         return view('dashboard.admin.equipes.index', compact('equipes'));
     }
@@ -315,13 +297,11 @@ class AdminController extends Controller
     // Afficher une équipe
     public function showEquipe($id)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
         $equipe = $this->equipeRepository->trouver($id);
-        // dd($equipe->responsable);
         $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
 
 
@@ -344,27 +324,14 @@ class AdminController extends Controller
     // Formulaire de modification d'une équipe
     public function editEquipe($id)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
 
         $equipe = $this->equipeRepository->trouver($id);
         $agents = $this->agentRepository->tous();
         $equipes = $this->equipeRepository->tous();
-        // retirer l'agent de list des agents si et un responsable d'un n'amport q'uil equipe
-        // foreach($agents as $agent)
-        // {
-        //     foreach($equipes as $equipe)
-        //     {
-        //         if($agent->id == $equipe->responsable)
-        //         {
-        //            $agent = ''; 
-        //         }
-        //     }
-        // }
 
-        // dd($equipes);
         foreach ($agents as $agent) {
             $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
             if ($user) {
@@ -374,7 +341,6 @@ class AdminController extends Controller
             }
         }
 
-        // dd($agents[0]);
         $responsableAgent = $this->agentRepository->trouver($equipe->responsable);
 
 
@@ -385,9 +351,7 @@ class AdminController extends Controller
 
         $responsableUser = $this->utilisateurRepository->trouver($responsableAgent->utilisateur_id);
 
-
         $equipe->responsable = $responsableUser;
-        // dd($equipe->respnsable);
 
         if (!$equipe) {
             return redirect()->route('error.404')->with('error', "Équipe introuvable");
@@ -398,10 +362,10 @@ class AdminController extends Controller
     // Traitement de la modification
     public function updateEquipe(Request $request, $id)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
+
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -417,14 +381,13 @@ class AdminController extends Controller
             return redirect()->route('error.500')->with('error', "Équipe introuvable");
         }
 
-        // Gestion des agents
+
         $agentsSelectionnes = $request->agents ?? [];
 
         $usersActuels = $this->utilisateurRepository->tousEnEquipeId($id);
         foreach ($usersActuels as $user) {
             $doitEtreDansEquipe = false;
 
-            // Vérifier si cet utilisateur doit rester dans l'équipe
             foreach ($agentsSelectionnes as $agentId) {
                 $agent = $this->agentRepository->trouver($agentId);
                 if ($agent && $agent->utilisateur_id == $user->id) {
@@ -438,14 +401,12 @@ class AdminController extends Controller
             }
         }
 
-        // 2. Ensuite ajouter les nouveaux agents sélectionnés
         foreach ($agentsSelectionnes as $agentId) {
             $agent = $this->agentRepository->trouver($agentId);
             if (!$agent) {
-                continue; 
+                continue;
             }
 
-            // Vérifier si l'utilisateur associé à l'agent est déjà dans l'équipe
             $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
             if ($user && $user->equipe_id != $id) {
                 $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, ['equipe_id' => $id]);
@@ -460,11 +421,10 @@ class AdminController extends Controller
     // Formulaire d'ajout d'une équipe
     public function createEquipe()
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // Récupération de tous les agents pour le formulaire
+
         $agents = $this->agentRepository->tous();
         foreach ($agents as $agent) {
             $user = $this->utilisateurRepository->trouver($agent->utilisateur_id);
@@ -474,7 +434,7 @@ class AdminController extends Controller
                 $agent->utilisateur = null;
             }
         }
-        // dd($agents[0]);
+
         $equipes = $this->equipeRepository->tous();
         if (count($equipes) >= 20) {
             return redirect()->route('dashboard.admin.equipes')->withErrors(['general' => 'Vous avez atteint le nombre maximum d\'équipes autorisées.']);
@@ -498,11 +458,10 @@ class AdminController extends Controller
     // Enregistrement d'une nouvelle équipe
     public function storeEquipe(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // dd($request->all());
+
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -512,20 +471,19 @@ class AdminController extends Controller
             'telephone' => 'nullable|string',
             'specialite' => 'nullable|string',
         ]);
-        
+
 
         $equipe = $this->equipeRepository->creer($data);
-        // dd($equipe->id);
+
         $agentsSelectionnes = $request->agents ?? [];
 
         foreach ($agentsSelectionnes as $agentId) {
             $agent = $this->agentRepository->trouver($agentId);
             if (!$agent) {
-                continue; 
+                continue;
             }
 
             $this->utilisateurRepository->mettreAJour($agent->utilisateur_id, ['equipe_id' => $equipe->id]);
-            
         }
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe créée avec succès');
     }
@@ -533,11 +491,10 @@ class AdminController extends Controller
     // Suppression d'une équipe
     public function equipeSupprimer(Request $request)
     {
-         if(!Auth::check())
-        {
+        if (!Auth::check()) {
             return redirect()->route('login')->with(['error' => 'Vous devez être connecté pour accéder au tableau de bord.']);
         }
-        // dd($request->id);
+
         $equipe = $this->equipeRepository->trouver($request->id);
         if (!$equipe) {
             return redirect()->route('error.500')->with('error', "Équipe introuvable");
@@ -547,7 +504,7 @@ class AdminController extends Controller
         foreach ($usersInEquipe as $user) {
             $this->utilisateurRepository->mettreAJour($user->id, ['equipe_id' => null]);
         }
-        // dd($usersInEquipe);
+
         $this->equipeRepository->supprimer($request->id);
         return redirect()->route('dashboard.admin.equipes')->with('success', 'Équipe supprimée avec succès');
     }
