@@ -20,6 +20,7 @@ class Rapport extends Model
         'frequence_generation',
     ];
 
+    // Définition de la relation entre le modèle Rapport et Utilisateur
     public function createur()
     {
         return $this->belongsTo(Utilisateur::class, 'createur_id');
