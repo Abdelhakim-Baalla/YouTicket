@@ -15,11 +15,13 @@ class RolePermission extends Model
         'permission_id',
     ];
 
+    // Définition des relations entre le modèle RolePermission et le modèle Role
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    // Définition des relations entre le modèle RolePermission et le modèle Permission
     public function permission()
     {
         return $this->belongsTo(Permission::class);
