@@ -15,6 +15,7 @@ class Admin extends Model
         'permissions_speciales',
     ];
 
+    // Définition de la relation avec le modèle Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class);
