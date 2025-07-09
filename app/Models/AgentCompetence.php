@@ -16,11 +16,13 @@ class AgentCompetence extends Model
         'niveau',
     ];
 
+    // Définition relation entre model AgentCompetence et Agent
     public function agent()
     {
         return $this->belongsTo(Agent::class);
     }
 
+    // Définition relation entre model AgentCompetence et Competence
     public function competence()
     {
         return $this->belongsTo(Competence::class);
