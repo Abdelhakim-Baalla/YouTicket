@@ -21,11 +21,13 @@ class TemplateTicket extends Model
         'actif',
     ];
 
+    // Définition des relations entre le modèle TemplateTicket et TypeTicket
     public function typeTicket()
     {
         return $this->belongsTo(TypeTicket::class);
     }
 
+    // Définition des relations entre le modèle TemplateTicket et Utilisateur
     public function createur()
     {
         return $this->belongsTo(Utilisateur::class, 'createur_id');
