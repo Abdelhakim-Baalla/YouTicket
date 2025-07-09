@@ -57,78 +57,70 @@ class UtilisateurController extends Controller
         $this->notificationRepository = $notificationRepository;
     }
 
+    // Affiche le tableau de bord de l'utilisateur pour Utilisateur
     public function showUtilisateurDashboard()
     {
         $countTicketActif = $this->ticketRepository->tous()->count();
-        // dd($countTicketActif);
         return view('dashboard.utilisateur.index');
     }
 
 
+    // Affiche les tickets de l'utilisateur
     public function showUtilisateurTickets()
     {
-        // dd(Auth::user()->id);
         $tickets = $this->ticketRepository->trouverParDemandeurId(Auth::user()->id);
         foreach ($tickets as $ticket) {
             $assigne_a_agent = $this->agentRepository->trouver($ticket->assigne_a_id);
-            // dd($assigne_a_agent->utilisateur_id);
+
             if (!$assigne_a_agent) {
                 continue;
             }
+
             $utilisateur_a_assigne = $this->utilisateurRepository->trouver($assigne_a_agent->utilisateur_id);
-            // dd($utilisateur_a_assigne);
             $ticket->assigne_a = $utilisateur_a_assigne;
         }
-        // dd($tickets);
+
         return view('dashboard.utilisateur.tickets.index', compact('tickets'));
     }
 
+    // Affiche un ticket spécifique de l'utilisateur
     public function showTicket(Request $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Please log in to Show a ticket.');
         }
-        // dd($request->id);
-        // tickets
+
         $ticket = $this->ticketRepository->trouver($request->id);
         if (!$ticket) {
             return redirect()->route('dashboard.utilisateur.tickets')
                 ->with('error', 'Ticket non trouver');
         }
 
-
         $ticketCreePar = $this->utilisateurRepository->trouver($ticket->demandeur_id);
         $ticketAssigne_A = $this->agentRepository->trouver($ticket->assigne_a_id);
-        // dd($ticketAssigne_A);
+
         if ($ticketAssigne_A) {
             $ticketAssigne_A = $this->utilisateurRepository->trouver($ticketAssigne_A->utilisateur_id);
         }
 
-        // dd($ticketCreePar->id);
         $roleUserAuth = $this->roleRepository->trouver(Auth::user()->role_id);
         $roleUserAuth = $roleUserAuth->nom;
-        // dd($roleUserAuth);
+
         if ($ticketCreePar->id != Auth::user()->id && $ticketAssigne_A->id != Auth::user()->id && $roleUserAuth != "admin") {
-            // dd(Auth::user()->role_id);
             return redirect('/403');
         }
 
         $ticket->cree_par = $ticketCreePar;
         $ticket->assigne_a = $ticketAssigne_A;
-        // dd($ticket);
 
-
-
-        // commentaires
         $commentaires = $this->commentaireRepository->trouverParTicketId($request->id);
-        // dd($commentaires);
 
         return view('dashboard.utilisateur.tickets.show', compact('ticket', 'commentaires'));
     }
 
+    // Sauvegarde un commentaire sur un ticket
     public function showTicketCommentStore(Request $request)
     {
-        // dd($request->comment);
         if (!Auth::user()->id) {
             return redirect()->route('login')->with('error', 'Please log in to Comment in a ticket.');
         }
@@ -147,14 +139,13 @@ class UtilisateurController extends Controller
 
 
         $ticket = $this->ticketRepository->trouver($commentaire->ticket_id);
-        // dd($commentaire->contenu);
 
         if ($ticket && $ticket->demandeur_id != $commentaire->utilisateur_id) {
             $data = [
                 "utilisateur_id" => $ticket->demandeur_id,
                 "ticket_id" => $ticket->id,
                 "type" => 'commentaire',
-                "titre" => $commentaire->utilisateur->prenom . $commentaire->utilisateur->nom . 'A commenter sur votre ticket',
+                "titre" => $commentaire->utilisateur->prenom . ' ' . $commentaire->utilisateur->nom . ' A commenter sur votre ticket',
                 "message" => $commentaire->contenu,
                 "date_envoi" => now(),
             ];
@@ -177,11 +168,10 @@ class UtilisateurController extends Controller
             $this->notificationRepository->creer($data);
         }
 
-
-
         return redirect()->to(route('dashboard.utilisateur.ticket.show', $request->id) . '#comments-section');
     }
 
+    // Affiche le modal de création de ticket pour l'utilisateur
     public function showUtilisateurTicketsCreateModal()
     {
         $projets = $this->projetRepository->tous()->where('statut', '!=', 'annule')->where('statut', '!=', 'termine');
@@ -191,11 +181,12 @@ class UtilisateurController extends Controller
         $etats = $this->etatRepository->tous();
         $experts = $this->agentRepository->tous()->where('disponible', 1);
         $slas = $this->slaRepository->tous();
-        // dd($projets);
+
         return view('dashboard.utilisateur.tickets.create', compact('projets', 'typeTickets', 'priorites', 'frequences', 'etats', 'experts', 'slas'));
     }
 
 
+    // Enregistre un nouveau ticket pour l'utilisateur
     public function utilisateurStoreCreateTickets(Request $request)
     {
         $validated = $request->validate([
@@ -208,10 +199,9 @@ class UtilisateurController extends Controller
             'frequence' => 'nullable|integer|exists:frequences,id',
             'assigne_a_id' => 'nullable|integer|exists:agents,id',
             'sla' => 'nullable|integer|exists:slas,id',
-            'pieces_jointes.*' => 'nullable|file|max:5120', // 5MB max
+            'pieces_jointes.*' => 'nullable|file|max:5120',
         ]);
 
-        // Validation manuelle des types MIME
         if ($request->hasFile('pieces_jointes')) {
             $allowedMimeTypes = [
                 // Images
@@ -245,16 +235,12 @@ class UtilisateurController extends Controller
 
             foreach ($request->file('pieces_jointes') as $file) {
                 if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Type de fichier non autorisé: ' . $file->getClientOriginalName());
+                    return redirect()->back()->withInput()->with('error', 'Type de fichier non autorisé: ' . $file->getClientOriginalName());
                 }
             }
         }
 
         try {
-            // $lastTicket = $this->ticketRepository->tous()->count();
-            // $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
 
             $data = [
                 'titre' => $validated['titre'],
@@ -270,14 +256,12 @@ class UtilisateurController extends Controller
             ];
 
             $ticket = $this->ticketRepository->creer($data);
-            // dd($ticket->titre);
             $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($ticket->id, 6, '0', STR_PAD_LEFT);
             $data = [
                 'numero' => $ticketNumber,
             ];
 
             $this->ticketRepository->mettreAJour($ticket->id, $data);
-            // dd($data);
 
             if ($ticket && $request->hasFile('pieces_jointes')) {
                 foreach ($request->file('pieces_jointes') as $file) {
@@ -297,8 +281,7 @@ class UtilisateurController extends Controller
             $user = Auth::user();
             $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
             $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
-            // dd($agent);
-            // Générer un lien signé valable 24h
+
             $ticketUrl = URL::temporarySignedRoute(
                 'dashboard.utilisateur.ticket.show',
                 now()->addHours(24),
@@ -309,8 +292,6 @@ class UtilisateurController extends Controller
             Mail::to($agent->email)->send(new assignationTicket($agent, $ticket, $ticketUrl));
 
             $ticket = $this->ticketRepository->trouver($ticket->id);
-
-            // dd($agent);
 
             if ($ticket) {
                 $data = [
@@ -325,31 +306,24 @@ class UtilisateurController extends Controller
                 $this->notificationRepository->creer($data);
             }
 
-            return redirect()->route('dashboard.utilisateur.ticket.show', $ticket->id)
-                ->with('success', 'Ticket créé avec succès!');
+            return redirect()->route('dashboard.utilisateur.ticket.show', $ticket->id)->with('success', 'Ticket créé avec succès!');
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Une erreur est survenue: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
     }
 
 
+    // Affiche le modal d'édition d'un ticket pour l'utilisateur
     public function showUtilisateurTicketsEditModal(Request $request)
     {
-        // dd($request->id);    
-
         $ticket = $this->ticketRepository->trouver($request->id);
-        // dd(Auth::user()->role->nom);
 
         if (!$ticket) {
-            return redirect()->route('dashboard.utilisateur.tickets')
-                ->with('error', 'Cette Tickets N\'exist pas!');
+            return redirect()->route('dashboard.utilisateur.tickets')->with('error', 'Cette Tickets N\'exist pas!');
         }
 
         if ($ticket->demandeur_id != Auth::user()->id && Auth::user()->role->nom != "admin") {
-            return redirect()->route('dashboard.utilisateur.tickets')
-                ->with('error', 'Vous N\'avez pas l\'accèes a cette Tickets');
+            return redirect()->route('dashboard.utilisateur.tickets')->with('error', 'Vous N\'avez pas l\'accèes a cette Tickets');
         }
 
         $projets = $this->projetRepository->tous()->where('statut', '!=', 'annule')->where('statut', '!=', 'termine');
@@ -364,20 +338,19 @@ class UtilisateurController extends Controller
     }
 
 
+    // Supprime une pièce jointe d'un ticket pour l'utilisateur
     public function utilisateurTicketsSupprimmerPieceJointe(Request $request)
     {
-        // dd($request->pieceJointe);
         $piceJointe = $this->pienceJointeRepository->supprimer($request->pieceJointe);
 
         if (!$piceJointe) {
+
             $nbPiceJointe = $this->pienceJointeRepository->tous()->where('ticket_id', $request->ticket)->count();
 
             if ($nbPiceJointe > 0) {
-                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#pieceJointeActuelle')
-                    ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#pieceJointeActuelle')->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
             } else {
-                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe')
-                    ->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
+                return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe')->with('error', 'Echec de supprimmer cette fichier, Essayer plus tard ou bien contactez nous');
             }
         }
 
@@ -388,14 +361,11 @@ class UtilisateurController extends Controller
         } else {
             return redirect()->to(route('dashboard.utilisateur.tickets.edit', $request->ticket) . '#nouvellePieceJointe');
         }
-
-        // dd($nbPiceJointe);
     }
 
+    // Enregistre les modifications d'un ticket pour l'utilisateur
     public function utilisateurStoreEditTickets(Request $request)
     {
-        // dd($request->all());
-
         $validated = $request->validate([
             'projet' => 'nullable|integer|exists:projets,id',
             'type' => 'required|integer|exists:type_tickets,id',
@@ -406,10 +376,9 @@ class UtilisateurController extends Controller
             'frequence' => 'nullable|integer|exists:frequences,id',
             'assigne_a_id' => 'nullable|integer|exists:agents,id',
             'sla' => 'nullable|integer|exists:slas,id',
-            'pieces_jointes.*' => 'nullable|file|max:5120', // 5MB max
+            'pieces_jointes.*' => 'nullable|file|max:5120',
         ]);
 
-        // Validation manuelle des types MIME
         if ($request->hasFile('pieces_jointes')) {
             $allowedMimeTypes = [
                 // Images
@@ -443,18 +412,12 @@ class UtilisateurController extends Controller
 
             foreach ($request->file('pieces_jointes') as $file) {
                 if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->with('error', 'Type de fichier non autorisé: ' . $file->getClientOriginalName());
+                    return redirect()->back()->withInput()->with('error', 'Type de fichier non autorisé: ' . $file->getClientOriginalName());
                 }
             }
         }
 
-
-
         try {
-            // $lastTicket = $this->ticketRepository->tous()->count();
-            // $ticketNumber = 'TICK-' . now()->format('Y') . '-' . str_pad($lastTicket + 1, 5, '0', STR_PAD_LEFT);
 
             $data = [
                 'titre' => $validated['titre'],
@@ -470,7 +433,6 @@ class UtilisateurController extends Controller
             ];
 
             $ticket = $this->ticketRepository->mettreAJour($request->id, $data);
-            // dd($data);
 
             if ($ticket && $request->hasFile('pieces_jointes')) {
                 foreach ($request->file('pieces_jointes') as $file) {
@@ -492,22 +454,15 @@ class UtilisateurController extends Controller
             $agent = $this->agentRepository->trouver($ticket->assigne_a_id);
             $agent = $this->utilisateurRepository->trouver($agent->utilisateur_id);
             $modifiedBy = $user;
-            // dd($ticket);
-            // Générer un lien signé valable 24h
+
             $ticketUrl = URL::temporarySignedRoute(
                 'dashboard.utilisateur.ticket.show',
                 now()->addHours(24),
                 ['id' => $ticket->id]
             );
 
-            // dd($ticket);
-
             Mail::to($user->email)->send(new editTicketUtilisateur($user, $ticket, $ticketUrl));
             Mail::to($agent->email)->send(new editTicketAgent($agent, $modifiedBy, $ticket, $ticketUrl));
-
-            // $ticket = $this->ticketRepository->trouver($ticket->id);
-
-            // dd($agent);
 
             if ($ticket) {
                 $data = [
@@ -522,35 +477,27 @@ class UtilisateurController extends Controller
                 $this->notificationRepository->creer($data);
             }
 
-            return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)
-                ->with('success', 'Ticket Modifier avec succès!');
+            return redirect()->route('dashboard.utilisateur.ticket.show', $request->id)->with('success', 'Ticket Modifier avec succès!');
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Une erreur est survenue: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Une erreur est survenue: ' . $e->getMessage());
         }
     }
 
+    // Redirige l'utilisateur vers la page appropriée en fonction de la notification
     public function utilisateurNotificationsRedirect(Request $request)
     {
-        // dd($request->notification);
-
         $notification = $this->notificationRepository->trouver($request->notification);
 
         if (!$notification) {
-            return redirect()->route('dashboard.utilisateur.tickets')
-                ->with('error', 'Une Probleme et survenu');
+            return redirect()->route('dashboard.utilisateur.tickets')->with('error', 'Une Probleme et survenu');
         }
 
         $notification->lu = 1;
         $notification->save();
 
-
-
         if ($notification->type == 'commentaire') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id) . '#comments-body');
         }
-
 
         if ($notification->type == 'mettre a jour') {
             return redirect()->to(route('dashboard.utilisateur.ticket.show', $notification->ticket_id));
@@ -565,31 +512,21 @@ class UtilisateurController extends Controller
         }
 
         return redirect()->back();
-
-        // dd($notification);
-
     }
 
+    // Mettez toutes les notifications de l'utilisateur comme lues
     public function utilisateurNotificationsMetterToutCommeLu(Request $request)
     {
-        // dd($request->id);
-
         $notifications = $this->notificationRepository->trouverNotificationsParUtilisateurId($request->id);
         if (!$notifications) {
-            return redirect()->back()
-                ->with('error', 'Aucun Notification pour mettre comme lu');
+            return redirect()->back()->with('error', 'Aucun Notification pour mettre comme lu');
         }
-
 
         foreach ($notifications as $notification) {
             $notification->lu = 1;
             $notification->save();
-            // dd($notification->lu);
         }
 
-        return redirect()->back()
-            ->with('success', 'Tout les notification ont mettre comme lu');
-
-        // dd($notifications[0]->lu);
+        return redirect()->back()->with('success', 'Tout les notification ont mettre comme lu');
     }
 }
