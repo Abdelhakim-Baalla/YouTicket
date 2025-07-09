@@ -21,21 +21,25 @@ class UserActionHistory extends Model
         'user_agent'
     ];
 
+    // Définition des casts pour les attributs JSON
     protected $casts = [
         'old_values' => 'array',
         'new_values' => 'array',
     ];
 
+    // Définition de la relation entre le modèle UserActionHistory et Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id');
     }
 
+    // Définition de la relation entre le modèle UserActionHistory et le modèle polymorphe
     public function model()
     {
         return $this->morphTo();
     }
 
+    // Définition de la relation entre le modèle UserActionHistory et Utilisateur
     public function user()
     {
         return $this->belongsTo(Utilisateur::class, 'user_id');
