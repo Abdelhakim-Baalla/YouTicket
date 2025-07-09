@@ -19,11 +19,13 @@ class RegleEscalade extends Model
         'actif',
     ];
 
+    // Définition des relations entre le modèle RegleEscalade et priorite
     public function priorite()
     {
         return $this->belongsTo(Priorite::class);
     }
 
+    // Définition de la relation entre le modèle RegleEscalade et Utilisateur
     public function utilisateurEscalade()
     {
         return $this->belongsTo(Utilisateur::class, 'utilisateur_escalade_id');
