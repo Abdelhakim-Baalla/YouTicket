@@ -15,11 +15,13 @@ class TicketTag extends Model
         'tag_id',
     ];
 
+    // Définition de relation entre le modèle TicketTag et Ticket
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
     }
 
+    // Définition de relation entre le modèle TicketTag et Tag
     public function tag()
     {
         return $this->belongsTo(Tag::class);

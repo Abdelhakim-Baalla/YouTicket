@@ -20,6 +20,7 @@ class ChampPersonnalise extends Model
         'type_ticket_id',
     ];
 
+    // Définition de la relation entre le modèle ChampPersonnalise et TypeTicket
     public function typeTicket()
     {
         return $this->belongsTo(TypeTicket::class);

@@ -17,11 +17,13 @@ class TypeTicket extends Model
         'actif',
     ];
 
+    // Définition de la relation entre le modèle TypeTicket et workflows
     public function workflows()
     {
         return $this->hasMany(Workflow::class);
     }
 
+    // Définition de la relation entre le modèle TypeTicket et ChampPersonnalise
     public function champPersonnalises()
     {
         return $this->hasMany(ChampPersonnalise::class);

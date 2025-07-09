@@ -21,16 +21,19 @@ class BaseConnaissance extends Model
         'note_moyenne',
     ];
 
+    // Définition de la relation entre le modèle BaseConnaissance et l'Utilisateur
     public function auteur()
     {
         return $this->belongsTo(Utilisateur::class, 'auteur_id');
     }
 
+    // Définition de la relation entre le modèle BaseConnaissance et la CategorieKb
     public function categorie()
     {
         return $this->belongsTo(CategorieKb::class, 'categorie_kb_id');
     }
 
+    // Définition de la relation entre le modèle BaseConnaissance et les EvaluationsKb
     public function evaluations()
     {
         return $this->hasMany(EvaluationKb::class);

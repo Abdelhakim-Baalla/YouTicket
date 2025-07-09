@@ -19,11 +19,13 @@ class HistoriqueTicket extends Model
         'commentaire',
     ];
 
+    // Définition de la relation entre le modèle HistoriqueTicket et Ticket
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
     }
 
+    // Définition de la relation entre le modèle HistoriqueTicket et Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class);

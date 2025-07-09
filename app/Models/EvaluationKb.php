@@ -17,11 +17,13 @@ class EvaluationKb extends Model
         'commentaire',
     ];
 
+    // Définition de la relation entre le modèle EvaluationKb et BaseConnaissance
     public function baseConnaissance()
     {
         return $this->belongsTo(BaseConnaissance::class);
     }
 
+    // Définition de la relation entre le modèle EvaluationKb et Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class);

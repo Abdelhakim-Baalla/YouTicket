@@ -19,16 +19,19 @@ class Transition extends Model
         'action',
     ];
 
+    // Définition de relation entre le modèle Transition et Workflow
     public function workflow()
     {
         return $this->belongsTo(Workflow::class);
     }
 
+    // Définition de relation entre le modèle Transition et Etat (source et destination)
     public function etatSource()
     {
         return $this->belongsTo(Etat::class, 'etat_source_id');
     }
 
+    // Définition de relation entre le modèle Transition et Etat (destination)
     public function etatDestination()
     {
         return $this->belongsTo(Etat::class, 'etat_destination_id');

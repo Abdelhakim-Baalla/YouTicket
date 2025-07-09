@@ -20,11 +20,13 @@ class Equipe extends Model
         'specialite',
     ];
 
+    // Définition de la relation entre le modèle Equipe et les Utilisateurs
     public function utilisateurs()
     {
         return $this->hasMany(Utilisateur::class);
     }
 
+    // Définition de la relation entre le modèle Equipe et les Projets
     public function agents()
     {
         return $this->belongsToMany(Agent::class, 'agent_equipe');

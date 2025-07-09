@@ -5,7 +5,6 @@ document
         document.getElementById("mobile-menu").classList.toggle("show");
     });
 
-// Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
         e.preventDefault();
@@ -19,18 +18,16 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
 });
 
-// Flash messages handling
+// Flash messages
 document.addEventListener("DOMContentLoaded", function () {
     const flashMessages = document.querySelectorAll(".flash-message");
 
     flashMessages.forEach((message) => {
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             message.classList.add("slide-out");
             setTimeout(() => message.remove(), 300);
         }, 5000);
 
-        // Close button functionality
         const closeBtn = message.querySelector(".close-flash");
         if (closeBtn) {
             closeBtn.addEventListener("click", () => {

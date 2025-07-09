@@ -15,6 +15,7 @@ class Tag extends Model
         'couleur',
     ];
 
+    // Définition de la relation entre le modèle Tag et Ticket
     public function tickets()
     {
         return $this->belongsToMany(Ticket::class, 'ticket_tag');
