@@ -16,6 +16,7 @@ class Competence extends Model
         'niveau',
     ];
 
+    // Définition de la relation entre le modèle Competence et les Agents
     public function agents()
     {
         return $this->belongsToMany(Agent::class, 'agent_competence')
