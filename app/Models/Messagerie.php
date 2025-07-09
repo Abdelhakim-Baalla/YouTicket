@@ -19,11 +19,13 @@ class Messagerie extends Model
         'date_lecture',
     ];
 
+    // Définition de la relation entre le modèle Messagerie et Expediteur
     public function expediteur()
     {
         return $this->belongsTo(Utilisateur::class, 'expediteur_id');
     }
 
+    // Définition de la relation entre le modèle Messagerie et Destinataire
     public function destinataire()
     {
         return $this->belongsTo(Utilisateur::class, 'destinataire_id');
