@@ -19,6 +19,7 @@ class Projet extends Model
         'statut',
     ];
 
+    // Définition de la relation entre le modèle Projet et Utilisateur
     public function responsable()
     {
         return $this->belongsTo(Utilisateur::class, 'responsable_id');
