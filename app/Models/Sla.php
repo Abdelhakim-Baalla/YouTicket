@@ -20,11 +20,13 @@ class Sla extends Model
         'actif',
     ];
 
+    // Définition de la relation entre le modèle Sla et Priorite
     public function priorite()
     {
         return $this->belongsTo(Priorite::class);
     }
 
+    // Définition de la relation entre le modèle Sla et HoraireTravail
     public function horaireTravail()
     {
         return $this->belongsTo(HoraireTravail::class);
