@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Notifications via Echo
 if (typeof Echo !== "undefined") {
     Echo.private(`agent.${window.authUser.id}`).listen(
         "TicketAssigned",
@@ -119,6 +120,7 @@ if (typeof Echo !== "undefined") {
     );
 }
 
+// Toast notification function
 function showToastNotification(title, message, url = "#") {
     const toast = document.createElement("div");
     toast.className = "toast-notification";
@@ -152,6 +154,7 @@ function showToastNotification(title, message, url = "#") {
     }, 5000);
 }
 
+// Helper function pour getting status label
 function getStatusLabel(status) {
     const labels = {
         new: "Nouveau",

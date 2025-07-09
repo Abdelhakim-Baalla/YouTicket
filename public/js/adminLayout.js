@@ -42,6 +42,7 @@ document.addEventListener("click", function (e) {
     }
 });
 
+// Fermer les dropdowns au scroll
 window.addEventListener("scroll", () => {
     topbarDropdown.classList.remove("show");
     notificationDropdown.classList.remove("show");

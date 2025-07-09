@@ -1,4 +1,3 @@
-
 // Fonction pour formater la taille des fichiers
 function formatFileSize(bytes) {
     if (bytes === 0) return "0 Bytes";
@@ -11,6 +10,7 @@ function formatFileSize(bytes) {
 // Modification du message de soumission pour l'édition
 document.getElementById("ticketForm").addEventListener("submit", function (e) {
     const submitBtn = document.getElementById("submitBtn");
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement en cours...';
+    submitBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> Enregistrement en cours...';
     submitBtn.disabled = true;
 });

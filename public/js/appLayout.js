@@ -18,6 +18,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
 });
 
+// Flash messages
 document.addEventListener("DOMContentLoaded", function () {
     const flashMessages = document.querySelectorAll(".flash-message");
 
