@@ -20,11 +20,13 @@ class PieceJointe extends Model
         'taille',
     ];
 
+    // Définition de la relation entre le modèle PieceJointe et Ticket
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
     }
 
+    // Définition de la relation entre le modèle PieceJointe et Utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class);
