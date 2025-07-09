@@ -66,7 +66,6 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // dd($request->all());
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -77,7 +76,6 @@ class AuthController extends Controller
             'terms' => 'required|accepted',
             'role' => 'required|string',
         ], [
-            // Messages d'erreur personnalisés
             'nom.required' => 'Le nom est requis',
             'prenom.required' => 'Le prénom est requis',
             'email.required' => 'L\'adresse email est requise',
@@ -92,53 +90,42 @@ class AuthController extends Controller
             'role.required' => 'Le role est requis',
         ]);
 
-        // dd($data['role']);
-
-        if($data['role'] == 'admin')
-        {
-           return back()->withErrors([
+        if ($data['role'] == 'admin') {
+            return back()->withErrors([
                 'role' => 'Une erreur technique est survenue. Veuillez réessayer plus tard.',
             ])->withInput();
         }
 
         $role_id = $this->roleRepository->trouverParNom($data['role']);
 
-        if(!$role_id)
-        {
-           return back()->withErrors([
+        if (!$role_id) {
+            return back()->withErrors([
                 'role' => 'Le role et requit.',
-            ])->withInput(); 
+            ])->withInput();
         }
 
         $data['role_id'] = $role_id->id;
 
+        $data['password'] = Hash::make($data['password']);
 
-        // dd($data);
+        unset($data['terms']);
 
+        $user = Utilisateur::create($data);
+        if ($user) {
+            Auth::login($user);
+            $request->session()->regenerate();
 
-        
-            $data['password'] = Hash::make($data['password']);
+            return redirect()->route('profile')->with('success', 'Compte créé avec succès !');
+        }
 
-            // Retirer le champ 'terms' avant de créer l'utilisateur
-            unset($data['terms']);
+        // if (Auth::attempt($user)) {
+        //     $request->session()->regenerate();
+        //     return redirect()->route('profile');
+        // }
 
-            $user = Utilisateur::create($data);
-            // dd($user);
-            if ($user) {
-                Auth::login($user);
-                $request->session()->regenerate();
-
-                return redirect()->route('profile')->with('success', 'Compte créé avec succès !');
-            }
-            
-            // if (Auth::attempt($user)) {
-            //     $request->session()->regenerate();
-            //     return redirect()->route('profile');
-            // }
-
-            return back()->withErrors([
-                'general' => 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.',
-            ])->withInput();
+        return back()->withErrors([
+            'general' => 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.',
+        ])->withInput();
     }
 
     public function logout()
@@ -185,9 +172,6 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    /**
-     * Envoie un email de validation de compte avec un lien sécurisé
-     */
     public function sendValidationEmail(Request $request)
     {
         $user = Auth::user();
@@ -201,9 +185,6 @@ class AuthController extends Controller
         return back()->with('success', 'Un email de validation a été envoyé à votre adresse.');
     }
 
-    /**
-     * Valide le compte utilisateur via le lien reçu par email
-     */
     public function validateAccount(Request $request)
     {
         if (!$request->hasValidSignature()) {
@@ -216,29 +197,24 @@ class AuthController extends Controller
         return redirect()->route('profile')->with('success', 'Votre compte a été validé avec succès !');
     }
 
-    /**
-     * Envoie un code de validation par SMS
-     */
     public function sendValidationSms(Request $request)
     {
         $user = Auth::user();
         $code = random_int(100000, 999999);
-        // Stocker le code temporairement (10 min)
+
         Cache::put('sms_code_' . $user->id, $code, now()->addMinutes(10));
         $user->notify(new ValidationSms($code));
         return back()->with('success', 'Un code de validation a été envoyé par SMS.');
     }
 
-    /**
-     * Vérifie le code SMS et active le compte
-     */
+
     public function validateSmsCode(Request $request)
     {
         $request->validate(['code' => 'required|digits:6']);
         $user = Auth::user();
         $code = Cache::get('sms_code_' . $user->id);
         if ($code && $request->code == $code) {
-            // Re-fetch the user as an Eloquent model to ensure save() is available
+
             $eloquentUser = \App\Models\Utilisateur::find($user->id);
             if ($eloquentUser) {
                 $eloquentUser->actif = 1;
@@ -253,17 +229,13 @@ class AuthController extends Controller
         return back()->withErrors(['code' => 'Code invalide ou expiré.']);
     }
 
-    /**
-     * Affiche le formulaire de demande de réinitialisation
-     */
+
     public function showForgetPasswordForm()
     {
         return view('auth.forget_password');
     }
 
-    /**
-     * Envoie le lien de réinitialisation par email
-     */
+
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -275,18 +247,14 @@ class AuthController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
-    /**
-     * Affiche le formulaire de nouveau mot de passe
-     */
+
     public function showResetForm(Request $request, $token)
     {
         $email = $request->query('email');
         return view('auth.reset_password', ['token' => $token, 'email' => $email]);
     }
 
-    /**
-     * Traite la soumission du nouveau mot de passe
-     */
+
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -316,13 +284,10 @@ class AuthController extends Controller
             'new_password' => 'required|string',
         ]);
 
-        // dd($data);
-
-        // Vérifier le mot de passe actuel
         if (!Hash::check($data['current_password'], $user->password)) {
             return back()->with('error', 'Le mot de passe actuel est incorrect.');
         }
-        // Mettre à jour le mot de passe
+
         $data = [
             'password' => Hash::make($data['new_password']),
         ];
@@ -331,22 +296,18 @@ class AuthController extends Controller
         return back()->with('success', 'Mot de passe mis à jour avec succès.');
     }
 
-    /**
-     * Affiche le formulaire d'édition du profil utilisateur
-     */
+
     public function editProfile()
     {
         $user = Auth::user();
         return view('profile.edit', compact('user'));
     }
 
-    /**
-     * Met à jour les informations personnelles de l'utilisateur
-     */
+
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        // dd($request->file('photo'));
+
         $data = $request->validate([
             'prenom' => 'required|string|max:255',
             'nom' => 'required|string|max:255',
@@ -356,15 +317,14 @@ class AuthController extends Controller
             'departement' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        // dd($data);
 
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $path = $file->store('photos', 'public');
-            // dd($path);
+
             $data['photo'] = $path;
         } else {
-            unset($data['photo']); // Ne pas inclure la clé si pas d'upload
+            unset($data['photo']);
         }
         $this->utilisateurRepository->mettreAJour($user->id, $data);
         return back()->with('success', 'Profil mis à jour avec succès.');
