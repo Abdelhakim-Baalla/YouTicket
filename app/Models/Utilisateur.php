@@ -30,46 +30,55 @@ class Utilisateur extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    // Définition de la relation entre le modèle Utilisateur et Role
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Equipe
     public function equipe()
     {
         return $this->belongsTo(Equipe::class);
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Ticket
     public function ticketsDemandes()
     {
         return $this->hasMany(Ticket::class, 'demandeur_id');
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Ticket (assigné à)
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'assigne_a_id');
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Ticket (assigné par)
     public function ticketsAssignes()
     {
         return $this->hasMany(Ticket::class, 'assigne_a_id');
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Commentaire
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class);
     }
 
+    // Définition de la relation entre le modèle Utilisateur et propriétaires
     public function proprietaires()
     {
         return $this->hasMany(Proprietaire::class);
     }
 
+    // Définition de la relation entre le modèle Utilisateur et Notification
     public function notifications()
     {
         return $this->hasMany(Notification::class, 'utilisateur_id');
     }
 
+    //  Définition JwtIdentifier et JWTCustomClaims pour l'authentification JWT
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -80,9 +89,7 @@ class Utilisateur extends Authenticatable implements JWTSubject
         return [];
     }
 
-    /**
-     * Permet à Laravel Notification Channels d'envoyer un SMS via Twilio
-     */
+    // Permet à Laravel Notification Channels d'envoyer un SMS via Twilio
     public function routeNotificationForTwilio()
     {
         return $this->telephone;
