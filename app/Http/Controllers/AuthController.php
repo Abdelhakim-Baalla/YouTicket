@@ -28,6 +28,7 @@ class AuthController extends Controller
         $this->roleRepository = $roleRepository;
     }
 
+    // Authentification de l'utilisateur
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -64,6 +65,7 @@ class AuthController extends Controller
         // ]);
     }
 
+    // Inscription d'un nouvel utilisateur
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -128,12 +130,14 @@ class AuthController extends Controller
         ])->withInput();
     }
 
+    // Déconnexion de l'utilisateur
     public function logout()
     {
         Auth::logout();
         return redirect()->route('login');
     }
 
+    // Afficher la page de profil
     public function profile()
     {
         // dd(Auth::user()->actif);
@@ -144,6 +148,7 @@ class AuthController extends Controller
         return redirect()->route('login')->with('error', 'Please log in to access to your profile.');
     }
 
+    // Afficher la page de validation du compte
     public function validationCompte()
     {
         if (Auth::check()) {
@@ -154,6 +159,7 @@ class AuthController extends Controller
     }
 
 
+    // Afficher le formulaire de connexion
     public function showLoginForm()
     {
         if (Auth::check()) {
@@ -163,6 +169,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    // Afficher le formulaire d'inscription
     public function showRegistrationForm()
     {
         if (Auth::check()) {
@@ -172,6 +179,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    // Envoyer l'email de validation
     public function sendValidationEmail(Request $request)
     {
         $user = Auth::user();
@@ -185,6 +193,7 @@ class AuthController extends Controller
         return back()->with('success', 'Un email de validation a été envoyé à votre adresse.');
     }
 
+    // Valider le compte utilisateur via le lien signé
     public function validateAccount(Request $request)
     {
         if (!$request->hasValidSignature()) {
@@ -197,6 +206,7 @@ class AuthController extends Controller
         return redirect()->route('profile')->with('success', 'Votre compte a été validé avec succès !');
     }
 
+    // Envoyer le code de validation par SMS
     public function sendValidationSms(Request $request)
     {
         $user = Auth::user();
@@ -208,6 +218,7 @@ class AuthController extends Controller
     }
 
 
+    // Valider le code SMS
     public function validateSmsCode(Request $request)
     {
         $request->validate(['code' => 'required|digits:6']);
@@ -230,12 +241,14 @@ class AuthController extends Controller
     }
 
 
+    // Afficher le formulaire de réinitialisation du mot de passe
     public function showForgetPasswordForm()
     {
         return view('auth.forget_password');
     }
 
 
+    // Envoyer le lien de réinitialisation du mot de passe
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -247,14 +260,14 @@ class AuthController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
-
+    // Afficher le formulaire de réinitialisation du mot de passe
     public function showResetForm(Request $request, $token)
     {
         $email = $request->query('email');
         return view('auth.reset_password', ['token' => $token, 'email' => $email]);
     }
 
-
+    // Réinitialiser le mot de passe
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -275,6 +288,7 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
+    // Afficher le formulaire de changement de mot de passe
     public function updateProfileChangePassword(Request $request)
     {
         $user = Auth::user();
@@ -297,13 +311,14 @@ class AuthController extends Controller
     }
 
 
+    // Afficher le formulaire d'édition du profil
     public function editProfile()
     {
         $user = Auth::user();
         return view('profile.edit', compact('user'));
     }
 
-
+    // Mettre a jour les informations du profile
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
