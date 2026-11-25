@@ -1,5 +1,7 @@
 # ![YouTicket Logo](/public/images/YouTicketLogo.jpg)
 
+[Modèle des tickets et des utilisateurs](https://github.com/Abdelhakim-Baalla/YouTicket/blob/main/Docs/YouTicket-Diagramme-Des-Classes.jpg)
+
 ## 🚀 YouTicket - Révolutionnez Votre Support Client
 
 Bienvenue sur **YouTicket**, la plateforme de gestion de tickets pensée pour les entreprises modernes. Simplifiez la gestion de votre support client, boostez la satisfaction de vos utilisateurs et gagnez en efficacité grâce à une solution innovante, intuitive et puissante.
