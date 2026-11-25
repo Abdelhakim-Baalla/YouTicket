@@ -1,5 +1,7 @@
 # ![YouTicket Logo](/public/images/YouTicketLogo.jpg)
 
+[Parcours du projet](PARCOURS.md)
+
 [Modèle des tickets et des utilisateurs](https://github.com/Abdelhakim-Baalla/YouTicket/blob/main/Docs/YouTicket-Diagramme-Des-Classes.jpg)
 
 ## 🚀 YouTicket - Révolutionnez Votre Support Client
